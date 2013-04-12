@@ -25,7 +25,7 @@ interface FileInterface extends MediaInterface
     public function getSize();
 
     /**
-     * TODO: The mime type of this media element ?
+     * The mime type of this media element
      *
      * @return string
      */
