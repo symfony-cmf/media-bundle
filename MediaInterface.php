@@ -27,11 +27,12 @@ interface MediaInterface
     public function getName();
 
     /**
-     * The caption to show to users
+     * The description to show to users, e.g. an image caption or some text
+     * to put after the filename.
      *
      * @return string
      */
-    public function getCaption();
+    public function getDescription();
 
     /**
      * The copyright text, e.g. a license name
