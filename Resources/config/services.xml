@@ -6,11 +6,11 @@
 
     <!--
     <parameters>
-        <parameter key="symfony_cmf_media.example.class">Symfony\Cmf\Bundle\MediaBundle\Example</parameter>
+        <parameter key="cmf_media.example.class">Symfony\Cmf\Bundle\MediaBundle\Example</parameter>
     </parameters>
 
     <services>
-        <service id="symfony_cmf_media.example" class="%symfony_cmf_media.example.class%">
+        <service id="cmf_media.example" class="%cmf_media.example.class%">
             <argument type="service" id="service_id" />
             <argument>plain_value</argument>
             <argument>%parameter_name%</argument>
