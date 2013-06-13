@@ -11,11 +11,20 @@ namespace Symfony\Cmf\Bundle\MediaBundle;
 interface FileInterface extends MediaInterface
 {
     /**
-     * Get a php stream with the data of this file.
+     * Returns the content
      *
-     * @return stream
+     * @return string
      */
-    public function getBinaryContent();
+    public function getContentAsString();
+
+    /**
+     * Set the content
+     *
+     * @param string $content
+     *
+     * @return boolean
+     */
+    public function setContentFromString($content);
 
     /**
      * Get the file size in bytes

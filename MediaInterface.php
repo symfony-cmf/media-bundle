@@ -49,6 +49,13 @@ interface MediaInterface
     public function getAuthorName();
 
     /**
+     * Get all metadata
+     *
+     * @return array
+     */
+    public function getMetadata();
+
+    /**
      * @param string $name
      * @param null   $default to be used if $name is not set in the metadata
      */
@@ -57,14 +64,14 @@ interface MediaInterface
     /**
      * Get creation date
      *
-     * @return \Datetime $createdAt
+     * @return \Datetime
      */
     public function getCreatedAt();
 
     /**
      * Get last update date
      *
-     * @return \Datetime $updatedAt
+     * @return \Datetime
      */
     public function getUpdatedAt();
 }
