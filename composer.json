@@ -1,0 +1,30 @@
+{
+    "name": "symfony-cmf/media-bundle",
+    "type": "symfony-bundle",
+    "description": "Symfony CMF Media Bundle",
+    "keywords": ["Symfony CMF", "image", "media"],
+    "homepage": "http://cmf.symfony.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Symfony CMF Community",
+            "homepage": "https://github.com/symfony-cmf/MediaBundle/contributors"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.3.3",
+        "symfony/framework-bundle": "~2.1"
+    },
+    "autoload":{
+        "psr-0":{
+            "Symfony\\Cmf\\Bundle\\MediaBundle": ""
+        }
+    },
+    "target-dir": "Symfony/Cmf/Bundle/MediaBundle",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}
