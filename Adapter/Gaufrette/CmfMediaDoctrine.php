@@ -34,7 +34,7 @@ class CmfMediaDoctrine implements Adapter,
     protected $fullPathId;
     protected $dirClass;
     protected $identifier;
-    protected $flush;
+    protected $autoFlush;
 
     protected $keys;
 
@@ -54,7 +54,7 @@ class CmfMediaDoctrine implements Adapter,
      * @param string          $identifier  property used to identify a file and
      *                                     lookup (default NULL: let Doctrine
      *                                     determine the identifier)
-     * @param boolean         $flush       whether to flush write and delete
+     * @param boolean         $autoFlush   whether to flush write and delete
      *                                     actions (default: true)
      */
     public function __construct(
@@ -66,7 +66,7 @@ class CmfMediaDoctrine implements Adapter,
         $fullPathId = false,
         $dirClass = null,
         $identifier = null,
-        $flush = true)
+        $autoFlush = true)
     {
         $this->managerRegistry = $registry;
         $this->managerName     = $managerName;
@@ -75,7 +75,7 @@ class CmfMediaDoctrine implements Adapter,
         $this->create          = $create;
         $this->dirClass        = $dirClass;
         $this->identifier      = $identifier;
-        $this->flush           = $flush;
+        $this->autoFlush       = $autoFlush;
 
         if (!is_subclass_of($class, 'Symfony\Cmf\Bundle\MediaBundle\FileInterface')) {
             throw new \InvalidArgumentException(sprintf(
@@ -141,7 +141,7 @@ class CmfMediaDoctrine implements Adapter,
         $file->setContentFromString($content);
 
         $this->getObjectManager()->persist($file);
-        if ($this->flush) {
+        if ($this->autoflush) {
             $this->getObjectManager()->flush();
         }
 
@@ -194,7 +194,7 @@ class CmfMediaDoctrine implements Adapter,
 
         if ($file) {
             $this->getObjectManager()->remove($file);
-            if ($this->flush) {
+            if ($this->autoflush) {
                 $this->getObjectManager()->flush();
             }
 
@@ -319,7 +319,7 @@ class CmfMediaDoctrine implements Adapter,
      *
      * @return \Doctrine\Common\Persistence\ObjectManager
      */
-    protected function getObjectManager()
+    public function getObjectManager()
     {
         return $this->managerRegistry->getManager($this->managerName);
     }
@@ -330,9 +330,9 @@ class CmfMediaDoctrine implements Adapter,
      *
      * @param $bool boolean
      */
-    public function setFlush($bool)
+    public function setAutoFlush($bool)
     {
-        $this->flush = $bool;
+        $this->autoFlush = $bool;
     }
 
     /**
