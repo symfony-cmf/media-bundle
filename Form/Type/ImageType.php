@@ -2,7 +2,7 @@
 
 namespace Symfony\Cmf\Bundle\MediaBundle\Form\Type;
 
-use Symfony\Cmf\Bundle\MediaBundle\Form\DataTransformer\ModelToImageTransformer;
+use Symfony\Cmf\Bundle\MediaBundle\Form\DataTransformer\ModelToFileTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -32,7 +32,7 @@ class ImageType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $transformer = new ModelToImageTransformer($this->dataClass);
+        $transformer = new ModelToFileTransformer($this->dataClass);
         $builder->addModelTransformer($transformer);
     }
 

@@ -2,9 +2,12 @@
 
 namespace Symfony\Cmf\Bundle\MediaBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Cmf\Bundle\MediaBundle\BinaryInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
+use Symfony\Cmf\Bundle\MediaBundle\FileSytemInterface;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Controller to handle file downloads for things that have a route
@@ -22,8 +25,20 @@ class DownloadController
             throw new NotFoundHttpException('Content is no file');
         }
 
-        // TODO: can we use the BinaryFileResponse here? or adapt it to use it?
-        header('Content-Type: ' . $contentDocument->getContentType());
-        fpassthru($contentDocument->getBinaryContent());
+        if ($contentDocument instanceof BinaryInterface && is_file($contentDocument->getContentAsStream())) {
+            $file = $contentDocument->getContentAsStream();
+        } elseif ($contentDocument instanceof FileSytemInterface) {
+            $file = $contentDocument->getFileSystemPath();
+        } else {
+            $file = new \SplTempFileObject();
+            $file->fwrite($contentDocument->getContentAsString());
+            $file->rewind();
+        }
+
+        $response = new BinaryFileResponse($file);
+        $response->headers->set('Content-Type', $contentDocument->getContentType());
+        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $contentDocument->getName());
+
+        return $response;
     }
 }

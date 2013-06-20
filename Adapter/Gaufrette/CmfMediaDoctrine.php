@@ -2,7 +2,7 @@
 
 namespace Symfony\Cmf\Bundle\MediaBundle\Gaufrette\Adapter;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Gaufrette\Adapter;
 use Gaufrette\Adapter\ChecksumCalculator;
 use Gaufrette\Adapter\ListKeysAware;
@@ -22,51 +22,60 @@ use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
  * as identifier, set "identifier" to fe. "slug".
  */
 class CmfMediaDoctrine implements Adapter,
-                          ChecksumCalculator,
-                          ListKeysAware,
-                          MetadataSupporter
+                                  ChecksumCalculator,
+                                  ListKeysAware,
+                                  MetadataSupporter
 {
-    protected $manager;
+    protected $managerRegistry;
+    protected $managerName;
     protected $class;
     protected $rootPath;
     protected $create;
     protected $fullPathId;
     protected $dirClass;
     protected $identifier;
+    protected $flush;
 
     protected $keys;
 
     /**
      * Constructor
      *
-     * @param ObjectManager $manager
-     * @param string        $class      fully qualified class name of file
-     * @param string        $rootPath   path where the filesystem is located
-     * @param boolean       $create     Whether to create the directory if it
-     *                                  does not exist (default FALSE)
-     * @param boolean       $fullPathId whether the identifier contains the
-     *                                  full file path (default FALSE)
-     * @param string        $dirClass   fully qualified class name for dirs
-     *                                  (default NULL: dir is same as file)
-     * @param string        $identifier property used to identify a file and
-     *                                  lookup (default NULL: let Doctrine
-     *                                  determine the identifier)
+     * @param ManagerRegistry $registry
+     * @param string          $managerName
+     * @param string          $class       fully qualified class name of file
+     * @param string          $rootPath    path where the filesystem is located
+     * @param boolean         $create      whether to create the directory if
+     *                                     it does not exist (default FALSE)
+     * @param boolean         $fullPathId  whether the identifier contains the
+     *                                     full file path (default FALSE)
+     * @param string          $dirClass    fully qualified class name for dirs
+     *                                     (default NULL: dir is same as file)
+     * @param string          $identifier  property used to identify a file and
+     *                                     lookup (default NULL: let Doctrine
+     *                                     determine the identifier)
+     * @param boolean         $flush       whether to flush write and delete
+     *                                     actions (default: true)
      */
     public function __construct(
-        ObjectManager $manager,
+        ManagerRegistry $registry,
+        $managerName,
         $class,
         $rootPath = '/',
         $create = false,
         $fullPathId = false,
         $dirClass = null,
-        $identifier = null)
+        $identifier = null,
+        $flush = true)
     {
-        $this->manager    = $manager;
-        $this->class      = $class;
-        $this->rootPath   = Util\Path::normalize($rootPath);
-        $this->create     = $create;
-        $this->dirClass   = $dirClass;
-        $this->identifier = $identifier;
+        $this->managerRegistry = $registry;
+        $this->managerName     = $managerName;
+        $this->class           = $class;
+        $this->rootPath        = Util\Path::normalize($rootPath);
+        $this->create          = $create;
+        $this->dirClass        = $dirClass;
+        $this->identifier      = $identifier;
+        $this->flush           = $flush;
 
         if (!is_subclass_of($class, 'Symfony\Cmf\Bundle\MediaBundle\FileInterface')) {
             throw new \InvalidArgumentException(sprintf(
@@ -75,7 +84,7 @@ class CmfMediaDoctrine implements Adapter,
             ));
         }
 
-        if ($identifier && !$this->manager->getClassMetadata($class)->hasField($identifier)) {
+        if ($identifier && !$this->getObjectManager()->getClassMetadata($class)->hasField($identifier)) {
             throw new \InvalidArgumentException(sprintf(
                 'The class "%s" does not have the field "%s" to be used as identifier',
                 $class,
@@ -91,7 +100,7 @@ class CmfMediaDoctrine implements Adapter,
                 ));
             }
 
-            if ($identifier && !$this->manager->getClassMetadata($dirClass)->hasField($identifier)) {
+            if ($identifier && !$this->getObjectManager()->getClassMetadata($dirClass)->hasField($identifier)) {
                 throw new \InvalidArgumentException(sprintf(
                     'The class "%s" does not have the field "%s" to be used as identifier',
                     $dirClass,
@@ -131,8 +140,10 @@ class CmfMediaDoctrine implements Adapter,
 
         $file->setContentFromString($content);
 
-        $this->manager->persist($file);
-        $this->manager->flush();
+        $this->getObjectManager()->persist($file);
+        if ($this->flush) {
+            $this->getObjectManager()->flush();
+        }
 
         return $file->getSize();
     }
@@ -181,7 +192,16 @@ class CmfMediaDoctrine implements Adapter,
     {
         $file = $this->find($key);
 
-        return $file && $this->manager->remove($file);
+        if ($file) {
+            $this->getObjectManager()->remove($file);
+            if ($this->flush) {
+                $this->getObjectManager()->flush();
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -283,6 +303,39 @@ class CmfMediaDoctrine implements Adapter,
     }
 
     /**
+     * Set the managerName to use to get the object manager;
+     * if not called, the default manager will be used.
+     *
+     * @param string $managerName
+     */
+    public function setManagerName($managerName)
+    {
+        $this->managerName = $managerName;
+    }
+
+    /**
+     * Get the object manager from the registry, based on the current
+     * managerName
+     *
+     * @return \Doctrine\Common\Persistence\ObjectManager
+     */
+    protected function getObjectManager()
+    {
+        return $this->managerRegistry->getManager($this->managerName);
+    }
+
+    /**
+     * Whether to flush Doctrine directly after a persist,
+     * disable for batch actions
+     *
+     * @param $bool boolean
+     */
+    public function setFlush($bool)
+    {
+        $this->flush = $bool;
+    }
+
+    /**
      * Find a file object for the given key.
      *
      * @param string|int $key Identifier.
@@ -301,24 +354,24 @@ class CmfMediaDoctrine implements Adapter,
         // find file
         if (!$dir || ($dir && !$this->dirClass)) {
             if ($this->identifier) {
-                $file = $this->manager
+                $file = $this->getObjectManager()
                     ->getRepository($this->class)
                     ->findOneBy(array($this->identifier => $id))
                 ;
             } else {
-                $file = $this->manager->getRepository($this->class)->find($id);
+                $file = $this->getObjectManager()->getRepository($this->class)->find($id);
             }
         }
 
         // find directory from the configured directory repository
         if (!$file && $this->dirClass) {
             if ($this->identifier) {
-                $file = $this->manager
+                $file = $this->getObjectManager()
                     ->getRepository($this->class)
                     ->findOneBy(array($this->identifier => $id))
                 ;
             } else {
-                $file = $this->manager->getRepository($this->dirClass)->find($id);
+                $file = $this->getObjectManager()->getRepository($this->dirClass)->find($id);
             }
         }
 
@@ -337,7 +390,7 @@ class CmfMediaDoctrine implements Adapter,
         $filesAndDirs = array();
         $prefix = $this->normalizePath($this->rootPath . '/' . trim($prefix));
 
-        $files = $this->manager->getRepository($this->class)->findAll();
+        $files = $this->getObjectManager()->getRepository($this->class)->findAll();
         foreach ($files as $file) {
             if (empty($prefix) || false !== strpos($this->getFilePath($file), $prefix)) {
                 $filesAndDirs[] = $file;
@@ -345,7 +398,7 @@ class CmfMediaDoctrine implements Adapter,
         }
 
         if ($this->dirClass) {
-            $dirs = $this->manager->getRepository($this->dirClass)->findAll();
+            $dirs = $this->getObjectManager()->getRepository($this->dirClass)->findAll();
             foreach ($dirs as $dir) {
                 if (empty($prefix) || false !== strpos($this->getFilePath($dir), $prefix)) {
                     $filesAndDirs[] = $dir;
@@ -522,8 +575,10 @@ class CmfMediaDoctrine implements Adapter,
         $dir = new $dirClass();
         $this->setFileDefaults($dirPath, $dir, $parent);
 
-        $this->manager->persist($dir);
-        $this->manager->flush();
+        $this->getObjectManager()->persist($dir);
+        if ($this->flush) {
+            $this->getObjectManager()->flush();
+        }
 
         return $dir;
     }

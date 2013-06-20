@@ -2,12 +2,12 @@
 
 namespace Symfony\Cmf\Bundle\MediaBundle\Form\DataTransformer;
 
-use Symfony\Cmf\Bundle\MediaBundle\BinaryInterface;
+use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
 use Symfony\Component\Form\DataTransformerInterface;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Cmf\Bundle\MediaBundle\ImageInterface;
 
-class ModelToImageTransformer implements DataTransformerInterface
+class ModelToFileTransformer implements DataTransformerInterface
 {
     private $dataClass;
 
@@ -31,26 +31,26 @@ class ModelToImageTransformer implements DataTransformerInterface
             throw new \RuntimeException("File '$uploadedFile->getPathname()' not found");
         }
 
-        /** @var $image ImageInterface */
-        $image = new $this->dataClass();
-        if ($image instanceof BinaryInterface) {
-            $image->setContentFromStream($stream);
+        /** @var $file FileInterface */
+        $file = new $this->dataClass();
+        if ($file instanceof BinaryInterface) {
+            $file->setContentFromStream($stream);
         } else {
-            $image->setContentFromString(stream_get_contents($stream));
+            $file->setContentFromString(stream_get_contents($stream));
         }
 
         // TODO: image does not persist Resource stream, error on update:
         // "InvalidArgumentException: A detached document was found through a
         // child relationship during cascading a persist operation"
 
-        return $image;
+        return $file;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function transform($image)
+    public function transform($file)
     {
-        return $image;
+        return $file;
     }
 }
