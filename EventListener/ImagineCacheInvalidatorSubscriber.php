@@ -119,7 +119,7 @@ class ImagineCacheInvalidatorSubscriber implements EventSubscriber
      * Get full file path: /path/to/file/filename.ext
      *
      * For PHPCR the id is being the path.
-     * For ORM the file path concatenates the directory identifiers with '/'
+     * For ORM the file path can concatenate the directory identifiers with '/'
      * and ends with the file identifier. For a nice path a slug could be used
      * as identifier.
      *

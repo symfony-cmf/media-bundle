@@ -6,7 +6,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 use Imagine\Image\ImagineInterface;
 use Liip\ImagineBundle\Imagine\Data\Loader\AbstractDoctrineLoader;
 use Symfony\Cmf\Bundle\MediaBundle\BinaryInterface;
-use Symfony\Cmf\Bundle\MediaBundle\FileSytemInterface;
+use Symfony\Cmf\Bundle\MediaBundle\FileSystemInterface;
 use Symfony\Cmf\Bundle\MediaBundle\ImageInterface;
 use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
 
@@ -16,7 +16,7 @@ use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
  * The path to a file is: /path/to/file/filename.ext
  *
  * For PHPCR the id is being the path, set "fullPathId" to true.
- * For ORM the file path concatenates the directory identifiers with '/'
+ * For ORM the file path can concatenate the directory identifiers with '/'
  * and ends with the file identifier.
  */
 class CmfMediaDoctrineLoader extends AbstractDoctrineLoader
@@ -50,11 +50,13 @@ class CmfMediaDoctrineLoader extends AbstractDoctrineLoader
      */
     protected function mapPathToId($path)
     {
+        // TODO: remove fullPathId config?
         if ($this->fullPathId) {
             // The path is being the id
             return substr($path, 0, 1) === '/' ? $path : '/'.$path;
         } else {
             // Get filename component of path, that is the id
+            // TODO: refactor to not use basename
             return basename($path);
         }
     }
@@ -65,9 +67,10 @@ class CmfMediaDoctrineLoader extends AbstractDoctrineLoader
     protected function getStreamFromImage($image)
     {
         if (!$image instanceof ImageInterface) {
+            $type = is_object($image) ? get_class($file) : gettype($image);
             throw new UnsupportedMediaTypeHttpException(
-                sprintf('Source image class "%s" does not implement "%s"',
-                    get_class($image),
+                sprintf('Source image of type "%s" does not implement "%s"',
+                    $type,
                     'Symfony\Cmf\Bundle\MediaBundle\ImageInterface'
                 )
             );
@@ -76,17 +79,14 @@ class CmfMediaDoctrineLoader extends AbstractDoctrineLoader
         /** @var $image ImageInterface */
         if ($image instanceof BinaryInterface) {
             return $image->getContentAsStream();
-        } elseif($image instanceof FileSytemInterface) {
+        }
+        if($image instanceof FileSystemInterface) {
             return fopen($image->getFileSystemPath(), 'rb');
         }
 
         $stream = fopen('php://memory', 'rwb+');
         fwrite($stream, $image->getContentAsString());
         rewind($stream);
-
-        // TODO - error stream is empty:
-        // "An image could not be created from the given input"
-        // Imagine->load('')
 
         return $stream;
     }

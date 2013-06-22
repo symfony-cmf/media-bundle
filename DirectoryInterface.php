@@ -8,7 +8,7 @@ namespace Symfony\Cmf\Bundle\MediaBundle;
  * The path to a file is: /path/to/file/filename.ext
  *
  * For PHPCR the id is being the path.
- * For ORM the file path concatenates the directory identifiers with '/'
+ * For ORM the file path can concatenate the directory identifiers with '/'
  * and ends with the file identifier. For a nice path a slug could be used
  * as identifier.
  *
@@ -21,13 +21,6 @@ namespace Symfony\Cmf\Bundle\MediaBundle;
  */
 interface DirectoryInterface extends FileInterface
 {
-    /**
-     * Check if the file is a directory.
-     *
-     * @return boolean
-     */
-    public function isDirectory();
-
     /**
      * Get the parent directory.
      *

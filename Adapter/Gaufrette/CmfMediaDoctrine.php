@@ -17,7 +17,7 @@ use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
  * The path to a file is: /path/to/file/filename.ext
  *
  * For PHPCR the id is being the path, set "fullPathId" to true.
- * For ORM the file path concatenates the directory identifiers with '/'
+ * For ORM the file path can concatenate the directory identifiers with '/'
  * and ends with the file identifier. For a nice path a slug could be used
  * as identifier, set "identifier" to fe. "slug".
  */
@@ -130,9 +130,11 @@ class CmfMediaDoctrine implements Adapter,
         } else {
             $filePath = $this->computePath($key);
 
+            // TODO: refactor to not use dirname
             $this->ensureDirectoryExists(dirname($filePath), $this->create);
 
-            $file   = new $this->class();
+            $file   = new $this->class;
+            // TODO: refactor to not use dirname
             $parent = $this->find(dirname($key));
 
             $this->setFileDefaults($filePath, $file, $parent);
@@ -239,11 +241,11 @@ class CmfMediaDoctrine implements Adapter,
 
         $file = $this->find($key, true);
 
-        if ($file instanceof DirectoryInterface) {
-            return $file->isDirectory();
+        if ($file instanceof $this->class) {
+            return false;
         }
 
-        return false;
+        return true;
     }
 
     /**
@@ -413,7 +415,7 @@ class CmfMediaDoctrine implements Adapter,
      * Get full file path: /path/to/file/filename.ext
      *
      * For PHPCR the id is being the path.
-     * For ORM the file path concatenates the directory identifiers with '/'
+     * For ORM the file path can concatenate the directory identifiers with '/'
      * and ends with the file identifier. For a nice path a slug could be used
      * as identifier.
      *
@@ -439,11 +441,13 @@ class CmfMediaDoctrine implements Adapter,
      */
     protected function mapKeyToId($key)
     {
+        // TODO: remove fullPathId config?
         if ($this->fullPathId) {
             // The path is being the id
             return $this->computePath($key);
         } else {
             // Get filename component of path, that is the id
+            // TODO: refactor to not use basename
             return basename($this->computePath($key));
         }
     }
@@ -511,7 +515,7 @@ class CmfMediaDoctrine implements Adapter,
     protected function setFileDefaults($path, FileInterface $file, FileInterface $parent = null)
     {
         $setIdentifier = $this->identifier ? 'set'.ucfirst($this->identifier) : false;
-        $name          = basename($path);
+        $name          = basename($path); // TODO: refactor to not use basename
 
         if ($setIdentifier) {
             $file->{$setIdentifier}($name);
@@ -565,6 +569,7 @@ class CmfMediaDoctrine implements Adapter,
         }
 
         // create parent directory if needed
+        // TODO: refactor to not use dirname
         $parentPath = dirname($dirPath);
         if (!$this->isDirectory($parentPath)) {
             $parent = $this->createDirectory($parentPath);
@@ -572,7 +577,7 @@ class CmfMediaDoctrine implements Adapter,
 
         $dirClass = $this->dirClass ? $this->dirClass : $this->class;
 
-        $dir = new $dirClass();
+        $dir = new $dirClass;
         $this->setFileDefaults($dirPath, $dir, $parent);
 
         $this->getObjectManager()->persist($dir);

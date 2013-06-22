@@ -5,6 +5,8 @@ namespace Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr;
 use Doctrine\ODM\PHPCR\Document\Resource;
 use Symfony\Cmf\Bundle\MediaBundle\BinaryInterface;
 use Symfony\Cmf\Bundle\MediaBundle\DirectoryInterface;
+use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
+use Symfony\Cmf\Bundle\MediaBundle\FileSystemInterface;
 
 /**
  * TODO: create and add cmf:file mixin
@@ -90,9 +92,8 @@ class File extends Media implements BinaryInterface,
     public function getContentAsString()
     {
         $stream = $this->getContent()->getData();
-        rewind($stream);
-
         $content = stream_get_contents($stream);
+        rewind($stream);
 
         return $content !== false ? $content : '';
     }
@@ -118,6 +119,28 @@ class File extends Media implements BinaryInterface,
     /**
      * {@inheritDoc}
      */
+    public function copyContentFromFile($file)
+    {
+        if ($file instanceof \SplFileInfo) {
+            $this->setFileContentFromFilesystem($file->getPathname());
+        } elseif ($file instanceof BinaryInterface) {
+            $this->setContentFromStream($file->getContentAsStream());
+        } elseif ($file instanceof FileSystemInterface) {
+            $this->setFileContentFromFilesystem($file->getFileSystemPath());
+        } elseif ($file instanceof FileInterface) {
+            $this->setContentFromString($file->getContentAsString());
+        } else {
+            $type = is_object($file) ? get_class($file) : gettype($file);
+            throw new \InvalidArgumentException(sprintf(
+                'File is not a valid type, "%s" given.',
+                 $type
+            ));
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getContentAsStream()
     {
         $stream = $this->getContent()->getData();
@@ -131,19 +154,12 @@ class File extends Media implements BinaryInterface,
      */
     public function setContentFromStream($stream)
     {
-        if (is_resource($stream)) {
-            $this->getContent()->setData($stream);
-
-            $this->updateDimensionsFromContent();
+        if (!is_resource($stream)) {
+            throw new \InvalidArgumentException('Expected a stream');
         }
-    }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function isDirectory()
-    {
-        return false;
+        $this->getContent()->setData($stream);
+        $this->updateDimensionsFromContent();
     }
 
     /**

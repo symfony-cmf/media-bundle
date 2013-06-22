@@ -2,6 +2,7 @@
 
 namespace Symfony\Cmf\Bundle\MediaBundle\Form\DataTransformer;
 
+use Symfony\Cmf\Bundle\MediaBundle\BinaryInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -32,16 +33,12 @@ class ModelToFileTransformer implements DataTransformerInterface
         }
 
         /** @var $file FileInterface */
-        $file = new $this->dataClass();
+        $file = new $this->dataClass;
         if ($file instanceof BinaryInterface) {
             $file->setContentFromStream($stream);
         } else {
             $file->setContentFromString(stream_get_contents($stream));
         }
-
-        // TODO: image does not persist Resource stream, error on update:
-        // "InvalidArgumentException: A detached document was found through a
-        // child relationship during cascading a persist operation"
 
         return $file;
     }

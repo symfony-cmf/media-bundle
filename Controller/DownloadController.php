@@ -4,7 +4,7 @@ namespace Symfony\Cmf\Bundle\MediaBundle\Controller;
 
 use Symfony\Cmf\Bundle\MediaBundle\BinaryInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
-use Symfony\Cmf\Bundle\MediaBundle\FileSytemInterface;
+use Symfony\Cmf\Bundle\MediaBundle\FileSystemInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -27,7 +27,7 @@ class DownloadController
 
         if ($contentDocument instanceof BinaryInterface && is_file($contentDocument->getContentAsStream())) {
             $file = $contentDocument->getContentAsStream();
-        } elseif ($contentDocument instanceof FileSytemInterface) {
+        } elseif ($contentDocument instanceof FileSystemInterface) {
             $file = $contentDocument->getFileSystemPath();
         } else {
             $file = new \SplTempFileObject();

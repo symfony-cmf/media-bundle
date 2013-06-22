@@ -11,7 +11,7 @@ namespace Symfony\Cmf\Bundle\MediaBundle;
  * This is to be kept compatible with the SonataMediaBundle MediaInterface to
  * allow integration with sonata.
  */
-interface FileSytemInterface extends FileInterface
+interface FileSystemInterface extends FileInterface
 {
     /**
      * Get the path to the file on the file system.
