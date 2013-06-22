@@ -4,17 +4,23 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <!--
     <parameters>
-        <parameter key="cmf_media.example.class">Symfony\Cmf\Bundle\MediaBundle\Example</parameter>
+        <parameter key="cmf_media.form.image_class">Symfony\Cmf\Bundle\MediaBundle\Form\Type\ImageType</parameter>
+        <parameter key="cmf_media.subscriber.imagine_cache_class">Symfony\Cmf\Bundle\MediaBundle\EventListener\ImagineCacheInvalidatorSubscriber</parameter>
     </parameters>
 
     <services>
-        <service id="cmf_media.example" class="%cmf_media.example.class%">
-            <argument type="service" id="service_id" />
-            <argument>plain_value</argument>
-            <argument>%parameter_name%</argument>
+        <service id="cmf_media.form.type.image" class="%cmf_media.form.image_class%">
+            <argument>%cmf_media.image_class%</argument>
+            <argument>%cmf_media.imagine.filter%</argument>
+            <tag name="form.type" alias="cmf_media_image"/>
+        </service>
+
+        <service id="cmf_media.subscriber.imagine_cache" class="%cmf_media.subscriber.imagine_cache_class%">
+            <tag name="%cmf_media.manager_registry%.event_subscriber"/>
+            <argument type="service" id="liip_imagine.cache.manager"/>
+            <argument type="service" id="service_container"/>
+            <argument>%cmf_media.imagine.all_filters%</argument>
         </service>
     </services>
-    -->
 </container>
