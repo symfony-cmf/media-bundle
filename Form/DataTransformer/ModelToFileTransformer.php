@@ -26,19 +26,9 @@ class ModelToFileTransformer implements DataTransformerInterface
             return $uploadedFile;
         }
 
-        /** @var $uploadedFile UploadedFile */
-        $stream = fopen($uploadedFile->getPathname(), 'rb');
-        if (! $stream) {
-            throw new \RuntimeException("File '$uploadedFile->getPathname()' not found");
-        }
-
         /** @var $file FileInterface */
         $file = new $this->dataClass;
-        if ($file instanceof BinaryInterface) {
-            $file->setContentFromStream($stream);
-        } else {
-            $file->setContentFromString(stream_get_contents($stream));
-        }
+        $file->copyContentFromFile($uploadedFile);
 
         return $file;
     }
