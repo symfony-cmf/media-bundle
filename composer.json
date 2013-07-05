@@ -16,6 +16,10 @@
         "php": ">=5.3.3",
         "symfony/framework-bundle": "~2.1"
     },
+    "suggest": {
+        "knplabs/gaufrette": "When using the Gaufrette adapter",
+        "phpcr/phpcr-utils": "When using the Gaufrette adapter"
+    },
     "autoload":{
         "psr-0":{
             "Symfony\\Cmf\\Bundle\\MediaBundle": ""

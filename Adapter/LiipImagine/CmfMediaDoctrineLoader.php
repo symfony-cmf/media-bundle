@@ -56,8 +56,7 @@ class CmfMediaDoctrineLoader extends AbstractDoctrineLoader
             return substr($path, 0, 1) === '/' ? $path : '/'.$path;
         } else {
             // Get filename component of path, that is the id
-            // TODO: refactor to not use basename
-            return basename($path);
+            return substr($path, strrpos($path, '/') + 1);
         }
     }
 
@@ -67,7 +66,7 @@ class CmfMediaDoctrineLoader extends AbstractDoctrineLoader
     protected function getStreamFromImage($image)
     {
         if (!$image instanceof ImageInterface) {
-            $type = is_object($image) ? get_class($file) : gettype($image);
+            $type = is_object($image) ? get_class($image) : gettype($image);
             throw new UnsupportedMediaTypeHttpException(
                 sprintf('Source image of type "%s" does not implement "%s"',
                     $type,
