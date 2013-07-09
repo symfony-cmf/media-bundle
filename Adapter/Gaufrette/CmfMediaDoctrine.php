@@ -130,12 +130,10 @@ class CmfMediaDoctrine implements Adapter,
         } else {
             $filePath = $this->computePath($key);
 
-            // TODO: refactor to not use dirname
-            $this->ensureDirectoryExists(dirname($filePath), $this->create);
+            $this->ensureDirectoryExists($this->getParentPath($filePath), $this->create);
 
             $file   = new $this->class;
-            // TODO: refactor to not use dirname
-            $parent = $this->find(dirname($key));
+            $parent = $this->find($this->getParentPath($key));
 
             $this->setFileDefaults($filePath, $file, $parent);
         }
@@ -447,8 +445,7 @@ class CmfMediaDoctrine implements Adapter,
             return $this->computePath($key);
         } else {
             // Get filename component of path, that is the id
-            // TODO: refactor to not use basename
-            return basename($this->computePath($key));
+            return $this->getBaseName($this->computePath($key));
         }
     }
 
@@ -506,6 +503,30 @@ class CmfMediaDoctrine implements Adapter,
     }
 
     /**
+     * Get the parent path of a valid absolute path.
+     *
+     * @param string $path the path to get the parent from
+     *
+     * @return string the path with the last segment removed
+     */
+    protected function getParentPath($path)
+    {
+        return \PHPCR\Util\PathHelper::getParentPath($path);
+    }
+
+    /**
+     * Get the name from the path
+     *
+     * @param string $path a valid absolute path, like /content/jobs/data
+     *
+     * @return string the name, that is the string after the last "/"
+     */
+    protected function getBaseName($path)
+    {
+        return \PHPCR\Util\PathHelper::getNodeName($path);
+    }
+
+    /**
      * Set default values for a new file or directory
      *
      * @param string        $path   Path of the file
@@ -515,7 +536,7 @@ class CmfMediaDoctrine implements Adapter,
     protected function setFileDefaults($path, FileInterface $file, FileInterface $parent = null)
     {
         $setIdentifier = $this->identifier ? 'set'.ucfirst($this->identifier) : false;
-        $name          = basename($path); // TODO: refactor to not use basename
+        $name          = $this->getBaseName($path);
 
         if ($setIdentifier) {
             $file->{$setIdentifier}($name);
@@ -569,8 +590,7 @@ class CmfMediaDoctrine implements Adapter,
         }
 
         // create parent directory if needed
-        // TODO: refactor to not use dirname
-        $parentPath = dirname($dirPath);
+        $parentPath = $this->getParentPath($dirPath);
         if (!$this->isDirectory($parentPath)) {
             $parent = $this->createDirectory($parentPath);
         }
