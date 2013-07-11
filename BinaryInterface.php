@@ -16,9 +16,4 @@ interface BinaryInterface extends FileInterface
      * @return stream
      */
     public function getContentAsStream();
-
-    /**
-     * @param $stream
-     */
-    public function setContentFromStream($stream);
 }
