@@ -9,7 +9,10 @@ use Gaufrette\Adapter\ListKeysAware;
 use Gaufrette\Adapter\MetadataSupporter;
 use Gaufrette\Util;
 use Symfony\Cmf\Bundle\MediaBundle\DirectoryInterface;
+use Symfony\Cmf\Bundle\MediaBundle\DirectoryWriteInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
+use Symfony\Cmf\Bundle\MediaBundle\FileWriteInterface;
+use Symfony\Cmf\Bundle\MediaBundle\MediaWriteInterface;
 
 /**
  * Cmf doctrine media adapter
@@ -136,6 +139,10 @@ class CmfMediaDoctrine implements Adapter,
             $parent = $this->find($this->getParentPath($key));
 
             $this->setFileDefaults($filePath, $file, $parent);
+        }
+
+        if (! $file instanceof FileWriteInterface) {
+            return false;
         }
 
         $file->setContentFromString($content);
@@ -282,14 +289,27 @@ class CmfMediaDoctrine implements Adapter,
 
     /**
      * {@inheritDoc}
+     *
+     * @throws RuntimeException If file cannot be found or cannot be written
+     *                          to
      */
     public function setMetadata($key, $metadata)
     {
         $file = $this->find($key);
 
-        if ($file) {
-            $file->setMetadata($metadata);
+        if (! $file) {
+            throw new \RuntimeException(sprintf('The file "%s" does not exist.', $key));
         }
+
+        if (! $file instanceof MediaWriteInterface) {
+            $type = is_object($file) ? get_class($file) : gettype($file);
+            throw new \InvalidArgumentException(sprintf(
+                'The class "%s" does not implement Symfony\Cmf\Bundle\MediaBundle\MediaWriteInterface',
+                $type
+            ));
+        }
+
+        $file->setMetadata($metadata);
     }
 
     /**
@@ -533,7 +553,7 @@ class CmfMediaDoctrine implements Adapter,
      * @param FileInterface $file
      * @param FileInterface $parent Parent directory of the file
      */
-    protected function setFileDefaults($path, FileInterface $file, FileInterface $parent = null)
+    protected function setFileDefaults($path, FileWriteInterface $file, FileInterface $parent = null)
     {
         $setIdentifier = $this->identifier ? 'set'.ucfirst($this->identifier) : false;
         $name          = $this->getBaseName($path);
@@ -543,7 +563,7 @@ class CmfMediaDoctrine implements Adapter,
         }
         $file->setName($name);
 
-        if ($parent && $file instanceof DirectoryInterface) {
+        if ($parent && $file instanceof DirectoryWriteInterface) {
             $file->setParentDirectory($parent);
         }
     }
