@@ -21,10 +21,10 @@ use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
  * and ends with the file identifier. For a nice path a slug could be used
  * as identifier, set "identifier" to fe. "slug".
  */
-class CmfMediaDoctrine implements Adapter,
-                                  ChecksumCalculator,
-                                  ListKeysAware,
-                                  MetadataSupporter
+abstract class AbstractCmfMediaDoctrine implements Adapter,
+                                                   ChecksumCalculator,
+                                                   ListKeysAware,
+                                                   MetadataSupporter
 {
     protected $managerRegistry;
     protected $managerName;
@@ -93,6 +93,8 @@ class CmfMediaDoctrine implements Adapter,
         }
 
         if ($dirClass) {
+            // TODO: check after re-modelling directories in interface structure,
+            // see https://github.com/symfony-cmf/MediaBundle/issues/18
             if (!is_subclass_of($dirClass, 'Symfony\Cmf\Bundle\MediaBundle\DirectoryInterface')) {
                 throw new \InvalidArgumentException(sprintf(
                     'The class "%s" does not implement Symfony\Cmf\Bundle\MediaBundle\DirectoryInterface',
@@ -267,6 +269,8 @@ class CmfMediaDoctrine implements Adapter,
         foreach ($files as $file) {
             $key = $this->computeKey($this->getFilePath($file));
 
+            // TODO: check after re-modelling directories in interface structure,
+            // see https://github.com/symfony-cmf/MediaBundle/issues/18
             if ($file instanceof DirectoryInterface && $file->isDirectory()) {
                 $dirKeys[] = $key;
             } else {
@@ -421,6 +425,8 @@ class CmfMediaDoctrine implements Adapter,
      */
     protected function getFilePath(FileInterface $file)
     {
+        // TODO: check after re-modelling directories in interface structure,
+        // see https://github.com/symfony-cmf/MediaBundle/issues/18
         if ($file instanceof DirectoryInterface) {
             $path = $file->getPath();
         } else {
@@ -509,10 +515,7 @@ class CmfMediaDoctrine implements Adapter,
      *
      * @return string the path with the last segment removed
      */
-    protected function getParentPath($path)
-    {
-        return \PHPCR\Util\PathHelper::getParentPath($path);
-    }
+    abstract protected function getParentPath($path);
 
     /**
      * Get the name from the path
@@ -521,10 +524,7 @@ class CmfMediaDoctrine implements Adapter,
      *
      * @return string the name, that is the string after the last "/"
      */
-    protected function getBaseName($path)
-    {
-        return \PHPCR\Util\PathHelper::getNodeName($path);
-    }
+    abstract protected function getBaseName($path);
 
     /**
      * Set default values for a new file or directory
@@ -543,6 +543,8 @@ class CmfMediaDoctrine implements Adapter,
         }
         $file->setName($name);
 
+        // TODO: check after re-modelling directories in interface structure,
+        // see https://github.com/symfony-cmf/MediaBundle/issues/18
         if ($parent && $file instanceof DirectoryInterface) {
             $file->setParentDirectory($parent);
         }
