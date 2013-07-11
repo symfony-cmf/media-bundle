@@ -18,26 +18,6 @@ interface FileInterface extends MediaInterface
     public function getContentAsString();
 
     /**
-     * Set the content
-     *
-     * @param string $content
-     *
-     * @return boolean
-     */
-    public function setContentFromString($content);
-
-    /**
-     * Copy the content from a file, this allows to optimize copying the data
-     * of a file. It is preferred to use the dedicated content setters if
-     * possible.
-     *
-     * @param FileInterface|\SplFileInfo $file
-     *
-     * @throws \InvalidArgumentException if file is no FileInterface|\SplFileInfo
-     */
-    public function copyContentFromFile($file);
-
-    /**
      * Get the file size in bytes
      *
      * @return integer

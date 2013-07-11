@@ -9,7 +9,10 @@ use Gaufrette\Adapter\ListKeysAware;
 use Gaufrette\Adapter\MetadataSupporter;
 use Gaufrette\Util;
 use Symfony\Cmf\Bundle\MediaBundle\DirectoryInterface;
+use Symfony\Cmf\Bundle\MediaBundle\DirectoryWriteInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
+use Symfony\Cmf\Bundle\MediaBundle\FileWriteInterface;
+use Symfony\Cmf\Bundle\MediaBundle\MediaWriteInterface;
 
 /**
  * Cmf doctrine media adapter
@@ -136,6 +139,10 @@ class CmfMediaDoctrine implements Adapter,
             $parent = $this->find($this->getParentPath($key));
 
             $this->setFileDefaults($filePath, $file, $parent);
+        }
+
+        if (! $file instanceof FileWriteInterface) {
+            return;
         }
 
         $file->setContentFromString($content);
@@ -287,7 +294,7 @@ class CmfMediaDoctrine implements Adapter,
     {
         $file = $this->find($key);
 
-        if ($file) {
+        if ($file && $file instanceof MediaWriteInterface) {
             $file->setMetadata($metadata);
         }
     }
@@ -533,7 +540,7 @@ class CmfMediaDoctrine implements Adapter,
      * @param FileInterface $file
      * @param FileInterface $parent Parent directory of the file
      */
-    protected function setFileDefaults($path, FileInterface $file, FileInterface $parent = null)
+    protected function setFileDefaults($path, FileWriteInterface $file, FileInterface $parent = null)
     {
         $setIdentifier = $this->identifier ? 'set'.ucfirst($this->identifier) : false;
         $name          = $this->getBaseName($path);
@@ -543,7 +550,7 @@ class CmfMediaDoctrine implements Adapter,
         }
         $file->setName($name);
 
-        if ($parent && $file instanceof DirectoryInterface) {
+        if ($parent && $file instanceof DirectoryWriteInterface) {
             $file->setParentDirectory($parent);
         }
     }

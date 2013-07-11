@@ -2,9 +2,9 @@
 
 namespace Symfony\Cmf\Bundle\MediaBundle\Model;
 
-use Symfony\Cmf\Bundle\MediaBundle\MediaInterface;
+use Symfony\Cmf\Bundle\MediaBundle\MediaWriteInterface;
 
-class Media implements MediaInterface
+class Media implements MediaWriteInterface
 {
     /**
      * @var string
@@ -68,7 +68,7 @@ class Media implements MediaInterface
     }
 
     /**
-     * @param string $name
+     * {@inheritDoc}
      */
     public function setName($name)
     {
@@ -84,7 +84,7 @@ class Media implements MediaInterface
     }
 
     /**
-     * @param string $description
+     * {@inheritDoc}
      */
     public function setDescription($description)
     {
@@ -100,7 +100,7 @@ class Media implements MediaInterface
     }
 
     /**
-     * @param string $copyright
+     * {@inheritDoc}
      */
     public function setCopyright($copyright)
     {
@@ -116,7 +116,7 @@ class Media implements MediaInterface
     }
 
     /**
-     * @param string $authorName
+     * {@inheritDoc}
      */
     public function setAuthorName($authorName)
     {
@@ -132,9 +132,9 @@ class Media implements MediaInterface
     }
 
     /**
-     * @param array $metadata
+     * {@inheritDoc}
      */
-    public function setMetadata($metadata)
+    public function setMetadata(array $metadata)
     {
         $this->metadata = $metadata;
     }
@@ -156,12 +156,21 @@ class Media implements MediaInterface
     }
 
     /**
-     * @param string $name
-     * @param mixed  $value
+     * {@inheritDoc}
      */
     public function setMetadataValue($name, $value)
     {
         $this->metadata[$name] = $value;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function unsetMetadataValue($name)
+    {
+        $metadata = $this->getMetadata();
+        unset($metadata[$name]);
+        $this->setMetadata($metadata);
     }
 
     /**

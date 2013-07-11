@@ -2,10 +2,8 @@
 
 namespace Symfony\Cmf\Bundle\MediaBundle\Form\DataTransformer;
 
-use Symfony\Cmf\Bundle\MediaBundle\BinaryInterface;
-use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
+use Symfony\Cmf\Bundle\MediaBundle\FileWriteInterface;
 use Symfony\Component\Form\DataTransformerInterface;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ModelToFileTransformer implements DataTransformerInterface
@@ -15,6 +13,13 @@ class ModelToFileTransformer implements DataTransformerInterface
     public function __construct($class)
     {
         $this->dataClass = $class;
+
+        if (!is_subclass_of($class, 'Symfony\Cmf\Bundle\MediaBundle\FileWriteInterface')) {
+            throw new \InvalidArgumentException(sprintf(
+                'The class "%s" does not implement Symfony\Cmf\Bundle\MediaBundle\FileWriteInterface',
+                $class
+            ));
+        }
     }
 
     /**
@@ -26,7 +31,7 @@ class ModelToFileTransformer implements DataTransformerInterface
             return $uploadedFile;
         }
 
-        /** @var $file FileInterface */
+        /** @var $file FileWriteInterface */
         $file = new $this->dataClass;
         $file->copyContentFromFile($uploadedFile);
 

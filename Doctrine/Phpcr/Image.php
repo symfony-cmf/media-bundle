@@ -8,7 +8,7 @@ use Symfony\Cmf\Bundle\MediaBundle\ImageInterface;
  * TODO: create and add cmf:image mixin
  * This class represents a CmfMedia Doctrine PHPCR image.
  */
-class Image extends File implements ImageInterface
+class Image extends File implements ImageWriteInterface
 {
     /**
      * @var int
@@ -21,7 +21,7 @@ class Image extends File implements ImageInterface
     protected $height;
 
     /**
-     * @param int $width
+     * {@inheritDoc}
      */
     public function setWidth($width)
     {
@@ -37,7 +37,7 @@ class Image extends File implements ImageInterface
     }
 
     /**
-     * @param int $height
+     * {@inheritDoc}
      */
     public function setHeight($height)
     {

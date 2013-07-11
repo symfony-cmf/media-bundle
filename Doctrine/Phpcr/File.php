@@ -12,8 +12,8 @@ use Symfony\Cmf\Bundle\MediaBundle\FileSystemInterface;
  * TODO: create and add cmf:file mixin
  * This class represents a CmfMedia Doctrine Phpcr file.
  */
-class File extends Media implements BinaryInterface,
-                                    DirectoryInterface
+class File extends Media implements BinaryWriteInterface,
+                                    DirectoryWriteInterface
 {
     /**
      * @var Resource
