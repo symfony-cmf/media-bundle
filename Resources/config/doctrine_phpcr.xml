@@ -20,7 +20,7 @@
             <argument type="service" id="doctrine_phpcr" />
             <argument>%cmf_media.manager_name%</argument>
             <argument/>
-            <argument>%cmf_media.media_basepath%</argument>
+            <argument>/</argument>
         </service>
     </services>
 </container>

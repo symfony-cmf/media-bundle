@@ -8,4 +8,5 @@
         <default key="_controller">cmf_media.download_controller:downloadAction</default>
         <requirement key="path">.*</requirement>
     </route>
+
 </routes>

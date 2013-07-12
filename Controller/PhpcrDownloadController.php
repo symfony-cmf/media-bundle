@@ -2,6 +2,7 @@
 
 namespace Symfony\Cmf\Bundle\MediaBundle\Controller;
 
+use PHPCR\Util\PathHelper;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -15,10 +16,10 @@ class PhpcrDownloadController extends AbstractDownloadController
     protected function mapPathToId($path)
     {
         // The path is being the id
-        $id = \PHPCR\Util\PathHelper::absolutizePath($path, '/');
+        $id = PathHelper::absolutizePath($path, '/');
 
         if (0 !== strpos($id, $this->rootPath)) {
-            throw new \NotFoundHttpException(sprintf(
+            throw new NotFoundHttpException(sprintf(
                 'The path "%s" is out of the root path "%s" were the file system is located.',
                 $path,
                 $this->rootPath

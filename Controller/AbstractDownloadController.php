@@ -30,7 +30,7 @@ abstract class AbstractDownloadController
     {
         $this->managerRegistry = $registry;
         $this->managerName     = $managerName;
-        $this->class           = $class;
+        $this->class           = $class === '' ? null : $class;
         $this->rootPath        = $rootPath;
     }
 
@@ -101,14 +101,14 @@ abstract class AbstractDownloadController
             throw new NotFoundHttpException('Content is no file');
         }
 
-        if ($contentDocument instanceof BinaryInterface && is_file($contentDocument->getContentAsStream())) {
-            $file = $contentDocument->getContentAsStream();
+        if ($contentDocument instanceof BinaryInterface) {
+            $metadata = stream_get_meta_data($contentDocument->getContentAsStream());
+
+            $file = isset($metadata['uri']) ? $metadata['uri'] : false;
         } elseif ($contentDocument instanceof FileSystemInterface) {
             $file = $contentDocument->getFileSystemPath();
         } else {
-            $file = new \SplTempFileObject();
-            $file->fwrite($contentDocument->getContentAsString());
-            $file->rewind();
+            throw new NotFoundHttpException('Content cannot be downloaded');
         }
 
         $response = new BinaryFileResponse($file);
