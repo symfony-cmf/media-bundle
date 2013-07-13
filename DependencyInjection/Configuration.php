@@ -44,6 +44,7 @@ class Configuration implements ConfigurationInterface
     private function addImageSection(ArrayNodeDefinition $node)
     {
         $node
+            ->fixXmlConfig('extra_filter')
             ->children()
                 ->enumNode('use_liip_imagine')
                     ->values(array(true, false, 'auto'))
