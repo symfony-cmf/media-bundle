@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<xsd:schema xmlns="http://cmf.symfony.com/schema/dic/media"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://cmf.symfony.com/schema/dic/media"
+    elementFormDefault="qualified">
+
+    <xsd:element name="config" type="config" />
+
+    <xsd:complexType name="config">
+        <xsd:sequence>
+            <xsd:element name="extra-filter" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+
+        <xsd:attribute name="manager-registry" type="manager_registry" />
+        <xsd:attribute name="manager-name" type="xsd:string" />
+        <xsd:attribute name="media-basepath" type="xsd:string" />
+        <xsd:attribute name="media-class" type="xsd:string" />
+        <xsd:attribute name="file-class" type="xsd:string" />
+        <xsd:attribute name="directory-class" type="xsd:string" />
+        <xsd:attribute name="image-class" type="xsd:string" />
+        <xsd:attribute name="use-liip-imagine" type="use_liip_imagine" />
+        <xsd:attribute name="imagine-filter" type="xsd:string" />
+    </xsd:complexType>
+
+    <xsd:simpleType name="manager_registry">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="doctrine_orm" />
+            <xsd:enumeration value="doctrine_phpcr" />
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="use_liip_imagine">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="true" />
+            <xsd:enumeration value="false" />
+            <xsd:enumeration value="auto" />
+        </xsd:restriction>
+    </xsd:simpleType>
+</xsd:schema>
