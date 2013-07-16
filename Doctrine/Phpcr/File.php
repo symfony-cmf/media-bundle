@@ -54,7 +54,7 @@ class File extends Media implements BinaryInterface,
 
         $finfo = new \finfo();
         $this->content->setEncoding($finfo->file($filename,FILEINFO_MIME_ENCODING));
-        $this->content->mimeType($finfo->file($filename,FILEINFO_MIME_TYPE));
+        $this->content->setMimeType($finfo->file($filename,FILEINFO_MIME_TYPE));
 
         $this->updateDimensionsFromContent();
     }
