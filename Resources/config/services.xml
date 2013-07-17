@@ -7,13 +7,15 @@
     <parameters>
         <parameter key="cmf_media.form.image_class">Symfony\Cmf\Bundle\MediaBundle\Form\Type\ImageType</parameter>
         <parameter key="cmf_media.subscriber.imagine_cache_class">Symfony\Cmf\Bundle\MediaBundle\EventListener\ImagineCacheInvalidatorSubscriber</parameter>
+        <parameter key="cmf_media.templating.helper.class">Symfony\Cmf\Bundle\MediaBundle\Templating\Helper\MediaHelper</parameter>
+        <parameter key="cmf_media.twig.extension.class">Symfony\Cmf\Bundle\MediaBundle\Twig\Extension\MediaExtension</parameter>
     </parameters>
 
     <services>
         <service id="cmf_media.form.type.image" class="%cmf_media.form.image_class%">
+            <tag name="form.type" alias="cmf_media_image"/>
             <argument>%cmf_media.image_class%</argument>
             <argument>%cmf_media.imagine.filter%</argument>
-            <tag name="form.type" alias="cmf_media_image"/>
         </service>
 
         <service id="cmf_media.subscriber.imagine_cache" class="%cmf_media.subscriber.imagine_cache_class%">
@@ -21,6 +23,16 @@
             <argument type="service" id="liip_imagine.cache.manager"/>
             <argument type="service" id="service_container"/>
             <argument>%cmf_media.imagine.all_filters%</argument>
+        </service>
+
+        <service id="cmf_media.twig.extension" class="%cmf_media.twig.extension.class%" public="false">
+            <tag name="twig.extension"/>
+            <argument type="service" id="cmf_media.templating.helper"/>
+        </service>
+
+        <service id="cmf_media.templating.helper" class="%cmf_media.templating.helper.class%" public="false">
+            <tag name="templating.helper" alias="cmf_media"/>
+            <argument type="service" id="router"/>
         </service>
     </services>
 </container>
