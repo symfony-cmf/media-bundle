@@ -20,13 +20,6 @@ namespace Symfony\Cmf\Bundle\MediaBundle;
 interface HierarchyInterface extends MediaInterface
 {
     /**
-     * Get full path: /path/of/directory | /path/to/file/filename.ext
-     *
-     * @return string
-     */
-    public function getPath();
-
-    /**
      * Get the parent node.
      *
      * @return Object|null

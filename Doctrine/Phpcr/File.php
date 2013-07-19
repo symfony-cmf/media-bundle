@@ -7,7 +7,6 @@ use Symfony\Cmf\Bundle\MediaBundle\BinaryInterface;
 use Symfony\Cmf\Bundle\MediaBundle\DirectoryInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileSystemInterface;
-use Symfony\Cmf\Bundle\MediaBundle\HierarchyInterface;
 
 /**
  * TODO: create and add cmf:file mixin
@@ -16,7 +15,7 @@ use Symfony\Cmf\Bundle\MediaBundle\HierarchyInterface;
 class File extends Media implements FileInterface, BinaryInterface
 {
     /**
-     * @var HierarchyInterface $parent
+     * @var Object $parent
      */
     protected $parent;
 
@@ -200,14 +199,6 @@ class File extends Media implements FileInterface, BinaryInterface
     public function getParentDirectory()
     {
         return $this->parent instanceof DirectoryInterface ? $this->parent : null;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPath()
-    {
-        return (string) $this->id .'.'. $this->extension;
     }
 
     /**
