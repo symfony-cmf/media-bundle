@@ -12,28 +12,48 @@ use Symfony\Cmf\Bundle\MediaBundle\FileSystemInterface;
  * TODO: create and add cmf:file mixin
  * This class represents a CmfMedia Doctrine Phpcr file.
  */
-class File extends Media implements BinaryInterface,
-                                    DirectoryInterface
+class File extends Media implements FileInterface, BinaryInterface
 {
     /**
-     * @var Resource
+     * @var Object $parent
+     */
+    protected $parent;
+
+    /**
+     * @var Resource $content
      */
     protected $content;
 
     /**
-     * @var int
+     * @var int $size
      */
     protected $size;
 
     /**
-     * @var string
+     * @var string $contentType
      */
     protected $contentType;
 
     /**
-     * @var string
+     * @var string $extension
      */
     protected $extension;
+
+    /**
+     * @param Object $parent
+     */
+    public function setParent($parent)
+    {
+        $this->parent = $parent;
+    }
+
+    /**
+     * @return Object|null
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
 
     /**
      * Set the content for this file from the given filename.
@@ -54,7 +74,7 @@ class File extends Media implements BinaryInterface,
 
         $finfo = new \finfo();
         $this->content->setEncoding($finfo->file($filename,FILEINFO_MIME_ENCODING));
-        $this->content->setMimeType($finfo->file($filename,FILEINFO_MIME_TYPE));
+        $this->content->mimeType($finfo->file($filename,FILEINFO_MIME_TYPE));
 
         $this->updateDimensionsFromContent();
     }
@@ -69,7 +89,7 @@ class File extends Media implements BinaryInterface,
         $this->content = $content;
     }
 
-    /*
+    /**
      * Get the resource representing the data of this file.
      *
      * Ensures the content object is created
@@ -87,7 +107,7 @@ class File extends Media implements BinaryInterface,
     }
 
     /**
-     * {@inheritDoc}
+     * @return string
      */
     public function getContentAsString()
     {
@@ -99,7 +119,8 @@ class File extends Media implements BinaryInterface,
     }
 
     /**
-     * {@inheritDoc}
+     * @param string $content
+     * @return bool|void
      */
     public function setContentFromString($content)
     {
@@ -117,7 +138,8 @@ class File extends Media implements BinaryInterface,
     }
 
     /**
-     * {@inheritDoc}
+     * @param \SplFileInfo|FileInterface $file
+     * @throws \InvalidArgumentException
      */
     public function copyContentFromFile($file)
     {
@@ -139,7 +161,7 @@ class File extends Media implements BinaryInterface,
     }
 
     /**
-     * {@inheritDoc}
+     * @return \Symfony\Cmf\Bundle\MediaBundle\stream
      */
     public function getContentAsStream()
     {
@@ -150,7 +172,8 @@ class File extends Media implements BinaryInterface,
     }
 
     /**
-     * {@inheritDoc}
+     * @param $stream
+     * @throws \InvalidArgumentException
      */
     public function setContentFromStream($stream)
     {
@@ -163,7 +186,7 @@ class File extends Media implements BinaryInterface,
     }
 
     /**
-     * {@inheritDoc}
+     * @param DirectoryInterface $parent
      */
     public function setParentDirectory(DirectoryInterface $parent)
     {
@@ -171,19 +194,11 @@ class File extends Media implements BinaryInterface,
     }
 
     /**
-     * {@inheritDoc}
+     * @return null|DirectoryInterface
      */
     public function getParentDirectory()
     {
         return $this->parent instanceof DirectoryInterface ? $this->parent : null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getPath()
-    {
-        return (string) $this->id;
     }
 
     /**
@@ -195,15 +210,15 @@ class File extends Media implements BinaryInterface,
     }
 
     /**
-     * {@inheritDoc}
+     * @return int
      */
     public function getSize()
     {
-        return $this->size;
+        return (int) $this->size;
     }
 
     /**
-     * @param $mimeType string
+     * @param string $contentType
      */
     public function setContentType($contentType)
     {
@@ -212,7 +227,7 @@ class File extends Media implements BinaryInterface,
     }
 
     /**
-     * {@inheritDoc}
+     * @return string
      */
     public function getContentType()
     {
@@ -228,7 +243,7 @@ class File extends Media implements BinaryInterface,
     }
 
     /**
-     * {@inheritDoc}
+     * @return string
      */
     public function getExtension()
     {
