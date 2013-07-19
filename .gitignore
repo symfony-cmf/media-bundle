@@ -1,0 +1,4 @@
+Tests/Functional/App/cache
+composer.lock
+vendor
+.idea/
