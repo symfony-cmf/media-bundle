@@ -29,7 +29,7 @@ class Image extends File implements ImageInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @return int
      */
     public function getWidth()
     {
@@ -45,7 +45,7 @@ class Image extends File implements ImageInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @return int
      */
     public function getHeight()
     {
@@ -53,7 +53,8 @@ class Image extends File implements ImageInterface
     }
 
     /**
-     * {@inheritDoc}
+     * Determine the with and height of the object from
+     * the binary image data
      */
     protected function updateDimensionsFromContent()
     {

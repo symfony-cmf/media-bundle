@@ -2,86 +2,29 @@
 
 namespace Symfony\Cmf\Bundle\MediaBundle\Model;
 
-use Symfony\Cmf\Bundle\MediaBundle\MediaInterface;
+use Symfony\Cmf\Bundle\MediaBundle\MediaMetaDataInterface;
 
-class Media implements MediaInterface
+class Media extends BaseMedia implements MediaMetaDataInterface
 {
     /**
-     * @var string
-     */
-    protected $id;
-
-    /**
-     * @var string
-     */
-    protected $name;
-
-    /**
-     * @var string
+     * @var string $description
      */
     protected $description;
 
     /**
-     * @var string
+     * @var string $copyright
      */
     protected $copyright;
 
     /**
-     * @var string
+     * @var string $authorName
      */
     protected $authorName;
 
     /**
-     * @var array
+     * @var array $metadata
      */
     protected $metadata;
-
-    /**
-     * @var \DateTime
-     */
-    protected $createdAt;
-
-    /**
-     * @var \DateTime
-     */
-    protected $updatedAt;
-
-    public function __toString()
-    {
-        return (string) $this->id;
-    }
-
-    /**
-     * @param string $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
 
     /**
      * @param string $description
@@ -92,7 +35,7 @@ class Media implements MediaInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @return string
      */
     public function getDescription()
     {
@@ -108,7 +51,7 @@ class Media implements MediaInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @return string
      */
     public function getCopyright()
     {
@@ -124,7 +67,7 @@ class Media implements MediaInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @return string
      */
     public function getAuthorName()
     {
@@ -140,7 +83,7 @@ class Media implements MediaInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @return array
      */
     public function getMetadata()
     {
@@ -148,7 +91,9 @@ class Media implements MediaInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @param string $name
+     * @param null $default
+     * @return null
      */
     public function getMetadataValue($name, $default = null)
     {
@@ -162,21 +107,5 @@ class Media implements MediaInterface
     public function setMetadataValue($name, $value)
     {
         $this->metadata[$name] = $value;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
     }
 }
