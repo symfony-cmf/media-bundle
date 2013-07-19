@@ -8,7 +8,7 @@ namespace Symfony\Cmf\Bundle\MediaBundle;
  * This is to be kept compatible with the SonataMediaBundle MediaInterface to
  * allow integration with sonata.
  */
-interface MediaMetaDataInterface extends MediaInterface
+interface MetaDataInterface extends MediaInterface
 {
     /**
      * The description to show to users, e.g. an image caption or some text

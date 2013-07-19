@@ -8,7 +8,7 @@ namespace Symfony\Cmf\Bundle\MediaBundle;
  * This is to be kept compatible with the SonataMediaBundle MediaInterface to
  * allow integration with sonata.
  */
-interface FileInterface extends HierarchyInterface, MediaMetaDataInterface
+interface FileInterface extends HierarchyInterface, MetaDataInterface
 {
     /**
      * Returns the content
