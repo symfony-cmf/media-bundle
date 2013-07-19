@@ -27,39 +27,10 @@ interface MediaInterface
     public function getName();
 
     /**
-     * The description to show to users, e.g. an image caption or some text
-     * to put after the filename.
-     *
-     * @return string
+     * @param $name
+     * @return void
      */
-    public function getDescription();
-
-    /**
-     * The copyright text, e.g. a license name
-     *
-     * @return string
-     */
-    public function getCopyright();
-
-    /**
-     * The name of the author of the media represented by this object
-     *
-     * @return string
-     */
-    public function getAuthorName();
-
-    /**
-     * Get all metadata
-     *
-     * @return array
-     */
-    public function getMetadata();
-
-    /**
-     * @param string $name
-     * @param null   $default to be used if $name is not set in the metadata
-     */
-    public function getMetadataValue($name, $default = null);
+    public function setName($name);
 
     /**
      * Get creation date
@@ -74,4 +45,5 @@ interface MediaInterface
      * @return \Datetime
      */
     public function getUpdatedAt();
+
 }

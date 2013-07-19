@@ -3,9 +3,7 @@
 namespace Symfony\Cmf\Bundle\MediaBundle;
 
 /**
- * Interface for file objects containing directories.
- *
- * The path to a file is: /path/to/file/filename.ext
+ * Interface for file and directory objects.
  *
  * For PHPCR the id is being the path.
  * For ORM the file path can concatenate the directory identifiers with '/'
@@ -19,12 +17,21 @@ namespace Symfony\Cmf\Bundle\MediaBundle;
  * This is to be kept compatible with the Gaufrette adapter to be able to use a
  * filesystem with directories.
  */
-interface DirectoryInterface extends HierarchyInterface
+interface HierarchyInterface extends MediaInterface
 {
     /**
-     * Returns the contents of this directory.
+     * Get the parent node.
      *
-     * @return HierarchyInterface[]
+     * @return Object|null
      */
-    public function getChildren();
+    public function getParent();
+
+    /**
+     * Set the parent node.
+     *
+     * @param Object $parent
+     *
+     * @return boolean
+     */
+    public function setParent($parent);
 }
