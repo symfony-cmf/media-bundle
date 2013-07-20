@@ -4,7 +4,6 @@ namespace Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr;
 
 use Doctrine\ODM\PHPCR\Document\Resource;
 use Symfony\Cmf\Bundle\MediaBundle\BinaryInterface;
-use Symfony\Cmf\Bundle\MediaBundle\DirectoryInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileSystemInterface;
 
@@ -14,11 +13,6 @@ use Symfony\Cmf\Bundle\MediaBundle\FileSystemInterface;
  */
 class File extends Media implements FileInterface, BinaryInterface
 {
-    /**
-     * @var Object $parent
-     */
-    protected $parent;
-
     /**
      * @var Resource $content
      */
@@ -40,22 +34,6 @@ class File extends Media implements FileInterface, BinaryInterface
     protected $extension;
 
     /**
-     * @param Object $parent
-     */
-    public function setParent($parent)
-    {
-        $this->parent = $parent;
-    }
-
-    /**
-     * @return Object|null
-     */
-    public function getParent()
-    {
-        return $this->parent;
-    }
-
-    /**
      * Set the content for this file from the given filename.
      * Calls file_get_contents with the given filename
      *
@@ -74,7 +52,7 @@ class File extends Media implements FileInterface, BinaryInterface
 
         $finfo = new \finfo();
         $this->content->setEncoding($finfo->file($filename,FILEINFO_MIME_ENCODING));
-        $this->content->mimeType($finfo->file($filename,FILEINFO_MIME_TYPE));
+        $this->content->setMimeType($finfo->file($filename,FILEINFO_MIME_TYPE));
 
         $this->updateDimensionsFromContent();
     }
@@ -183,22 +161,6 @@ class File extends Media implements FileInterface, BinaryInterface
 
         $this->getContent()->setData($stream);
         $this->updateDimensionsFromContent();
-    }
-
-    /**
-     * @param DirectoryInterface $parent
-     */
-    public function setParentDirectory(DirectoryInterface $parent)
-    {
-        $this->parent = $parent;
-    }
-
-    /**
-     * @return null|DirectoryInterface
-     */
-    public function getParentDirectory()
-    {
-        return $this->parent instanceof DirectoryInterface ? $this->parent : null;
     }
 
     /**

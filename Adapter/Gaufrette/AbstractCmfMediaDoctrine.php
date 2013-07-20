@@ -10,16 +10,16 @@ use Gaufrette\Adapter\MetadataSupporter;
 use Gaufrette\Util;
 use Symfony\Cmf\Bundle\MediaBundle\DirectoryInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
+use Symfony\Cmf\Bundle\MediaBundle\HierarchyInterface;
 
 /**
  * Cmf doctrine media adapter
  *
- * The path to a file is: /path/to/file/filename.ext
+ * Gaufrette uses a key to identify a file or directory. This adapter uses a
+ * filesystem path, like /path/to/file/filename.ext, as key.
  *
- * For PHPCR the id is being the path, set "fullPathId" to true.
- * For ORM the file path can concatenate the directory identifiers with '/'
- * and ends with the file identifier. For a nice path a slug could be used
- * as identifier, set "identifier" to fe. "slug".
+ * The abstract method getFilePath is used to get the path for a file or
+ * directory object. The method mapKeyToId maps a path back to an id.
  */
 abstract class AbstractCmfMediaDoctrine implements Adapter,
                                                    ChecksumCalculator,
@@ -31,7 +31,6 @@ abstract class AbstractCmfMediaDoctrine implements Adapter,
     protected $class;
     protected $rootPath;
     protected $create;
-    protected $fullPathId;
     protected $dirClass;
     protected $identifier;
     protected $autoFlush;
@@ -47,8 +46,6 @@ abstract class AbstractCmfMediaDoctrine implements Adapter,
      * @param string          $rootPath    path where the filesystem is located
      * @param boolean         $create      whether to create the directory if
      *                                     it does not exist (default FALSE)
-     * @param boolean         $fullPathId  whether the identifier contains the
-     *                                     full file path (default FALSE)
      * @param string          $dirClass    fully qualified class name for dirs
      *                                     (default NULL: dir is same as file)
      * @param string          $identifier  property used to identify a file and
@@ -63,7 +60,6 @@ abstract class AbstractCmfMediaDoctrine implements Adapter,
         $class,
         $rootPath = '/',
         $create = false,
-        $fullPathId = false,
         $dirClass = null,
         $identifier = null,
         $autoFlush = true)
@@ -93,8 +89,6 @@ abstract class AbstractCmfMediaDoctrine implements Adapter,
         }
 
         if ($dirClass) {
-            // TODO: check after re-modelling directories in interface structure,
-            // see https://github.com/symfony-cmf/MediaBundle/issues/18
             if (!is_subclass_of($dirClass, 'Symfony\Cmf\Bundle\MediaBundle\DirectoryInterface')) {
                 throw new \InvalidArgumentException(sprintf(
                     'The class "%s" does not implement Symfony\Cmf\Bundle\MediaBundle\DirectoryInterface',
@@ -269,12 +263,10 @@ abstract class AbstractCmfMediaDoctrine implements Adapter,
         foreach ($files as $file) {
             $key = $this->computeKey($this->getFilePath($file));
 
-            // TODO: check after re-modelling directories in interface structure,
-            // see https://github.com/symfony-cmf/MediaBundle/issues/18
-            if ($file instanceof DirectoryInterface && $file->isDirectory()) {
-                $dirKeys[] = $key;
+            if ($file instanceof FileInterface) {
+                $fileKeys = $key;
             } else {
-                $fileKeys[] = $key;
+                $dirKeys[] = $key;
             }
         }
 
@@ -286,14 +278,19 @@ abstract class AbstractCmfMediaDoctrine implements Adapter,
 
     /**
      * {@inheritDoc}
+     *
+     * @throws RuntimeException If file cannot be found or cannot be written
+     *                          to
      */
     public function setMetadata($key, $metadata)
     {
         $file = $this->find($key);
 
-        if ($file) {
-            $file->setMetadata($metadata);
+        if (! $file) {
+            throw new \RuntimeException(sprintf('The file "%s" does not exist.', $key));
         }
+
+        $file->setMetadata($metadata);
     }
 
     /**
@@ -414,46 +411,26 @@ abstract class AbstractCmfMediaDoctrine implements Adapter,
     }
 
     /**
-     * Get full file path: /path/to/file/filename.ext
+     * Get filesystem path.
      *
-     * For PHPCR the id is being the path.
-     * For ORM the file path can concatenate the directory identifiers with '/'
-     * and ends with the file identifier. For a nice path a slug could be used
-     * as identifier.
+     * Gaufrette uses a key to identify a file or directory. This adapter uses
+     * a filesystem path, like /path/to/file/filename.ext, as key.
      *
      * @return string
      */
-    protected function getFilePath(FileInterface $file)
-    {
-        // TODO: check after re-modelling directories in interface structure,
-        // see https://github.com/symfony-cmf/MediaBundle/issues/18
-        if ($file instanceof DirectoryInterface) {
-            $path = $file->getPath();
-        } else {
-            $path = $file->getId();
-        }
-
-        return $path;
-    }
+    abstract protected function getFilePath(FileInterface $file);
 
     /**
      * Map the key to an id to retrieve the file
+     *
+     * Gaufrette uses a key to identify a file or directory. This adapter uses
+     * a filesystem path, like /path/to/file/filename.ext, as key.
      *
      * @param $key
      *
      * @return string
      */
-    protected function mapKeyToId($key)
-    {
-        // TODO: remove fullPathId config?
-        if ($this->fullPathId) {
-            // The path is being the id
-            return $this->computePath($key);
-        } else {
-            // Get filename component of path, that is the id
-            return $this->getBaseName($this->computePath($key));
-        }
-    }
+    abstract protected function mapKeyToId($key);
 
     /**
      * Computes the key from the specified path
@@ -531,9 +508,9 @@ abstract class AbstractCmfMediaDoctrine implements Adapter,
      *
      * @param string        $path   Path of the file
      * @param FileInterface $file
-     * @param FileInterface $parent Parent directory of the file
+     * @param DirectoryInterface $parent Parent directory of the file
      */
-    protected function setFileDefaults($path, FileInterface $file, FileInterface $parent = null)
+    protected function setFileDefaults($path, FileInterface $file, DirectoryInterface $parent = null)
     {
         $setIdentifier = $this->identifier ? 'set'.ucfirst($this->identifier) : false;
         $name          = $this->getBaseName($path);
@@ -543,10 +520,8 @@ abstract class AbstractCmfMediaDoctrine implements Adapter,
         }
         $file->setName($name);
 
-        // TODO: check after re-modelling directories in interface structure,
-        // see https://github.com/symfony-cmf/MediaBundle/issues/18
-        if ($parent && $file instanceof DirectoryInterface) {
-            $file->setParentDirectory($parent);
+        if ($file instanceof HierarchyInterface && $parent && $parent instanceof DirectoryInterface) {
+            $file->setParent($parent);
         }
     }
 

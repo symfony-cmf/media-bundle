@@ -10,8 +10,20 @@
         node-type="nt:folder"
         >
 
+        <mixins>
+            <mixin type="mix:lastModified" />
+        </mixins>
+
+        <id name="id">
+            <generator strategy="PARENT"/>
+        </id>
+        <nodename name="name"/>
+        <parent-document name="parent"/>
+
         <children name="children"/>
-        <field name="size" type="int"/>
+
+        <field name="createdAt" type="date" property="jcr:created"/>
+        <field name="updatedAt" type="date" property="jcr:lastModified"/>
 
     </document>
 

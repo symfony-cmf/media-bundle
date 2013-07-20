@@ -6,6 +6,7 @@
 
     <parameters>
         <parameter key="cmf_media.download_controller.class">Symfony\Cmf\Bundle\MediaBundle\Controller\PhpcrDownloadController</parameter>
+        <parameter key="cmf_media.templating.helper.class">Symfony\Cmf\Bundle\MediaBundle\Templating\Helper\PhpcrMediaHelper</parameter>
     </parameters>
 
     <services>
@@ -21,6 +22,11 @@
             <argument>%cmf_media.manager_name%</argument>
             <argument/>
             <argument>/</argument>
+        </service>
+
+        <service id="cmf_media.templating.helper" class="%cmf_media.templating.helper.class%" public="false">
+            <tag name="templating.helper" alias="cmf_media"/>
+            <argument type="service" id="router"/>
         </service>
     </services>
 </container>

@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * A listener to invalidate the imagine cache when Image documents are modified
  */
-class ImagineCacheInvalidatorSubscriber implements EventSubscriber
+abstract class AbstractImagineCacheInvalidatorSubscriber implements EventSubscriber
 {
     /**
      * @var CacheManager
@@ -101,7 +101,7 @@ class ImagineCacheInvalidatorSubscriber implements EventSubscriber
                 return;
             }
             foreach ($this->filters as $filter) {
-                $path = $this->manager->resolve($request, $this->getFilePath($object), $filter);
+                $path = $this->manager->resolve($request, $this->getPath($object), $filter);
                 if ($path instanceof RedirectResponse) {
                     $path = $path->getTargetUrl();
                 }
@@ -116,23 +116,9 @@ class ImagineCacheInvalidatorSubscriber implements EventSubscriber
     }
 
     /**
-     * Get full file path: /path/to/file/filename.ext
-     *
-     * For PHPCR the id is being the path.
-     * For ORM the file path can concatenate the directory identifiers with '/'
-     * and ends with the file identifier. For a nice path a slug could be used
-     * as identifier.
+     * Get path for imagine
      *
      * @return string
      */
-    protected function getFilePath(FileInterface $file)
-    {
-        if ($file instanceof DirectoryInterface) {
-            $path = $file->getPath();
-        } else {
-            $path = $file->getId();
-        }
-
-        return $path;
-    }
+    abstract protected function getPath(FileInterface $file);
 }
