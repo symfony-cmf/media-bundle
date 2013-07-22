@@ -10,11 +10,24 @@
         referenceable="true"
         >
 
+        <mixins>
+            <mixin type="mix:lastModified" />
+        </mixins>
+
+        <id name="id">
+            <generator strategy="PARENT"/>
+        </id>
+        <nodename name="name"/>
+        <parent-document name="parent"/>
+
         <field name="description" type="string"/>
         <field name="copyright" type="string"/>
         <field name="authorName" type="string"/>
         <field name="createdBy" type="string" property="jcr:createdBy"/>
         <field name="updatedBy" type="string" property="jcr:lastModifiedBy"/>
+
+        <field name="createdAt" type="date" property="jcr:created"/>
+        <field name="updatedAt" type="date" property="jcr:lastModified"/>
 
         <field name="metadata" type="string" assoc=""/>
 

@@ -2,13 +2,13 @@
 
 namespace Symfony\Cmf\Bundle\MediaBundle\Twig\Extension;
 
-use Symfony\Cmf\Bundle\MediaBundle\Templating\Helper\MediaHelper;
+use Symfony\Cmf\Bundle\MediaBundle\Templating\Helper\AbstractMediaHelper;
 
 class MediaExtension extends \Twig_Extension
 {
     protected $mediaHelper;
 
-    public function __construct(MediaHelper $mediaHelper)
+    public function __construct(AbstractMediaHelper $mediaHelper)
     {
         $this->mediaHelper = $mediaHelper;
     }

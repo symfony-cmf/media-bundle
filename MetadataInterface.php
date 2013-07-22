@@ -58,8 +58,30 @@ interface MetadataInterface extends MediaInterface
     public function getMetadata();
 
     /**
+     * Set all metadata
+     *
+     * @return array $metadata
+     */
+    public function setMetadata(array $metadata);
+
+    /**
      * @param string $name
      * @param null   $default to be used if $name is not set in the metadata
      */
     public function getMetadataValue($name, $default = null);
+
+    /**
+     * The metadata value
+     *
+     * @param string $name
+     * @param mixed  $value
+     */
+    public function setMetadataValue($name, $value);
+
+    /**
+     * Remove a named data from the metadata
+     *
+     * @param string $name
+     */
+    public function unsetMetadataValue($name);
 }
