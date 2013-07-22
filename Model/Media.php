@@ -2,9 +2,9 @@
 
 namespace Symfony\Cmf\Bundle\MediaBundle\Model;
 
-use Symfony\Cmf\Bundle\MediaBundle\MetaDataInterface;
+use Symfony\Cmf\Bundle\MediaBundle\MetadataInterface;
 
-class Media extends BaseMedia implements MetaDataInterface
+class Media extends BaseMedia implements MetadataInterface
 {
     /**
      * @var string $description
