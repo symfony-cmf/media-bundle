@@ -77,7 +77,7 @@ class Media extends BaseMedia implements MetadataInterface
     /**
      * @param array $metadata
      */
-    public function setMetadata($metadata)
+    public function setMetadata(array $metadata)
     {
         $this->metadata = $metadata;
     }
@@ -107,5 +107,15 @@ class Media extends BaseMedia implements MetadataInterface
     public function setMetadataValue($name, $value)
     {
         $this->metadata[$name] = $value;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function unsetMetadataValue($name)
+    {
+        $metadata = $this->getMetadata();
+        unset($metadata[$name]);
+        $this->setMetadata($metadata);
     }
 }

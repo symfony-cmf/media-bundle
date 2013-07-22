@@ -95,8 +95,6 @@ class CmfMediaExtension extends Extension
 
         $bundles = $container->getParameter('kernel.bundles');
         if ('auto' === $config['use_liip_imagine'] && !isset($bundles['LiipImagineBundle'])) {
-            $container->removeDefinition('cmf_media.subscriber.imagine_cache');
-
             return;
         }
 
