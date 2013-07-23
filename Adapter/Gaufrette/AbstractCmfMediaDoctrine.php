@@ -11,6 +11,8 @@ use Gaufrette\Util;
 use Symfony\Cmf\Bundle\MediaBundle\DirectoryInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
 use Symfony\Cmf\Bundle\MediaBundle\HierarchyInterface;
+use Symfony\Cmf\Bundle\MediaBundle\MediaInterface;
+use Symfony\Cmf\Bundle\MediaBundle\MediaManagerInterface;
 
 /**
  * Cmf doctrine media adapter
@@ -18,17 +20,22 @@ use Symfony\Cmf\Bundle\MediaBundle\HierarchyInterface;
  * Gaufrette uses a key to identify a file or directory. This adapter uses a
  * filesystem path, like /path/to/file/filename.ext, as key.
  *
- * The abstract method getFilePath is used to get the path for a file or
- * directory object. The method mapKeyToId maps a path back to an id.
+ * The method getFilePath is used to get the path for a file or directory
+ * object. The method mapKeyToId maps a path back to an id.
+ *
+ * If you set the autoFlush flag to false, you will get better performance but
+ * must ensure that flush is called after all media operations are done.
  */
-abstract class AbstractCmfMediaDoctrine implements Adapter,
-                                                   ChecksumCalculator,
-                                                   ListKeysAware,
-                                                   MetadataSupporter
+abstract class AbstractCmfMediaDoctrine implements
+    Adapter,
+    ChecksumCalculator,
+    ListKeysAware,
+    MetadataSupporter
 {
     protected $managerRegistry;
     protected $managerName;
     protected $class;
+    protected $mediaManager;
     protected $rootPath;
     protected $create;
     protected $dirClass;
@@ -40,24 +47,26 @@ abstract class AbstractCmfMediaDoctrine implements Adapter,
     /**
      * Constructor
      *
-     * @param ManagerRegistry $registry
-     * @param string          $managerName
-     * @param string          $class       fully qualified class name of file
-     * @param string          $rootPath    path where the filesystem is located
-     * @param boolean         $create      whether to create the directory if
-     *                                     it does not exist (default FALSE)
-     * @param string          $dirClass    fully qualified class name for dirs
-     *                                     (default NULL: dir is same as file)
-     * @param string          $identifier  property used to identify a file and
-     *                                     lookup (default NULL: let Doctrine
-     *                                     determine the identifier)
-     * @param boolean         $autoFlush   whether to flush write and delete
-     *                                     actions (default: true)
+     * @param ManagerRegistry       $registry
+     * @param string                $managerName
+     * @param string                $class        fully qualified class name of file
+     * @param MediaManagerInterface $mediaManager
+     * @param string                $rootPath     path where the filesystem is located
+     * @param boolean               $create       whether to create the directory if
+     *                                            it does not exist (default FALSE)
+     * @param string                $dirClass     fully qualified class name for dirs
+     *                                            (default NULL: dir is same as file)
+     * @param string                $identifier   property used to identify a file and
+     *                                            lookup (default NULL: let Doctrine
+     *                                            determine the identifier)
+     * @param boolean               $autoFlush    whether to immediately flush write
+     *                                            and delete actions (default: true)
      */
     public function __construct(
         ManagerRegistry $registry,
         $managerName,
         $class,
+        MediaManagerInterface $mediaManager,
         $rootPath = '/',
         $create = false,
         $dirClass = null,
@@ -67,6 +76,7 @@ abstract class AbstractCmfMediaDoctrine implements Adapter,
         $this->managerRegistry = $registry;
         $this->managerName     = $managerName;
         $this->class           = $class;
+        $this->mediaManager    = $mediaManager;
         $this->rootPath        = Util\Path::normalize($rootPath);
         $this->create          = $create;
         $this->dirClass        = $dirClass;
@@ -418,7 +428,10 @@ abstract class AbstractCmfMediaDoctrine implements Adapter,
      *
      * @return string
      */
-    abstract protected function getFilePath(FileInterface $file);
+    protected function getFilePath(MediaInterface $file)
+    {
+        return $this->mediaManager->getPath($file);
+    }
 
     /**
      * Map the key to an id to retrieve the file
@@ -430,7 +443,10 @@ abstract class AbstractCmfMediaDoctrine implements Adapter,
      *
      * @return string
      */
-    abstract protected function mapKeyToId($key);
+    protected function mapKeyToId($key)
+    {
+        return $this->mediaManager->mapPathToId($key);
+    }
 
     /**
      * Computes the key from the specified path
