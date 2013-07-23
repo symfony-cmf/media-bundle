@@ -6,6 +6,8 @@
 
     <parameters>
         <parameter key="cmf_media.helper.class">Symfony\Cmf\Bundle\MediaBundle\Helper\PhpcrMediaHelper</parameter>
+        <parameter key="cmf_media.file.controller.class">Symfony\Cmf\Bundle\MediaBundle\Controller\FileController</parameter>
+        <parameter key="cmf_media.image.controller.class">Symfony\Cmf\Bundle\MediaBundle\Controller\ImageController</parameter>
     </parameters>
 
     <services>
@@ -16,9 +18,20 @@
             <tag name="doctrine_phpcr.initializer" />
         </service>
 
-        <service id="cmf_media.helper" class="%cmf_media.helper.class%" public="false" />
+        <service id="cmf_media.helper" class="%cmf_media.helper.class%" public="false">
+            <argument type="service" id="doctrine_phpcr" />
+            <argument>%cmf_media.manager_name%</argument>
+        </service>
 
         <service id="cmf_media.file.controller" class="%cmf_media.file.controller.class%" >
+            <argument type="service" id="doctrine_phpcr" />
+            <argument>%cmf_media.manager_name%</argument>
+            <argument/>
+            <argument>/</argument>
+            <argument type="service" id="cmf_media.helper" />
+        </service>
+
+        <service id="cmf_media.image.controller" class="%cmf_media.image.controller.class%" >
             <argument type="service" id="doctrine_phpcr" />
             <argument>%cmf_media.manager_name%</argument>
             <argument/>

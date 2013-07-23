@@ -25,6 +25,18 @@ interface MediaHelperInterface
     public function getFilePath(MediaInterface $media);
 
     /**
+     * Create and add a filesystem path to the media object if needed;
+     * is used fe. by Doctrine PHPCR to generate a unique id.
+     *
+     * @param MediaInterface $media
+     *
+     * @return void
+     *
+     * @throws \RuntimeException if the file path could not be created
+     */
+    public function createFilePath(MediaInterface $media, $rootPath = null);
+
+    /**
      * Map the requested path (ie. subpath in the URL) to an id that can
      * be used to lookup the file in the Doctrine store.
      *
@@ -33,7 +45,7 @@ interface MediaHelperInterface
      *
      * @return string
      *
-     * @throws OutOfBoundsException if the path is out of the root path where
+     * @throws \OutOfBoundsException if the path is out of the root path where
      *                              the filesystem is located
      */
     public function mapPathToId($path, $rootPath = null);

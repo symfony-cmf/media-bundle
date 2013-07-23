@@ -25,6 +25,10 @@ class MediaExtension extends \Twig_Extension
                 array($this->mediaHelper, 'downloadUrl'),
                 array('is_safe' => array('html'))
             ),
+            new \Twig_SimpleFunction('cmf_media_display_url',
+                array($this->mediaHelper, 'displayUrl'),
+                array('is_safe' => array('html'))
+            ),
         );
     }
 

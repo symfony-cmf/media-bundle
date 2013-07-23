@@ -6,6 +6,7 @@
 
     <route id="cmf_media_download" pattern="/media/download/{path}">
         <default key="_controller">cmf_media.file.controller:downloadAction</default>
+        <requirement key="_method">GET</requirement>
         <requirement key="path">.*</requirement>
     </route>
 

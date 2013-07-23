@@ -4,6 +4,7 @@ namespace Symfony\Cmf\Bundle\MediaBundle\Templating\Helper;
 
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
 use Symfony\Cmf\Bundle\MediaBundle\Helper\MediaHelperInterface;
+use Symfony\Cmf\Bundle\MediaBundle\ImageInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Templating\Helper\Helper;
 
@@ -37,6 +38,21 @@ class MediaHelper extends Helper
         $path = $this->mediaHelper->getFilePath($file);
 
         return $this->generator->generate('cmf_media_download', array('path' => ltrim($path, '/')), $referenceType);
+    }
+
+    /**
+     * Generates a display URL from the given image.
+     *
+     * @param ImageInterface  $file
+     * @param Boolean|string $referenceType The type of reference (one of the constants in UrlGeneratorInterface)
+     *
+     * @return string The generated URL
+     */
+    public function displayUrl(ImageInterface $file, $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+    {
+        $path = $this->mediaHelper->getFilePath($file);
+
+        return $this->generator->generate('cmf_media_image_display', array('path' => ltrim($path, '/')), $referenceType);
     }
 
     /**

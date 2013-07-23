@@ -3,13 +3,17 @@
 namespace Symfony\Cmf\Bundle\MediaBundle\Controller;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Cmf\Bundle\MediaBundle\BinaryInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileSystemInterface;
 use Symfony\Cmf\Bundle\MediaBundle\Helper\MediaHelperInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -76,7 +80,7 @@ class FileController
      * Get the object manager from the registry, based on the current
      * managerName
      *
-     * @return \Doctrine\Common\Persistence\ObjectManager
+     * @return ObjectManager
      */
     protected function getObjectManager()
     {
@@ -84,7 +88,55 @@ class FileController
     }
 
     /**
-     * Action to download a document that has a route
+     * Validate the uploaded file
+     *
+     * @param UploadedFile $file
+     *
+     * @return bool
+     */
+    protected function validateFile(UploadedFile $file)
+    {
+        return true;
+    }
+
+    /**
+     * Get description if set in the request for an upload
+     *
+     * @param Request $request
+     *
+     * @return string|null
+     */
+    protected function getDescription(Request $request)
+    {
+        if (strlen($request->get('description'))) {
+            return $request->get('description');
+        } elseif (strlen($request->get('caption'))) {
+            return $request->get('caption');
+        }
+
+        return null;
+    }
+
+    /**
+     * TODO: change to use an upload response factory;
+     * what should be the default response for an uploaded file?
+     *
+     * Generate the response for an uploaded image
+     *
+     * @param FileInterface $image
+     * @param UploadedFile $uploadedFile
+     *
+     * @return Response
+     */
+    protected function generateUploadResponse(FileInterface $file, UploadedFile $uploadedFile)
+    {
+        $path = $this->mediaHelper->getFilePath($file);
+
+        return new RedirectResponse($this->router->generate('cmf_media_image_display', array('path' => ltrim($path, '/'))));
+    }
+
+    /**
+     * Action to download a file object that has a route
      *
      * @param string $id
      */
@@ -127,5 +179,47 @@ class FileController
         }
 
         return $response;
+    }
+
+    public function uploadAction(Request $request)
+    {
+        $files = $request->files;
+
+        /** @var $file UploadedFile */
+        $uploadedFile = $files->getIterator()->current();
+        $this->validateFile($uploadedFile);
+
+        $name = $uploadedFile->getClientOriginalName();
+        $description = $this->getDescription($request);
+
+        /** @var $image FileInterface */
+        $file = new $this->class;
+        $file->setName($name);
+        if ($description) {
+            $file->setDescription($name);
+        }
+        $file->copyContentFromFile($uploadedFile);
+
+        try {
+            $this->mediaHelper->createFilePath($file, $this->rootPath);
+        } catch (\RuntimeException $e) {
+            throw new HttpException(409, $e->getMessage());
+        }
+
+        // persist
+        $this->getObjectManager()->persist($file);
+        $this->getObjectManager()->flush();
+
+        // file upload via CKEditor
+        if ($request->query->get('CKEditor')) {
+            $response = $this->generateUploadResponse($file, $uploadedFile);
+            $data = "<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction(" . $request->query->get('CKEditorFuncNum') . ", '" . $response->getTargetUrl() . "', 'success');</script>";
+
+            $response = new Response($data);
+            $response->headers->set('Content-Type', 'text/html');
+            return $response;
+        } else {
+            return $this->generateUploadResponse($file, $uploadedFile);
+        }
     }
 }

@@ -23,10 +23,11 @@ use Symfony\Cmf\Bundle\MediaBundle\MediaInterface;
  * The abstract method getFilePath is used to get the path for a file or
  * directory object. The method mapKeyToId maps a path back to an id.
  */
-class AbstractCmfMediaDoctrine implements Adapter,
-                                                   ChecksumCalculator,
-                                                   ListKeysAware,
-                                                   MetadataSupporter
+class CmfMediaDoctrine implements
+    Adapter,
+    ChecksumCalculator,
+    ListKeysAware,
+    MetadataSupporter
 {
     protected $managerRegistry;
     protected $managerName;

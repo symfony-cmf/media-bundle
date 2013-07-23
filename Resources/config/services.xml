@@ -6,7 +6,6 @@
 
     <parameters>
         <parameter key="cmf_media.form.image_class">Symfony\Cmf\Bundle\MediaBundle\Form\Type\ImageType</parameter>
-        <parameter key="cmf_media.file.controller.class">Symfony\Cmf\Bundle\MediaBundle\Controller\FileController</parameter>
         <parameter key="cmf_media.templating.helper.class">Symfony\Cmf\Bundle\MediaBundle\Templating\Helper\MediaHelper</parameter>
         <parameter key="cmf_media.twig.extension.class">Symfony\Cmf\Bundle\MediaBundle\Twig\Extension\MediaExtension</parameter>
     </parameters>

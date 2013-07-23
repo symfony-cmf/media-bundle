@@ -2,17 +2,87 @@
 
 namespace Symfony\Cmf\Bundle\MediaBundle\Helper;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\Util\ClassUtils;
 use PHPCR\Util\PathHelper;
 use Symfony\Cmf\Bundle\MediaBundle\MediaInterface;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class PhpcrMediaHelper implements MediaHelperInterface
 {
+    protected $managerRegistry;
+    protected $managerName;
+
+    /**
+     * @param ManagerRegistry $registry
+     * @param string          $managerName
+     */
+    public function __construct(ManagerRegistry $registry, $managerName)
+    {
+        $this->managerRegistry = $registry;
+        $this->managerName     = $managerName;
+    }
+
+    /**
+     * Set the managerName to use to get the object manager;
+     * if not called, the default manager will be used.
+     *
+     * @param string $managerName
+     */
+    public function setManagerName($managerName)
+    {
+        $this->managerName = $managerName;
+    }
+
+    /**
+     * Set the class to use to get the file object;
+     * if not called, the default class will be used.
+     *
+     * @param string $class fully qualified class name of file
+     */
+    public function setClass($class)
+    {
+        $this->class = $class;
+    }
+
+    /**
+     * Get the object manager from the registry, based on the current
+     * managerName
+     *
+     * @return ObjectManager
+     */
+    protected function getObjectManager()
+    {
+        return $this->managerRegistry->getManager($this->managerName);
+    }
+
     /**
      * {@inheritdoc}
      */
     public function getFilePath(MediaInterface $media)
     {
         return $media->getId();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createFilePath(MediaInterface $media, $rootPath = null)
+    {
+        $path = ($rootPath ? rtrim($rootPath, '/') : '/') . $media->getName();
+
+        // check if path exists
+        $class = ClassUtils::getClass($media);
+        if (! $this->getObjectManager()->find($class, $path)) {
+            throw new \RuntimeException(sprintf(
+                'A media object already exists at "%s".',
+                $path
+            ));
+        }
+
+        // set id
+        $media->setId($path);
     }
 
     /**
