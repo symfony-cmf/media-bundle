@@ -6,20 +6,28 @@
 
     <parameters>
         <parameter key="cmf_media.form.image_class">Symfony\Cmf\Bundle\MediaBundle\Form\Type\ImageType</parameter>
+        <parameter key="cmf_media.file.controller.class">Symfony\Cmf\Bundle\MediaBundle\Controller\FileController</parameter>
+        <parameter key="cmf_media.templating.helper.class">Symfony\Cmf\Bundle\MediaBundle\Templating\Helper\MediaHelper</parameter>
         <parameter key="cmf_media.twig.extension.class">Symfony\Cmf\Bundle\MediaBundle\Twig\Extension\MediaExtension</parameter>
     </parameters>
 
     <services>
         <service id="cmf_media.form.type.image" class="%cmf_media.form.image_class%">
-            <tag name="form.type" alias="cmf_media_image"/>
+            <tag name="form.type" alias="cmf_media_image" />
             <argument>%cmf_media.image_class%</argument>
             <argument>%cmf_media.use_imagine%</argument>
             <argument>%cmf_media.imagine.filter%</argument>
         </service>
 
+        <service id="cmf_media.templating.helper" class="%cmf_media.templating.helper.class%" public="false">
+            <tag name="templating.helper" alias="cmf_media" />
+            <argument type="service" id="cmf_media.helper" />
+            <argument type="service" id="router" />
+        </service>
+
         <service id="cmf_media.twig.extension" class="%cmf_media.twig.extension.class%" public="false">
-            <tag name="twig.extension"/>
-            <argument type="service" id="cmf_media.templating.helper"/>
+            <tag name="twig.extension" />
+            <argument type="service" id="cmf_media.templating.helper" />
         </service>
     </services>
 </container>

@@ -5,8 +5,7 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="cmf_media.download_controller.class">Symfony\Cmf\Bundle\MediaBundle\Controller\PhpcrDownloadController</parameter>
-        <parameter key="cmf_media.templating.helper.class">Symfony\Cmf\Bundle\MediaBundle\Templating\Helper\PhpcrMediaHelper</parameter>
+        <parameter key="cmf_media.helper.class">Symfony\Cmf\Bundle\MediaBundle\Helper\PhpcrMediaHelper</parameter>
     </parameters>
 
     <services>
@@ -17,16 +16,14 @@
             <tag name="doctrine_phpcr.initializer" />
         </service>
 
-        <service id="cmf_media.download_controller" class="%cmf_media.download_controller.class%" >
+        <service id="cmf_media.helper" class="%cmf_media.helper.class%" public="false" />
+
+        <service id="cmf_media.file.controller" class="%cmf_media.file.controller.class%" >
             <argument type="service" id="doctrine_phpcr" />
             <argument>%cmf_media.manager_name%</argument>
             <argument/>
             <argument>/</argument>
-        </service>
-
-        <service id="cmf_media.templating.helper" class="%cmf_media.templating.helper.class%" public="false">
-            <tag name="templating.helper" alias="cmf_media"/>
-            <argument type="service" id="router"/>
+            <argument type="service" id="cmf_media.helper" />
         </service>
     </services>
 </container>

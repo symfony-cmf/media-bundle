@@ -7,6 +7,7 @@ use Imagine\Image\ImagineInterface;
 use Liip\ImagineBundle\Imagine\Data\Loader\AbstractDoctrineLoader;
 use Symfony\Cmf\Bundle\MediaBundle\BinaryInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileSystemInterface;
+use Symfony\Cmf\Bundle\MediaBundle\Helper\MediaHelperInterface;
 use Symfony\Cmf\Bundle\MediaBundle\ImageInterface;
 use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
 
@@ -15,25 +16,39 @@ use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
  *
  * The path to a file is: /path/to/file/filename.ext
  */
-abstract class AbstractCmfMediaDoctrineLoader extends AbstractDoctrineLoader
+class CmfMediaDoctrineLoader extends AbstractDoctrineLoader
 {
+    protected $mediaHelper;
+
     /**
      * Constructor.
      *
-     * @param ImagineInterface $imagine
-     * @param ManagerRegistry  $registry
-     * @param string           $managerName
-     * @param string           $class      fully qualified class name of image
+     * @param ImagineInterface     $imagine
+     * @param ManagerRegistry      $registry
+     * @param string               $managerName
+     * @param MediaHelperInterface $mediaHelper
+     * @param string               $class       fully qualified class name of image
      */
     public function __construct(
         ImagineInterface $imagine,
         ManagerRegistry $registry,
         $managerName,
+        MediaHelperInterface $mediaHelper,
         $class = null)
     {
         $manager = $registry->getManager($managerName);
 
         parent::__construct($imagine, $manager, $class);
+
+        $this->mediaHelper = $mediaHelper;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function mapPathToId($path)
+    {
+        return $this->mediaHelper->mapPathToId($path);
     }
 
     /**

@@ -6,33 +6,37 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Cmf\Bundle\MediaBundle\BinaryInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileSystemInterface;
+use Symfony\Cmf\Bundle\MediaBundle\Helper\MediaHelperInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Controller to handle file downloads for things that have a route
+ * Controller to handle file downloads, uploads and other things that have a route
  */
-abstract class AbstractDownloadController
+class FileController
 {
     protected $managerRegistry;
     protected $managerName;
     protected $class;
     protected $rootPath;
+    protected $mediaHelper;
 
     /**
      * @param ManagerRegistry $registry
      * @param string          $managerName
      * @param string          $class       fully qualified class name of file
      * @param string          $rootPath    path where the filesystem is located
+     * @param MediaHelperInterface $mediaHelper
      */
-    public function __construct(ManagerRegistry $registry, $managerName, $class, $rootPath = '/')
+    public function __construct(ManagerRegistry $registry, $managerName, $class, $rootPath = '/', MediaHelperInterface $mediaHelper)
     {
         $this->managerRegistry = $registry;
         $this->managerName     = $managerName;
         $this->class           = $class === '' ? null : $class;
         $this->rootPath        = $rootPath;
+        $this->mediaHelper     = $mediaHelper;
     }
 
     /**
@@ -80,23 +84,19 @@ abstract class AbstractDownloadController
     }
 
     /**
-     * Map the requested path (ie. subpath in the URL) to an id that can
-     * be used to lookup the file in the Doctrine store.
-     *
-     * @param string $path
-     *
-     * @return string
-     */
-    abstract protected function mapPathToId($path);
-
-    /**
      * Action to download a document that has a route
      *
      * @param string $id
      */
     public function downloadAction($path)
     {
-        $contentDocument = $this->getObjectManager()->find($this->class, $this->mapPathToId($path));
+        try {
+            $id = $this->mediaHelper->mapPathToId($path, $this->rootPath);
+        } catch (\OutOfBoundsException $e) {
+            throw new NotFoundHttpException($e->getMessage());
+        }
+
+        $contentDocument = $this->getObjectManager()->find($this->class, $id);
 
         if (! $contentDocument || ! $contentDocument instanceof FileInterface) {
             throw new NotFoundHttpException('Content is no file');

@@ -101,7 +101,7 @@ class CmfMediaExtension extends Extension
         $container->setParameter($this->getAlias() . '.imagine.filter', $config['imagine_filter']);
         $container->setParameter($this->getAlias() . '.imagine.all_filters', $filters);
 
-        $loader->load($config['manager_registry'] . '.imagine.xml');
+        $loader->load('imagine.'.$config['manager_registry'].'.xml');
     }
 
     /**

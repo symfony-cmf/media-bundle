@@ -10,7 +10,9 @@ use Gaufrette\Adapter\MetadataSupporter;
 use Gaufrette\Util;
 use Symfony\Cmf\Bundle\MediaBundle\DirectoryInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
+use Symfony\Cmf\Bundle\MediaBundle\Helper\MediaHelperInterface;
 use Symfony\Cmf\Bundle\MediaBundle\HierarchyInterface;
+use Symfony\Cmf\Bundle\MediaBundle\MediaInterface;
 
 /**
  * Cmf doctrine media adapter
@@ -21,7 +23,7 @@ use Symfony\Cmf\Bundle\MediaBundle\HierarchyInterface;
  * The abstract method getFilePath is used to get the path for a file or
  * directory object. The method mapKeyToId maps a path back to an id.
  */
-abstract class AbstractCmfMediaDoctrine implements Adapter,
+class AbstractCmfMediaDoctrine implements Adapter,
                                                    ChecksumCalculator,
                                                    ListKeysAware,
                                                    MetadataSupporter
@@ -29,6 +31,7 @@ abstract class AbstractCmfMediaDoctrine implements Adapter,
     protected $managerRegistry;
     protected $managerName;
     protected $class;
+    protected $mediaHelper;
     protected $rootPath;
     protected $create;
     protected $dirClass;
@@ -43,6 +46,7 @@ abstract class AbstractCmfMediaDoctrine implements Adapter,
      * @param ManagerRegistry $registry
      * @param string          $managerName
      * @param string          $class       fully qualified class name of file
+     * @param MediaHelperInterface $mediaHelper
      * @param string          $rootPath    path where the filesystem is located
      * @param boolean         $create      whether to create the directory if
      *                                     it does not exist (default FALSE)
@@ -58,6 +62,7 @@ abstract class AbstractCmfMediaDoctrine implements Adapter,
         ManagerRegistry $registry,
         $managerName,
         $class,
+        MediaHelperInterface $mediaHelper,
         $rootPath = '/',
         $create = false,
         $dirClass = null,
@@ -67,6 +72,7 @@ abstract class AbstractCmfMediaDoctrine implements Adapter,
         $this->managerRegistry = $registry;
         $this->managerName     = $managerName;
         $this->class           = $class;
+        $this->mediaHelper     = $mediaHelper;
         $this->rootPath        = Util\Path::normalize($rootPath);
         $this->create          = $create;
         $this->dirClass        = $dirClass;
@@ -418,7 +424,10 @@ abstract class AbstractCmfMediaDoctrine implements Adapter,
      *
      * @return string
      */
-    abstract protected function getFilePath(FileInterface $file);
+    protected function getFilePath(MediaInterface $file)
+    {
+        return $this->mediaHelper->getFilePath($file);
+    }
 
     /**
      * Map the key to an id to retrieve the file
@@ -430,7 +439,10 @@ abstract class AbstractCmfMediaDoctrine implements Adapter,
      *
      * @return string
      */
-    abstract protected function mapKeyToId($key);
+    protected function mapKeyToId($key)
+    {
+        return $this->mediaHelper->mapPathToId($key);
+    }
 
     /**
      * Computes the key from the specified path
@@ -492,7 +504,10 @@ abstract class AbstractCmfMediaDoctrine implements Adapter,
      *
      * @return string the path with the last segment removed
      */
-    abstract protected function getParentPath($path);
+    protected function getParentPath($path)
+    {
+        return $this->mediaHelper->getParentPath($path);
+    }
 
     /**
      * Get the name from the path
@@ -501,7 +516,10 @@ abstract class AbstractCmfMediaDoctrine implements Adapter,
      *
      * @return string the name, that is the string after the last "/"
      */
-    abstract protected function getBaseName($path);
+    protected function getBaseName($path)
+    {
+        return $this->mediaHelper->getBaseName($path);
+    }
 
     /**
      * Set default values for a new file or directory

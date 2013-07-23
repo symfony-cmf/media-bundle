@@ -3,21 +3,25 @@
 namespace Symfony\Cmf\Bundle\MediaBundle\Templating\Helper;
 
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
+use Symfony\Cmf\Bundle\MediaBundle\Helper\MediaHelperInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Templating\Helper\Helper;
 
-abstract class AbstractMediaHelper extends Helper
+class MediaHelper extends Helper
 {
+    protected $mediaHelper;
     protected $generator;
 
     /**
      * Constructor.
      *
-     * @param UrlGeneratorInterface $router A Router instance
+     * @param MediaHelperInterface  $mediaHelper
+     * @param UrlGeneratorInterface $router      A Router instance
      */
-    public function __construct(UrlGeneratorInterface $router)
+    public function __construct(MediaHelperInterface $mediaHelper, UrlGeneratorInterface $router)
     {
-        $this->generator = $router;
+        $this->mediaHelper = $mediaHelper;
+        $this->generator   = $router;
     }
 
     /**
@@ -30,17 +34,10 @@ abstract class AbstractMediaHelper extends Helper
      */
     public function downloadUrl(FileInterface $file, $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
-        $path = $this->getFilePath($file);
+        $path = $this->mediaHelper->getFilePath($file);
 
         return $this->generator->generate('cmf_media_download', array('path' => ltrim($path, '/')), $referenceType);
     }
-
-    /**
-     * Get full file path: /path/to/file/filename.ext
-     *
-     * @return string
-     */
-    abstract protected function getFilePath(FileInterface $file);
 
     /**
      * Returns the canonical name of this helper.
