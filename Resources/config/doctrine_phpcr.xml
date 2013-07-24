@@ -29,6 +29,7 @@
             <argument/>
             <argument>/</argument>
             <argument type="service" id="cmf_media.helper" />
+            <argument type="service" id="cmf_media.editor.manager" />
         </service>
 
         <service id="cmf_media.image.controller" class="%cmf_media.image.controller.class%" >
@@ -37,6 +38,7 @@
             <argument/>
             <argument>/</argument>
             <argument type="service" id="cmf_media.helper" />
+            <argument type="service" id="cmf_media.editor.manager" />
         </service>
     </services>
 </container>

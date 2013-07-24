@@ -70,19 +70,20 @@ class PhpcrMediaHelper implements MediaHelperInterface
      */
     public function createFilePath(MediaInterface $media, $rootPath = null)
     {
-        $path = ($rootPath ? rtrim($rootPath, '/') : '/') . $media->getName();
+        $path = ($rootPath === '/' ? $rootPath : $rootPath . '/') . $media->getName();
 
-        // check if path exists
+        /** @var \Doctrine\ODM\PHPCR\DocumentManager $dm */
+        $dm = $this->getObjectManager();
+
+        // TODO use PHPCR autoname
         $class = ClassUtils::getClass($media);
-        if (! $this->getObjectManager()->find($class, $path)) {
-            throw new \RuntimeException(sprintf(
-                'A media object already exists at "%s".',
-                $path
-            ));
+        if ($dm->find($class, $path)) {
+            // path already exists
+            $media->setName($media->getName() . '_' . time() . '_' . rand());
         }
 
-        // set id
-        $media->setId($path);
+        $parent = $dm->find(null, PathHelper::getParentPath($path));
+        $media->setParent($parent);
     }
 
     /**

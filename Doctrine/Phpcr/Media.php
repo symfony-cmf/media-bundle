@@ -23,6 +23,14 @@ class Media extends BaseMedia implements HierarchyInterface
     protected $updatedBy;
 
     /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->name ? $this->name : parent::__toString();
+    }
+
+    /**
      * @param Object $parent
      */
     public function setParent($parent)

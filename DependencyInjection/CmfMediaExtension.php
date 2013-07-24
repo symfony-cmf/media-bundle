@@ -55,6 +55,8 @@ class CmfMediaExtension extends Extension
         $this->loadDefaultClasses($config, $container);
 
         $this->loadLiipImagine($config, $loader, $container);
+
+        $this->loadJmsSerializer($config, $loader, $container);
     }
 
     public function loadDefaultClasses($config, ContainerBuilder $container)
@@ -102,6 +104,16 @@ class CmfMediaExtension extends Extension
         $container->setParameter($this->getAlias() . '.imagine.all_filters', $filters);
 
         $loader->load('imagine.'.$config['manager_registry'].'.xml');
+    }
+
+    public function loadJmsSerializer($config, XmlFileLoader $loader, ContainerBuilder $container)
+    {
+        $bundles = $container->getParameter('kernel.bundles');
+        if ('auto' === $config['use_jms_serializer'] && !isset($bundles['JMSSerializerBundle'])) {
+            return;
+        }
+
+        $loader->load('serializer.xml');
     }
 
     /**

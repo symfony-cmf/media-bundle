@@ -33,6 +33,11 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('file_class')->defaultNull()->end()
                 ->scalarNode('directory_class')->defaultNull()->end()
                 ->scalarNode('image_class')->defaultNull()->end()
+
+                ->enumNode('use_jms_serializer')
+                    ->values(array(true, false, 'auto'))
+                    ->defaultValue('auto')
+                ->end()
             ->end()
         ;
 

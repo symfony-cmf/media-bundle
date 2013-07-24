@@ -5,6 +5,7 @@ namespace Symfony\Cmf\Bundle\MediaBundle\Controller;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Cmf\Bundle\MediaBundle\BinaryInterface;
+use Symfony\Cmf\Bundle\MediaBundle\Editor\EditorManagerInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileSystemInterface;
 use Symfony\Cmf\Bundle\MediaBundle\Helper\MediaHelperInterface;
@@ -26,6 +27,7 @@ class FileController
     protected $class;
     protected $rootPath;
     protected $mediaHelper;
+    protected $editorManager;
 
     /**
      * @param ManagerRegistry $registry
@@ -33,14 +35,22 @@ class FileController
      * @param string          $class       fully qualified class name of file
      * @param string          $rootPath    path where the filesystem is located
      * @param MediaHelperInterface $mediaHelper
+     * @param EditorManagerInterface $editorManager
      */
-    public function __construct(ManagerRegistry $registry, $managerName, $class, $rootPath = '/', MediaHelperInterface $mediaHelper)
+    public function __construct(
+        ManagerRegistry $registry,
+        $managerName,
+        $class,
+        $rootPath = '/',
+        MediaHelperInterface $mediaHelper,
+        EditorManagerInterface $editorManager)
     {
         $this->managerRegistry = $registry;
         $this->managerName     = $managerName;
         $this->class           = $class === '' ? null : $class;
         $this->rootPath        = $rootPath;
         $this->mediaHelper     = $mediaHelper;
+        $this->editorManager   = $editorManager;
     }
 
     /**
@@ -100,42 +110,6 @@ class FileController
     }
 
     /**
-     * Get description if set in the request for an upload
-     *
-     * @param Request $request
-     *
-     * @return string|null
-     */
-    protected function getDescription(Request $request)
-    {
-        if (strlen($request->get('description'))) {
-            return $request->get('description');
-        } elseif (strlen($request->get('caption'))) {
-            return $request->get('caption');
-        }
-
-        return null;
-    }
-
-    /**
-     * TODO: change to use an upload response factory;
-     * what should be the default response for an uploaded file?
-     *
-     * Generate the response for an uploaded image
-     *
-     * @param FileInterface $image
-     * @param UploadedFile $uploadedFile
-     *
-     * @return Response
-     */
-    protected function generateUploadResponse(FileInterface $file, UploadedFile $uploadedFile)
-    {
-        $path = $this->mediaHelper->getFilePath($file);
-
-        return new RedirectResponse($this->router->generate('cmf_media_image_display', array('path' => ltrim($path, '/'))));
-    }
-
-    /**
      * Action to download a file object that has a route
      *
      * @param string $id
@@ -183,22 +157,28 @@ class FileController
 
     public function uploadAction(Request $request)
     {
+        /** @var \Symfony\Cmf\Bundle\MediaBundle\Editor\EditorHelperInterface $editorHelper */
+        $editorHelper = $this->editorManager->getHelper($request->get('editor', 'default'));
+
+        if (! $editorHelper) {
+            throw new HttpException(409, sprintf(
+                'Editor type "%s" not found, cannot process upload.',
+                $request->get('editor', 'default')
+            ));
+        }
+
         $files = $request->files;
 
         /** @var $file UploadedFile */
         $uploadedFile = $files->getIterator()->current();
         $this->validateFile($uploadedFile);
 
-        $name = $uploadedFile->getClientOriginalName();
-        $description = $this->getDescription($request);
-
         /** @var $image FileInterface */
         $file = new $this->class;
-        $file->setName($name);
-        if ($description) {
-            $file->setDescription($name);
-        }
+        $file->setName($uploadedFile->getClientOriginalName());
         $file->copyContentFromFile($uploadedFile);
+
+        $editorHelper->setFileDefaults($request, $file);
 
         try {
             $this->mediaHelper->createFilePath($file, $this->rootPath);
@@ -210,16 +190,7 @@ class FileController
         $this->getObjectManager()->persist($file);
         $this->getObjectManager()->flush();
 
-        // file upload via CKEditor
-        if ($request->query->get('CKEditor')) {
-            $response = $this->generateUploadResponse($file, $uploadedFile);
-            $data = "<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction(" . $request->query->get('CKEditorFuncNum') . ", '" . $response->getTargetUrl() . "', 'success');</script>";
-
-            $response = new Response($data);
-            $response->headers->set('Content-Type', 'text/html');
-            return $response;
-        } else {
-            return $this->generateUploadResponse($file, $uploadedFile);
-        }
+        // response
+        return $editorHelper->getUploadResponse($request, $file);
     }
 }
