@@ -22,7 +22,6 @@
 
         <service id="cmf_media.adapter.elfinder.phpcr_driver" class="%cmf_media.adapter.elfinder.phpcr_driver.class%">
             <argument type="service" id="doctrine_phpcr.odm.default_document_manager" />
-            <argument type="service" id="doctrine_phpcr.default_session" />
         </service>
     </services>
 </container>
