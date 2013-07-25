@@ -5,13 +5,12 @@ namespace Symfony\Cmf\Bundle\MediaBundle\Adapter\ElFinder;
 use Doctrine\ODM\PHPCR\Document\Resource;
 use FM\ElFinderPHP\Driver\ElFinderVolumeDriver;
 use Doctrine\ODM\PHPCR\DocumentManager;
-use PHPCR\SessionInterface;
 use Symfony\Cmf\Bundle\MediaBundle\DirectoryInterface;
 use Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\Directory;
 use Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\File;
-use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
+use Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\Image;
 use Symfony\Cmf\Bundle\MediaBundle\HierarchyInterface;
-use Symfony\Cmf\Bundle\MediaBundle\MediaInterface;
+use Symfony\Cmf\Bundle\MediaBundle\ImageInterface;
 
 /**
  * @author Sjoerd Peters <sjoerd.peters@gmail.com>
@@ -199,12 +198,21 @@ class PHPCRDriver extends ElFinderVolumeDriver
         /** @var File $doc */
         $doc = $this->dm->find(null, $path);
 
+        if($path == $this->root && !$doc){
+            // @TODO not sure if this the best way / place for this. should a user create the media root manually?
+            $doc = new Directory();
+            $doc->setId($this->root);
+            $this->dm->persist($doc);
+            $this->dm->flush($doc);
+        }
+
         if(!$doc instanceof HierarchyInterface){
             return false;
         }
 
         $dir = $doc instanceof DirectoryInterface;
 //        $ts = $doc->getUpdatedAt() ? $doc->getUpdatedAt()->getTimestamp() : $doc->getCreatedAt()->getTimestamp();
+
         if($ua = $doc->getUpdatedAt()){
             $ts = $ua->getTimestamp();
         } elseif ($ca = $doc->getCreatedAt()) {
@@ -223,11 +231,6 @@ class PHPCRDriver extends ElFinderVolumeDriver
             'locked' => false,
             'hidden' => false,
         );
-
-//        echo "<pre>";
-//        var_dump($path, $stat);
-//        echo "</pre>";
-//        die;
 
         return $stat;
     }
@@ -259,8 +262,12 @@ class PHPCRDriver extends ElFinderVolumeDriver
      **/
     protected function _dimensions($path, $mime)
     {
+        return '';
+        // @TODO we can't store the width and height on the current nodeType
         $doc = $this->dm->find(null, $path);
-        return '10 X 10';
+        if($doc instanceof ImageInterface){
+            return $doc->getHeight().' x '.$doc->getWidth();
+        }
     }
 
     /**
@@ -347,10 +354,24 @@ class PHPCRDriver extends ElFinderVolumeDriver
         }
 
         $file = new File();
-        $file->setName($name);
+        $file->setContentFromString('');
         $file->setId($filename);
+
+        // @TODO failing cascade persist
+        $content = $file->getContent();
+        $content->setParent($file);
+
+        $pi = pathinfo($filename);
+        if(isset($pi['extension']) && !empty($pi['extension'])){
+            if(isset(self::$mimetypes[$pi['extension']])){
+                $content->setMimeType(self::$mimetypes[$pi['extension']]);
+            }
+        }
+
+        $this->dm->persist($content);
         $this->dm->persist($file);
-        $this->dm->flush($file);
+        $this->dm->flush();
+
         return $filename;
     }
 
@@ -383,11 +404,7 @@ class PHPCRDriver extends ElFinderVolumeDriver
             return false;
         }
 
-        $doc = $this->dm->find(null, $source);
-        $copy = unserialize(serialize($doc));
-        $copy->setId($targetPath);
-        $this->dm->persist($copy);
-        $this->dm->flush();
+        $this->dm->getPhpcrSession()->getWorkspace()->copy($source, $targetPath);
         return true;
     }
 
@@ -469,14 +486,12 @@ class PHPCRDriver extends ElFinderVolumeDriver
             return false;
         }
 
-        $mime = $stat['mime'];
-        $pi = pathinfo($filename);
-
-        $filename = $this->_joinPath($dir, $pi['filename']);
-
-        $file = new File();
-        $file->setId($filename);
-//        $file->setExtension($pi['extension']);
+        $mime = $stat['mime']; // @TODO implement a proper system to map a mime-type to a phpcr class
+        if(isset($stat['height']) && $stat['height'] && isset($stat['width']) && $stat['width']){
+            $file = new Image();
+        } else {
+            $file = new File();
+        }
 
         $content = new Resource();
         $content->setData($fp);
@@ -484,8 +499,10 @@ class PHPCRDriver extends ElFinderVolumeDriver
         $content->setMimeType($mime);
         $content->setLastModified(new \DateTime());
 
+        $file->setId($filename);
         $file->setContent($content);
 
+//        try {
         $this->dm->persist($content);
         $this->dm->persist($file);
         $this->dm->flush();

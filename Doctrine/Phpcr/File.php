@@ -177,11 +177,8 @@ class File extends Media implements FileInterface, BinaryInterface
      */
     public function getSize()
     {
-        $stream = $this->getContentAsStream();
-
-        $stat = fstat($stream);
+        $stat = fstat($this->getContentAsStream());
         return $stat['size'];
-        return (int) $this->getContent()->getSize();
     }
 
     /**
