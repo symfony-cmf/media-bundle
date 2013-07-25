@@ -1,6 +1,6 @@
 <?php
 
-namespace Symfony\Cmf\Bundle\MediaBundle\Editor;
+namespace Symfony\Cmf\Bundle\MediaBundle\Editor\Helper;
 
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,7 +12,7 @@ class CkeditorHelper extends DefaultHelper
      */
     public function getUploadResponse(Request $request, FileInterface $file)
     {
-        $path    = $this->mediaHelper->getFilePath($file);
+        $path    = $this->mediaManager->getFilePath($file);
         $url     = $this->router->generate('cmf_media_image_display', array('path' => ltrim($path, '/')));
         $funcNum = $request->query->get('CKEditorFuncNum');
 

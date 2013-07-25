@@ -22,10 +22,10 @@ class EditorManager implements EditorManagerInterface
      */
     public function getHelper($name = null)
     {
-        if (is_null($name)) {
-            $name = 'default';
+        if ($name && isset($this->helpers[$name])) {
+            return $this->helpers[$name];
         }
 
-        return isset($this->helpers[$name]) ? $this->helpers[$name] : null;
+        return isset($this->helpers['default']) ? $this->helpers['default'] : null;
     }
 }

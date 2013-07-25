@@ -15,13 +15,13 @@
             <argument type="service" id="liip_imagine" />
             <argument type="service" id="doctrine_phpcr" />
             <argument>%cmf_media.manager_name%</argument>
-            <argument type="service" id="cmf_media.helper" />
+            <argument type="service" id="cmf_media.manager" />
             <argument>%cmf_media.image_class%</argument>
         </service>
 
         <service id="cmf_media.subscriber.imagine_cache" class="%cmf_media.subscriber.imagine_cache_class%">
             <tag name="doctrine_phpcr.event_subscriber" />
-            <argument type="service" id="cmf_media.helper" />
+            <argument type="service" id="cmf_media.manager" />
             <argument type="service" id="liip_imagine.cache.manager" />
             <argument type="service" id="service_container" />
             <argument>%cmf_media.imagine.all_filters%</argument>

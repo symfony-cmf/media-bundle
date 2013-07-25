@@ -1,26 +1,27 @@
 <?php
 
-namespace Symfony\Cmf\Bundle\MediaBundle\Editor;
+namespace Symfony\Cmf\Bundle\MediaBundle\Editor\Helper;
 
+use Symfony\Cmf\Bundle\MediaBundle\Doctrine\MediaManagerInterface;
+use Symfony\Cmf\Bundle\MediaBundle\Editor\EditorHelperInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
-use Symfony\Cmf\Bundle\MediaBundle\Helper\MediaHelperInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 
 class DefaultHelper implements EditorHelperInterface
 {
-    protected $mediaHelper;
+    protected $mediaManager;
     protected $router;
 
     /**
-     * @param MediaHelperInterface $mediaHelper
+     * @param MediaManagerInterface $mediaManager
      * @param RouterInterface $router
      */
-    public function __construct(MediaHelperInterface $mediaHelper, RouterInterface $router)
+    public function __construct(MediaManagerInterface $mediaManager, RouterInterface $router)
     {
-        $this->mediaHelper = $mediaHelper;
-        $this->router      = $router;
+        $this->mediaManager = $mediaManager;
+        $this->router       = $router;
     }
 
     /**
@@ -40,7 +41,7 @@ class DefaultHelper implements EditorHelperInterface
      */
     public function getUploadResponse(Request $request, FileInterface $file)
     {
-        $path = $this->mediaHelper->getFilePath($file);
+        $path = $this->mediaManager->getFilePath($file);
 
         return new RedirectResponse($this->router->generate('cmf_media_image_display', array('path' => ltrim($path, '/'))));
     }

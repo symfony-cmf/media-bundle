@@ -11,7 +11,7 @@
     <services>
         <service id="cmf_media.serializer.handler" class="%cmf_media.serializer.handler.class%" public="true">
             <tag name="jms_serializer.handler" type="%cmf_media.image_class%" direction="serialization" format="json" method="serializeImageToJson" />
-            <argument type="service" id="cmf_media.helper" />
+            <argument type="service" id="cmf_media.manager" />
             <argument type="service" id="router" />
         </service>
     </services>

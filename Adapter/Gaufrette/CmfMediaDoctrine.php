@@ -10,7 +10,7 @@ use Gaufrette\Adapter\MetadataSupporter;
 use Gaufrette\Util;
 use Symfony\Cmf\Bundle\MediaBundle\DirectoryInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
-use Symfony\Cmf\Bundle\MediaBundle\Helper\MediaHelperInterface;
+use Symfony\Cmf\Bundle\MediaBundle\Doctrine\MediaManagerInterface;
 use Symfony\Cmf\Bundle\MediaBundle\HierarchyInterface;
 use Symfony\Cmf\Bundle\MediaBundle\MediaInterface;
 
@@ -32,7 +32,7 @@ class CmfMediaDoctrine implements
     protected $managerRegistry;
     protected $managerName;
     protected $class;
-    protected $mediaHelper;
+    protected $mediaManager;
     protected $rootPath;
     protected $create;
     protected $dirClass;
@@ -44,26 +44,26 @@ class CmfMediaDoctrine implements
     /**
      * Constructor
      *
-     * @param ManagerRegistry $registry
-     * @param string          $managerName
-     * @param string          $class       fully qualified class name of file
-     * @param MediaHelperInterface $mediaHelper
-     * @param string          $rootPath    path where the filesystem is located
-     * @param boolean         $create      whether to create the directory if
-     *                                     it does not exist (default FALSE)
-     * @param string          $dirClass    fully qualified class name for dirs
-     *                                     (default NULL: dir is same as file)
-     * @param string          $identifier  property used to identify a file and
-     *                                     lookup (default NULL: let Doctrine
-     *                                     determine the identifier)
-     * @param boolean         $autoFlush   whether to flush write and delete
-     *                                     actions (default: true)
+     * @param ManagerRegistry       $registry
+     * @param string                $managerName
+     * @param string                $class        fully qualified class name of file
+     * @param MediaManagerInterface $mediaManager
+     * @param string                $rootPath     path where the filesystem is located
+     * @param boolean               $create       whether to create the directory if
+     *                                            it does not exist (default FALSE)
+     * @param string                $dirClass     fully qualified class name for dirs
+     *                                            (default NULL: dir is same as file)
+     * @param string                $identifier   property used to identify a file and
+     *                                            lookup (default NULL: let Doctrine
+     *                                            determine the identifier)
+     * @param boolean               $autoFlush    whether to flush write and delete
+     *                                            actions (default: true)
      */
     public function __construct(
         ManagerRegistry $registry,
         $managerName,
         $class,
-        MediaHelperInterface $mediaHelper,
+        MediaManagerInterface $mediaManager,
         $rootPath = '/',
         $create = false,
         $dirClass = null,
@@ -73,7 +73,7 @@ class CmfMediaDoctrine implements
         $this->managerRegistry = $registry;
         $this->managerName     = $managerName;
         $this->class           = $class;
-        $this->mediaHelper     = $mediaHelper;
+        $this->mediaManager    = $mediaManager;
         $this->rootPath        = Util\Path::normalize($rootPath);
         $this->create          = $create;
         $this->dirClass        = $dirClass;
@@ -427,7 +427,7 @@ class CmfMediaDoctrine implements
      */
     protected function getFilePath(MediaInterface $file)
     {
-        return $this->mediaHelper->getFilePath($file);
+        return $this->mediaManager->getFilePath($file);
     }
 
     /**
@@ -442,7 +442,7 @@ class CmfMediaDoctrine implements
      */
     protected function mapKeyToId($key)
     {
-        return $this->mediaHelper->mapPathToId($key);
+        return $this->mediaManager->mapPathToId($key);
     }
 
     /**
@@ -507,7 +507,7 @@ class CmfMediaDoctrine implements
      */
     protected function getParentPath($path)
     {
-        return $this->mediaHelper->getParentPath($path);
+        return $this->mediaManager->getParentPath($path);
     }
 
     /**
@@ -519,7 +519,7 @@ class CmfMediaDoctrine implements
      */
     protected function getBaseName($path)
     {
-        return $this->mediaHelper->getBaseName($path);
+        return $this->mediaManager->getBaseName($path);
     }
 
     /**

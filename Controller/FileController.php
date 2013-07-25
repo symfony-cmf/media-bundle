@@ -5,10 +5,10 @@ namespace Symfony\Cmf\Bundle\MediaBundle\Controller;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Cmf\Bundle\MediaBundle\BinaryInterface;
+use Symfony\Cmf\Bundle\MediaBundle\Doctrine\MediaManagerInterface;
 use Symfony\Cmf\Bundle\MediaBundle\Editor\EditorManagerInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileSystemInterface;
-use Symfony\Cmf\Bundle\MediaBundle\Helper\MediaHelperInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,15 +26,15 @@ class FileController
     protected $managerName;
     protected $class;
     protected $rootPath;
-    protected $mediaHelper;
+    protected $mediaManager;
     protected $editorManager;
 
     /**
-     * @param ManagerRegistry $registry
-     * @param string          $managerName
-     * @param string          $class       fully qualified class name of file
-     * @param string          $rootPath    path where the filesystem is located
-     * @param MediaHelperInterface $mediaHelper
+     * @param ManagerRegistry        $registry
+     * @param string                 $managerName
+     * @param string                 $class         fully qualified class name of file
+     * @param string                 $rootPath      path where the filesystem is located
+     * @param MediaManagerInterface  $mediaManager
      * @param EditorManagerInterface $editorManager
      */
     public function __construct(
@@ -42,14 +42,14 @@ class FileController
         $managerName,
         $class,
         $rootPath = '/',
-        MediaHelperInterface $mediaHelper,
+        MediaManagerInterface $mediaManager,
         EditorManagerInterface $editorManager)
     {
         $this->managerRegistry = $registry;
         $this->managerName     = $managerName;
         $this->class           = $class === '' ? null : $class;
         $this->rootPath        = $rootPath;
-        $this->mediaHelper     = $mediaHelper;
+        $this->mediaManager    = $mediaManager;
         $this->editorManager   = $editorManager;
     }
 
@@ -117,7 +117,7 @@ class FileController
     public function downloadAction($path)
     {
         try {
-            $id = $this->mediaHelper->mapPathToId($path, $this->rootPath);
+            $id = $this->mediaManager->mapPathToId($path, $this->rootPath);
         } catch (\OutOfBoundsException $e) {
             throw new NotFoundHttpException($e->getMessage());
         }
@@ -181,7 +181,7 @@ class FileController
         $editorHelper->setFileDefaults($request, $file);
 
         try {
-            $this->mediaHelper->createFilePath($file, $this->rootPath);
+            $this->mediaManager->createFilePath($file, $this->rootPath);
         } catch (\RuntimeException $e) {
             throw new HttpException(409, $e->getMessage());
         }

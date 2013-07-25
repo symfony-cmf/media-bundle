@@ -5,7 +5,7 @@ namespace Symfony\Cmf\Bundle\MediaBundle\EventListener;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
-use Symfony\Cmf\Bundle\MediaBundle\Helper\MediaHelperInterface;
+use Symfony\Cmf\Bundle\MediaBundle\Doctrine\MediaManagerInterface;
 use Symfony\Cmf\Bundle\MediaBundle\ImageInterface;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -17,9 +17,9 @@ use Symfony\Component\HttpFoundation\Request;
 class ImagineCacheInvalidatorSubscriber implements EventSubscriber
 {
     /**
-     * @var MediaHelperInterface
+     * @var MediaManagerInterface
      */
-    private $mediaHelper;
+    private $mediaManager;
 
     /**
      * @var CacheManager
@@ -39,18 +39,18 @@ class ImagineCacheInvalidatorSubscriber implements EventSubscriber
     private $filters;
 
     /**
-     * @param MediaHelperInterface $mediaHelper
-     * @param CacheManager $manager   the imagine cache manager
-     * @param Container    $container to get the request from. Need to inject
-     *                                this as otherwise we have a scope problem
-     * @param array        $filter    list of filter names to invalidate
+     * @param MediaManagerInterface $mediaManager
+     * @param CacheManager          $manager      the imagine cache manager
+     * @param Container             $container    to get the request from. Need to inject
+     *                                            this as otherwise we have a scope problem
+     * @param array                 $filter       list of filter names to invalidate
      */
-    public function __construct(MediaHelperInterface $mediaHelper, CacheManager $manager, Container $container, $filters)
+    public function __construct(MediaManagerInterface $mediaManager, CacheManager $manager, Container $container, $filters)
     {
-        $this->mediaHelper = $mediaHelper;
-        $this->manager     = $manager;
-        $this->container   = $container;
-        $this->filters     = $filters;
+        $this->mediaManager = $mediaManager;
+        $this->manager      = $manager;
+        $this->container    = $container;
+        $this->filters      = $filters;
     }
 
     /**
@@ -109,7 +109,7 @@ class ImagineCacheInvalidatorSubscriber implements EventSubscriber
                 return;
             }
             foreach ($this->filters as $filter) {
-                $path = $this->manager->resolve($request, $this->mediaHelper->getFilePath($object), $filter);
+                $path = $this->manager->resolve($request, $this->mediaManager->getFilePath($object), $filter);
                 if ($path instanceof RedirectResponse) {
                     $path = $path->getTargetUrl();
                 }

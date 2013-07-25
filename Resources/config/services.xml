@@ -9,8 +9,8 @@
         <parameter key="cmf_media.templating.helper.class">Symfony\Cmf\Bundle\MediaBundle\Templating\Helper\MediaHelper</parameter>
         <parameter key="cmf_media.twig.extension.class">Symfony\Cmf\Bundle\MediaBundle\Twig\Extension\MediaExtension</parameter>
         <parameter key="cmf_media.editor.manager.class">Symfony\Cmf\Bundle\MediaBundle\Editor\EditorManager</parameter>
-        <parameter key="cmf_media.editor.helper.default.class">Symfony\Cmf\Bundle\MediaBundle\Editor\DefaultHelper</parameter>
-        <parameter key="cmf_media.editor.helper.ckeditor.class">Symfony\Cmf\Bundle\MediaBundle\Editor\CkeditorHelper</parameter>
+        <parameter key="cmf_media.editor.helper.default.class">Symfony\Cmf\Bundle\MediaBundle\Editor\Helper\DefaultHelper</parameter>
+        <parameter key="cmf_media.editor.helper.ckeditor.class">Symfony\Cmf\Bundle\MediaBundle\Editor\Helper\CkeditorHelper</parameter>
     </parameters>
 
     <services>
@@ -23,7 +23,7 @@
 
         <service id="cmf_media.templating.helper" class="%cmf_media.templating.helper.class%" public="false">
             <tag name="templating.helper" alias="cmf_media" />
-            <argument type="service" id="cmf_media.helper" />
+            <argument type="service" id="cmf_media.manager" />
             <argument type="service" id="router" />
         </service>
 
@@ -36,13 +36,13 @@
 
         <service id="cmf_media.editor.helper.default" class="%cmf_media.editor.helper.default.class%">
             <tag name="cmf_media.editor.helper" alias="default" />
-            <argument type="service" id="cmf_media.helper" />
+            <argument type="service" id="cmf_media.manager" />
             <argument type="service" id="router" />
         </service>
 
         <service id="cmf_media.editor.helper.ckeditor" class="%cmf_media.editor.helper.ckeditor.class%">
             <tag name="cmf_media.editor.helper" alias="ckeditor" />
-            <argument type="service" id="cmf_media.helper" />
+            <argument type="service" id="cmf_media.manager" />
             <argument type="service" id="router" />
         </service>
     </services>

@@ -5,7 +5,7 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="cmf_media.helper.class">Symfony\Cmf\Bundle\MediaBundle\Helper\PhpcrMediaHelper</parameter>
+        <parameter key="cmf_media.manager.class">Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\MediaManager</parameter>
         <parameter key="cmf_media.file.controller.class">Symfony\Cmf\Bundle\MediaBundle\Controller\FileController</parameter>
         <parameter key="cmf_media.image.controller.class">Symfony\Cmf\Bundle\MediaBundle\Controller\ImageController</parameter>
     </parameters>
@@ -18,7 +18,7 @@
             <tag name="doctrine_phpcr.initializer" />
         </service>
 
-        <service id="cmf_media.helper" class="%cmf_media.helper.class%" public="false">
+        <service id="cmf_media.manager" class="%cmf_media.manager.class%" public="false">
             <argument type="service" id="doctrine_phpcr" />
             <argument>%cmf_media.manager_name%</argument>
         </service>
@@ -28,7 +28,7 @@
             <argument>%cmf_media.manager_name%</argument>
             <argument/>
             <argument>/</argument>
-            <argument type="service" id="cmf_media.helper" />
+            <argument type="service" id="cmf_media.manager" />
             <argument type="service" id="cmf_media.editor.manager" />
         </service>
 
@@ -37,7 +37,7 @@
             <argument>%cmf_media.manager_name%</argument>
             <argument/>
             <argument>/</argument>
-            <argument type="service" id="cmf_media.helper" />
+            <argument type="service" id="cmf_media.manager" />
             <argument type="service" id="cmf_media.editor.manager" />
         </service>
     </services>

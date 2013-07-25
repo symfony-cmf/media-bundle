@@ -1,6 +1,6 @@
 <?php
 
-namespace Symfony\Cmf\Bundle\MediaBundle\Helper;
+namespace Symfony\Cmf\Bundle\MediaBundle\Doctrine;
 
 use Symfony\Cmf\Bundle\MediaBundle\MediaInterface;
 
@@ -11,7 +11,7 @@ use Symfony\Cmf\Bundle\MediaBundle\MediaInterface;
  * This is to be kept compatible with the SonataMediaBundle
  * MediaProviderInterface to allow integration with sonata.
  */
-interface MediaHelperInterface
+interface MediaManagerInterface
 {
     /**
      * Get filesystem path for file or directory, like:

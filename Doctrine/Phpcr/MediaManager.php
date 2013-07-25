@@ -1,15 +1,16 @@
 <?php
 
-namespace Symfony\Cmf\Bundle\MediaBundle\Helper;
+namespace Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Util\ClassUtils;
 use PHPCR\Util\PathHelper;
+use Symfony\Cmf\Bundle\MediaBundle\Doctrine\MediaManagerInterface;
 use Symfony\Cmf\Bundle\MediaBundle\MediaInterface;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class PhpcrMediaHelper implements MediaHelperInterface
+class MediaManager implements MediaManagerInterface
 {
     protected $managerRegistry;
     protected $managerName;

@@ -2,27 +2,27 @@
 
 namespace Symfony\Cmf\Bundle\MediaBundle\Templating\Helper;
 
+use Symfony\Cmf\Bundle\MediaBundle\Doctrine\MediaManagerInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
-use Symfony\Cmf\Bundle\MediaBundle\Helper\MediaHelperInterface;
 use Symfony\Cmf\Bundle\MediaBundle\ImageInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Templating\Helper\Helper;
 
 class MediaHelper extends Helper
 {
-    protected $mediaHelper;
+    protected $mediaManager;
     protected $generator;
 
     /**
      * Constructor.
      *
-     * @param MediaHelperInterface  $mediaHelper
-     * @param UrlGeneratorInterface $router      A Router instance
+     * @param MediaManagerInterface  $mediaManager
+     * @param UrlGeneratorInterface  $router       A Router instance
      */
-    public function __construct(MediaHelperInterface $mediaHelper, UrlGeneratorInterface $router)
+    public function __construct(MediaManagerInterface $mediaManager, UrlGeneratorInterface $router)
     {
-        $this->mediaHelper = $mediaHelper;
-        $this->generator   = $router;
+        $this->mediaManager = $mediaManager;
+        $this->generator    = $router;
     }
 
     /**
@@ -35,7 +35,7 @@ class MediaHelper extends Helper
      */
     public function downloadUrl(FileInterface $file, $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
-        $path = $this->mediaHelper->getFilePath($file);
+        $path = $this->mediaManager->getFilePath($file);
 
         return $this->generator->generate('cmf_media_download', array('path' => ltrim($path, '/')), $referenceType);
     }
@@ -50,7 +50,7 @@ class MediaHelper extends Helper
      */
     public function displayUrl(ImageInterface $file, $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
-        $path = $this->mediaHelper->getFilePath($file);
+        $path = $this->mediaManager->getFilePath($file);
 
         return $this->generator->generate('cmf_media_image_display', array('path' => ltrim($path, '/')), $referenceType);
     }
