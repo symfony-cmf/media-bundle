@@ -2,6 +2,7 @@
 
 namespace Symfony\Cmf\Bundle\MediaBundle\Adapter\ElFinder;
 
+use Doctrine\ODM\PHPCR\Document\Generic;
 use Doctrine\ODM\PHPCR\Document\Resource;
 use FM\ElFinderPHP\Driver\ElFinderVolumeDriver;
 use Doctrine\ODM\PHPCR\DocumentManager;
@@ -206,16 +207,16 @@ class PHPCRDriver extends ElFinderVolumeDriver
             $this->dm->flush($doc);
         }
 
-        if(!$doc instanceof HierarchyInterface){
+        if(!($doc instanceof HierarchyInterface || $doc instanceof Generic)){
             return false;
         }
 
-        $dir = $doc instanceof DirectoryInterface;
+        $dir = $doc instanceof DirectoryInterface || $doc instanceof Generic;
 //        $ts = $doc->getUpdatedAt() ? $doc->getUpdatedAt()->getTimestamp() : $doc->getCreatedAt()->getTimestamp();
 
-        if($ua = $doc->getUpdatedAt()){
+        if($doc instanceof DirectoryInterface && $ua = $doc->getUpdatedAt()){
             $ts = $ua->getTimestamp();
-        } elseif ($ca = $doc->getCreatedAt()) {
+        } elseif ($doc instanceof DirectoryInterface && $ca = $doc->getCreatedAt()) {
             $ts = $ca->getTimestamp();
         } else {
             $dt = new \DateTime();
@@ -262,12 +263,14 @@ class PHPCRDriver extends ElFinderVolumeDriver
      **/
     protected function _dimensions($path, $mime)
     {
-        return '';
+        //return '';
         // @TODO we can't store the width and height on the current nodeType
         $doc = $this->dm->find(null, $path);
         if($doc instanceof ImageInterface){
             return $doc->getHeight().' x '.$doc->getWidth();
         }
+
+        return '';
     }
 
     /**
@@ -364,7 +367,7 @@ class PHPCRDriver extends ElFinderVolumeDriver
         $pi = pathinfo($filename);
         if(isset($pi['extension']) && !empty($pi['extension'])){
             if(isset(self::$mimetypes[$pi['extension']])){
-                $content->setMimeType(self::$mimetypes[$pi['extension']]);
+                $file->setContentType(self::$mimetypes[$pi['extension']]);
             }
         }
 
@@ -482,7 +485,9 @@ class PHPCRDriver extends ElFinderVolumeDriver
      **/
     protected function _save($fp, $dir, $name, $stat)
     {
-        if($this->dm->find(null, $filename = $this->_joinPath($dir, $name))){
+        $filename = $this->_joinPath($dir, $name);
+
+        if($this->dm->find(null, $filename)){
             return false;
         }
 
@@ -493,17 +498,11 @@ class PHPCRDriver extends ElFinderVolumeDriver
             $file = new File();
         }
 
-        $content = new Resource();
-        $content->setData($fp);
-        $content->setParent($file);
-        $content->setMimeType($mime);
-        $content->setLastModified(new \DateTime());
-
+        $file->setContentFromStream($fp);
+        $file->setContentType($mime);
         $file->setId($filename);
-        $file->setContent($content);
 
 //        try {
-        $this->dm->persist($content);
         $this->dm->persist($file);
         $this->dm->flush();
 //        } catch (\Exception $e) {

@@ -19,16 +19,6 @@ class File extends Media implements FileInterface, BinaryInterface
     protected $content;
 
     /**
-     * @var int $size
-     */
-    protected $size;
-
-    /**
-     * @var string $contentType
-     */
-    protected $contentType;
-
-    /**
      * @var string $extension
      */
     protected $extension;
@@ -164,20 +154,13 @@ class File extends Media implements FileInterface, BinaryInterface
     }
 
     /**
-     * @param int $size
-     */
-    public function setSize($size)
-    {
-//        $this->size = $size;
-        $this->getContent()->setSize($size);
-    }
-
-    /**
      * @return int
      */
     public function getSize()
     {
-        $stat = fstat($this->getContentAsStream());
+        $stream = $this->getContentAsStream();
+
+        $stat = fstat($stream);
         return $stat['size'];
     }
 
@@ -218,10 +201,9 @@ class File extends Media implements FileInterface, BinaryInterface
      */
     protected function updateDimensionsFromContent()
     {
-        $stream = $this->getContentAsStream();
-
-        $stat = fstat($stream);
-        $this->size = $stat['size'];
-        $this->contentType = $this->getContent()->getMimeType();
+//        $stream = $this->getContentAsStream();
+//
+//        $stat = fstat($stream);
+//        $this->size = $stat['size'];
     }
 }
