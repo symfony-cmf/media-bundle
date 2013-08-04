@@ -6,6 +6,7 @@
 
     <parameters>
         <parameter key="cmf_media.manager.class">Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\MediaManager</parameter>
+        <parameter key="cmf_media.file_upload.helper.class">Symfony\Cmf\Bundle\MediaBundle\File\FileUploadHelper</parameter>
         <parameter key="cmf_media.file.controller.class">Symfony\Cmf\Bundle\MediaBundle\Controller\FileController</parameter>
         <parameter key="cmf_media.image.controller.class">Symfony\Cmf\Bundle\MediaBundle\Controller\ImageController</parameter>
     </parameters>
@@ -23,13 +24,21 @@
             <argument>%cmf_media.manager_name%</argument>
         </service>
 
+        <service id="cmf_media.file_upload.helper" class="%cmf_media.file_upload.helper.class%" public="false" >
+            <argument type="service" id="doctrine_phpcr" />
+            <argument>%cmf_media.manager_name%</argument>
+            <argument>%cmf_media.image_class%</argument>
+            <argument>%cmf_media.media_basepath%</argument>
+            <argument type="service" id="cmf_media.manager" />
+        </service>
+
         <service id="cmf_media.file.controller" class="%cmf_media.file.controller.class%" >
             <argument type="service" id="doctrine_phpcr" />
             <argument>%cmf_media.manager_name%</argument>
             <argument/>
             <argument>/</argument>
             <argument type="service" id="cmf_media.manager" />
-            <argument type="service" id="cmf_media.editor.manager" />
+            <argument type="service" id="cmf_media.file_upload.helper" />
         </service>
 
         <service id="cmf_media.image.controller" class="%cmf_media.image.controller.class%" >
@@ -38,7 +47,7 @@
             <argument/>
             <argument>/</argument>
             <argument type="service" id="cmf_media.manager" />
-            <argument type="service" id="cmf_media.editor.manager" />
+            <argument type="service" id="cmf_media.file_upload.helper" />
         </service>
     </services>
 </container>

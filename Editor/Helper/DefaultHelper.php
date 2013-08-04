@@ -13,15 +13,19 @@ class DefaultHelper implements EditorHelperInterface
 {
     protected $mediaManager;
     protected $router;
+    protected $propertyMapping;
 
     /**
      * @param MediaManagerInterface $mediaManager
-     * @param RouterInterface $router
+     * @param RouterInterface       $router
+     * @param array                 $propertyMapping maps request parameters to
+     * Media properties, fe. "caption" from the requests maps to "description"
      */
-    public function __construct(MediaManagerInterface $mediaManager, RouterInterface $router)
+    public function __construct(MediaManagerInterface $mediaManager, RouterInterface $router, array $propertyMapping = array())
     {
-        $this->mediaManager = $mediaManager;
-        $this->router       = $router;
+        $this->mediaManager    = $mediaManager;
+        $this->router          = $router;
+        $this->propertyMapping = $propertyMapping;
     }
 
     /**
@@ -29,10 +33,12 @@ class DefaultHelper implements EditorHelperInterface
      */
     public function setFileDefaults(Request $request, FileInterface $file)
     {
-        if (strlen($request->get('description'))) {
-            $file->setDescription($request->get('description'));
-        } elseif (strlen($request->get('caption'))) {
-            $file->setDescription($request->get('caption'));
+        // map request parameters to Media properties
+        foreach ($this->propertyMapping as $param => $property) {
+            if (strlen($request->get($param))) {
+                $setter = 'set' . ucfirst($property);
+                $file->$setter($request->get($param));
+            }
         }
     }
 

@@ -8,7 +8,6 @@
         <parameter key="cmf_media.form.image_class">Symfony\Cmf\Bundle\MediaBundle\Form\Type\ImageType</parameter>
         <parameter key="cmf_media.templating.helper.class">Symfony\Cmf\Bundle\MediaBundle\Templating\Helper\MediaHelper</parameter>
         <parameter key="cmf_media.twig.extension.class">Symfony\Cmf\Bundle\MediaBundle\Twig\Extension\MediaExtension</parameter>
-        <parameter key="cmf_media.editor.manager.class">Symfony\Cmf\Bundle\MediaBundle\Editor\EditorManager</parameter>
         <parameter key="cmf_media.editor.helper.default.class">Symfony\Cmf\Bundle\MediaBundle\Editor\Helper\DefaultHelper</parameter>
         <parameter key="cmf_media.editor.helper.ckeditor.class">Symfony\Cmf\Bundle\MediaBundle\Editor\Helper\CkeditorHelper</parameter>
     </parameters>
@@ -32,12 +31,14 @@
             <argument type="service" id="cmf_media.templating.helper" />
         </service>
 
-        <service id="cmf_media.editor.manager" class="%cmf_media.editor.manager.class%" public="false" />
-
         <service id="cmf_media.editor.helper.default" class="%cmf_media.editor.helper.default.class%">
             <tag name="cmf_media.editor.helper" alias="default" />
             <argument type="service" id="cmf_media.manager" />
             <argument type="service" id="router" />
+            <argument type="collection">
+                <argument key="description">description</argument>
+                <argument key="caption">description</argument>
+            </argument>
         </service>
 
         <service id="cmf_media.editor.helper.ckeditor" class="%cmf_media.editor.helper.ckeditor.class%">
