@@ -7,6 +7,7 @@ use Symfony\Cmf\Bundle\MediaBundle\BinaryInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileSystemInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -101,19 +102,29 @@ abstract class AbstractDownloadController
             throw new NotFoundHttpException('Content is no file');
         }
 
+        $file = false;
+
         if ($contentDocument instanceof BinaryInterface) {
             $metadata = stream_get_meta_data($contentDocument->getContentAsStream());
 
             $file = isset($metadata['uri']) ? $metadata['uri'] : false;
         } elseif ($contentDocument instanceof FileSystemInterface) {
             $file = $contentDocument->getFileSystemPath();
-        } else {
-            throw new NotFoundHttpException('Content cannot be downloaded');
         }
 
-        $response = new BinaryFileResponse($file);
-        $response->headers->set('Content-Type', $contentDocument->getContentType());
-        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $contentDocument->getName());
+        if ($file) {
+            $response = new BinaryFileResponse($file);
+            $response->headers->set('Content-Type', $contentDocument->getContentType());
+            $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $contentDocument->getName());
+        } else {
+            $response = new Response($contentDocument->getContentAsString());
+            $response->headers->set('Content-Type', $contentDocument->getContentType());
+            $response->headers->set('Content-Length', $contentDocument->getSize());
+            $response->headers->set('Content-Transfer-Encoding', 'binary');
+
+            $disposition = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $contentDocument->getName());
+            $response->headers->set('Content-Disposition', $disposition);
+        }
 
         return $response;
     }
