@@ -20,8 +20,8 @@ use Symfony\Cmf\Bundle\MediaBundle\MediaInterface;
  * Gaufrette uses a key to identify a file or directory. This adapter uses a
  * filesystem path, like /path/to/file/filename.ext, as key.
  *
- * The abstract method getFilePath is used to get the path for a file or
- * directory object. The method mapKeyToId maps a path back to an id.
+ * The method getFilePath is used to get the path for a file or directory
+ * object. The method mapKeyToId maps a path back to an id.
  */
 class CmfMediaDoctrine implements
     Adapter,

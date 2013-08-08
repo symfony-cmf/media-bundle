@@ -110,7 +110,10 @@ class FileController
         $contentDocument = $this->getObjectManager()->find($this->class, $id);
 
         if (! $contentDocument || ! $contentDocument instanceof FileInterface) {
-            throw new NotFoundHttpException('Content is no file');
+            throw new NotFoundHttpException(sprintf(
+                'Object with identifier %s cannot be resolved to a valid instance of Symfony\Cmf\Bundle\MediaBundle\FileInterface',
+                $path
+            ));
         }
 
         $file = false;
