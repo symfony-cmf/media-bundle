@@ -19,7 +19,7 @@
         <xsd:attribute name="file-class" type="xsd:string" />
         <xsd:attribute name="directory-class" type="xsd:string" />
         <xsd:attribute name="image-class" type="xsd:string" />
-        <xsd:attribute name="use-liip-imagine" type="use_liip_imagine" />
+        <xsd:attribute name="use-imagine" type="use_imagine" />
         <xsd:attribute name="imagine-filter" type="xsd:string" />
     </xsd:complexType>
 
@@ -30,7 +30,7 @@
         </xsd:restriction>
     </xsd:simpleType>
 
-    <xsd:simpleType name="use_liip_imagine">
+    <xsd:simpleType name="use_imagine">
         <xsd:restriction base="xsd:string">
             <xsd:enumeration value="true" />
             <xsd:enumeration value="false" />

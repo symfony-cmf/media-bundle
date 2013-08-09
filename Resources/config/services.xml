@@ -13,6 +13,7 @@
         <service id="cmf_media.form.type.image" class="%cmf_media.form.image_class%">
             <tag name="form.type" alias="cmf_media_image"/>
             <argument>%cmf_media.image_class%</argument>
+            <argument>%cmf_media.use_imagine%</argument>
             <argument>%cmf_media.imagine.filter%</argument>
         </service>
 
