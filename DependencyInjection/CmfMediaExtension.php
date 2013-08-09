@@ -84,19 +84,22 @@ class CmfMediaExtension extends Extension
 
     public function loadLiipImagine($config, XmlFileLoader $loader, ContainerBuilder $container)
     {
-        $filter = isset($config['imagine_filter'])
-            ? $config['imagine_filter']
-            : false;
-        $filters = isset($config['extra_filters']) && is_array($config['extra_filters'])
-            ? array_merge(array($filter), $config['extra_filters'])
-            : array();
-        $container->setParameter('cmf_media.imagine.filter', $filter);
-        $container->setParameter('cmf_media.imagine.all_filters', $filters);
-
         $bundles = $container->getParameter('kernel.bundles');
-        if ('auto' === $config['use_liip_imagine'] && !isset($bundles['LiipImagineBundle'])) {
+        if ('auto' === $config['use_imagine'] && !isset($bundles['LiipImagineBundle'])) {
+            $container->setParameter($this->getAlias() . '.use_imagine', false);
+            $container->setParameter($this->getAlias() . '.imagine.filter', false);
+            $container->setParameter($this->getAlias() . '.imagine.all_filters', array());
+
             return;
         }
+
+        $filters = isset($config['extra_filters']) && is_array($config['extra_filters'])
+            ? array_merge(array($config['imagine_filter']), $config['extra_filters'])
+            : array();
+
+        $container->setParameter($this->getAlias() . '.use_imagine', true);
+        $container->setParameter($this->getAlias() . '.imagine.filter', $config['imagine_filter']);
+        $container->setParameter($this->getAlias() . '.imagine.all_filters', $filters);
 
         $loader->load($config['manager_registry'] . '.imagine.xml');
     }

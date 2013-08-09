@@ -46,11 +46,11 @@ class Configuration implements ConfigurationInterface
         $node
             ->fixXmlConfig('extra_filter')
             ->children()
-                ->enumNode('use_liip_imagine')
+                ->enumNode('use_imagine')
                     ->values(array(true, false, 'auto'))
                     ->defaultValue('auto')
                 ->end()
-                ->scalarNode('imagine_filter')->end()
+                ->scalarNode('imagine_filter')->defaultValue('image_upload_thumbnail')->end()
                 ->arrayNode('extra_filters')
                     ->requiresAtLeastOneElement()
                     ->prototype('scalar')->end()
