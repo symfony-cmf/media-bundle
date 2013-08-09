@@ -11,13 +11,15 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class ImageType extends AbstractType
 {
-    private $defaultFilter;
     private $dataClass;
+    private $useImagine;
+    private $defaultFilter;
 
-    public function __construct($class, $defaultFilter)
+    public function __construct($class, $useImagine = false, $defaultFilter = false)
     {
         $this->dataClass = $class;
-        $this->defaultFilter = $defaultFilter;
+        $this->useImagine = $useImagine;
+        $this->defaultFilter = $this->useImagine ? $defaultFilter : false;
     }
 
     public function getParent()
@@ -38,7 +40,7 @@ class ImageType extends AbstractType
 
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $view->vars['imagine_filter'] = $options['imagine_filter'];
+        $view->vars['imagine_filter'] = $this->useImagine ? $options['imagine_filter'] : false;
     }
 
     public function setDefaultOptions(OptionsResolverInterface $options)
