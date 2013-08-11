@@ -31,8 +31,8 @@ class Handler
      */
     public function serializeImageToJson(JsonSerializationVisitor $visitor, ImageInterface $image)
     {
-        $path = $this->mediaManager->getFilePath($image);
-        $url = $this->router->generate('cmf_media_image_display', array('path' => ltrim($path, '/')), true);
+        $urlSafePath = $this->mediaManager->getUrlSafePath($image);
+        $url = $this->router->generate('cmf_media_image_display', array('path' => $urlSafePath), true);
 
         return array('id' => $image->getId(), 'url' => $url, 'alt' => $image->getDescription());
     }

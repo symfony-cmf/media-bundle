@@ -23,7 +23,7 @@ use Symfony\Cmf\Bundle\MediaBundle\MediaInterface;
  * The method getFilePath is used to get the path for a file or directory
  * object. The method mapKeyToId maps a path back to an id.
  */
-class CmfMediaDoctrine implements
+abstract class AbstractCmfMediaDoctrine implements
     Adapter,
     ChecksumCalculator,
     ListKeysAware,
@@ -427,7 +427,7 @@ class CmfMediaDoctrine implements
      */
     protected function getFilePath(MediaInterface $file)
     {
-        return $this->mediaManager->getFilePath($file);
+        return $this->mediaManager->getPath($file);
     }
 
     /**
@@ -505,10 +505,7 @@ class CmfMediaDoctrine implements
      *
      * @return string the path with the last segment removed
      */
-    protected function getParentPath($path)
-    {
-        return $this->mediaManager->getParentPath($path);
-    }
+    abstract protected function getParentPath($path);
 
     /**
      * Get the name from the path
@@ -517,10 +514,7 @@ class CmfMediaDoctrine implements
      *
      * @return string the name, that is the string after the last "/"
      */
-    protected function getBaseName($path)
-    {
-        return $this->mediaManager->getBaseName($path);
-    }
+    abstract protected function getBaseName($path);
 
     /**
      * Set default values for a new file or directory

@@ -102,7 +102,7 @@ class FileController
     public function downloadAction($path)
     {
         try {
-            $id = $this->mediaManager->mapPathToId($path, $this->rootPath);
+            $id = $this->mediaManager->mapUrlSafePathToId($path, $this->rootPath);
         } catch (\OutOfBoundsException $e) {
             throw new NotFoundHttpException($e->getMessage());
         }

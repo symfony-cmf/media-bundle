@@ -12,9 +12,9 @@ class CkeditorHelper extends DefaultHelper
      */
     public function getUploadResponse(Request $request, FileInterface $file)
     {
-        $path    = $this->mediaManager->getFilePath($file);
-        $url     = $this->router->generate('cmf_media_image_display', array('path' => ltrim($path, '/')));
-        $funcNum = $request->query->get('CKEditorFuncNum');
+        $urlSafePath = $this->mediaManager->getUrlSafePath($file);
+        $url         = $this->router->generate('cmf_media_image_display', array('path' => $urlSafePath));
+        $funcNum     = $request->query->get('CKEditorFuncNum');
 
         $data = "<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction(".$funcNum.", '".$url."', 'success');</script>";
 

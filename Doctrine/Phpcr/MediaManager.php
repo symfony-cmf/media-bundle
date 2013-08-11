@@ -61,7 +61,7 @@ class MediaManager implements MediaManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function getFilePath(MediaInterface $media)
+    public function getPath(MediaInterface $media)
     {
         return $media->getId();
     }
@@ -69,7 +69,15 @@ class MediaManager implements MediaManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function createFilePath(MediaInterface $media, $rootPath = null)
+    public function getUrlSafePath(MediaInterface $media)
+    {
+        return ltrim($media->getId(), '/');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createPath(MediaInterface $media, $rootPath = null)
     {
         $path = ($rootPath === '/' ? $rootPath : $rootPath . '/') . $media->getName();
 
@@ -109,16 +117,8 @@ class MediaManager implements MediaManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function getParentPath($path)
+    public function mapUrlSafePathToId($path, $rootPath = null)
     {
-        return PathHelper::getParentPath($path);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getBaseName($path)
-    {
-        return PathHelper::getNodeName($path);
+        return $this->mapPathToId($path, $rootPath);
     }
 }

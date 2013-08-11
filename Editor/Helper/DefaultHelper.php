@@ -47,8 +47,8 @@ class DefaultHelper implements EditorHelperInterface
      */
     public function getUploadResponse(Request $request, FileInterface $file)
     {
-        $path = $this->mediaManager->getFilePath($file);
+        $urlSafePath = $this->mediaManager->getUrlSafePath($file);
 
-        return new RedirectResponse($this->router->generate('cmf_media_image_display', array('path' => ltrim($path, '/'))));
+        return new RedirectResponse($this->router->generate('cmf_media_image_display', array('path' => $urlSafePath)));
     }
 }

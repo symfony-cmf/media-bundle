@@ -40,9 +40,9 @@ class MediaHelper extends Helper
      */
     public function downloadUrl(FileInterface $file, $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
-        $path = $this->mediaManager->getFilePath($file);
+        $urlSafePath = $this->mediaManager->getUrlSafePath($file);
 
-        return $this->generator->generate('cmf_media_download', array('path' => ltrim($path, '/')), $referenceType);
+        return $this->generator->generate('cmf_media_download', array('path' => $urlSafePath), $referenceType);
     }
 
     /**
@@ -56,7 +56,7 @@ class MediaHelper extends Helper
      */
     public function displayUrl(ImageInterface $file, array $options = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
-        $urlSafePath = ltrim($this->mediaManager->getFilePath($file), '/');
+        $urlSafePath = $this->mediaManager->getUrlSafePath($file);
 
         if ($this->useImagine && $this->imagineHelper && isset($options['imagine_filter']) && is_string($options['imagine_filter'])) {
             return $this->imagineHelper->filter(

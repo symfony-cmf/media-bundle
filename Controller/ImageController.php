@@ -22,7 +22,7 @@ class ImageController extends FileController
     public function displayAction($path)
     {
         try {
-            $id = $this->mediaManager->mapPathToId($path, $this->rootPath);
+            $id = $this->mediaManager->mapUrlSafePathToId($path, $this->rootPath);
         } catch (\OutOfBoundsException $e) {
             throw new NotFoundHttpException($e->getMessage());
         }

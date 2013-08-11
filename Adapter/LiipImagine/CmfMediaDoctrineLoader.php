@@ -48,7 +48,7 @@ class CmfMediaDoctrineLoader extends AbstractDoctrineLoader
      */
     protected function mapPathToId($path)
     {
-        return $this->mediaManager->mapPathToId($path);
+        return $this->mediaManager->mapUrlSafePathToId($path);
     }
 
     /**

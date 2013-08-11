@@ -109,7 +109,7 @@ class ImagineCacheInvalidatorSubscriber implements EventSubscriber
                 return;
             }
             foreach ($this->filters as $filter) {
-                $path = $this->manager->resolve($request, $this->mediaManager->getFilePath($object), $filter);
+                $path = $this->manager->resolve($request, $this->mediaManager->getUrlSafePath($object), $filter);
                 if ($path instanceof RedirectResponse) {
                     $path = $path->getTargetUrl();
                 }
