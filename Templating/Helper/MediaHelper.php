@@ -2,6 +2,7 @@
 
 namespace Symfony\Cmf\Bundle\MediaBundle\Templating\Helper;
 
+use Liip\ImagineBundle\Templating\Helper\ImagineHelper;
 use Symfony\Cmf\Bundle\MediaBundle\Doctrine\MediaManagerInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
 use Symfony\Cmf\Bundle\MediaBundle\ImageInterface;
@@ -12,6 +13,8 @@ class MediaHelper extends Helper
 {
     protected $mediaManager;
     protected $generator;
+    protected $useImagine;
+    protected $imagineHelper;
 
     /**
      * Constructor.
@@ -19,10 +22,12 @@ class MediaHelper extends Helper
      * @param MediaManagerInterface  $mediaManager
      * @param UrlGeneratorInterface  $router       A Router instance
      */
-    public function __construct(MediaManagerInterface $mediaManager, UrlGeneratorInterface $router)
+    public function __construct(MediaManagerInterface $mediaManager, UrlGeneratorInterface $router, $useImagine = false, ImagineHelper $imagineHelper = null)
     {
-        $this->mediaManager = $mediaManager;
-        $this->generator    = $router;
+        $this->mediaManager  = $mediaManager;
+        $this->generator     = $router;
+        $this->useImagine    = $useImagine;
+        $this->imagineHelper = $imagineHelper;
     }
 
     /**
@@ -44,15 +49,24 @@ class MediaHelper extends Helper
      * Generates a display URL from the given image.
      *
      * @param ImageInterface  $file
-     * @param Boolean|string $referenceType The type of reference (one of the constants in UrlGeneratorInterface)
+     * @param array           $options
+     * @param Boolean|string  $referenceType The type of reference (one of the constants in UrlGeneratorInterface)
      *
      * @return string The generated URL
      */
-    public function displayUrl(ImageInterface $file, $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+    public function displayUrl(ImageInterface $file, array $options = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
-        $path = $this->mediaManager->getFilePath($file);
+        $urlSafePath = ltrim($this->mediaManager->getFilePath($file), '/');
 
-        return $this->generator->generate('cmf_media_image_display', array('path' => ltrim($path, '/')), $referenceType);
+        if ($this->useImagine && $this->imagineHelper && isset($options['imagine_filter']) && is_string($options['imagine_filter'])) {
+            return $this->imagineHelper->filter(
+                $urlSafePath,
+                $options['imagine_filter'],
+                $referenceType === UrlGeneratorInterface::ABSOLUTE_URL
+            );
+        }
+
+        return $this->generator->generate('cmf_media_image_display', array('path' => $urlSafePath), $referenceType);
     }
 
     /**
