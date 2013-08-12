@@ -3,8 +3,8 @@
 namespace Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Util\ClassUtils;
+use Doctrine\ODM\PHPCR\DocumentManager;
 use PHPCR\Util\PathHelper;
 use Symfony\Cmf\Bundle\MediaBundle\Doctrine\MediaManagerInterface;
 use Symfony\Cmf\Bundle\MediaBundle\MediaInterface;
@@ -14,15 +14,18 @@ class MediaManager implements MediaManagerInterface
 {
     protected $managerRegistry;
     protected $managerName;
+    protected $rootPath;
 
     /**
      * @param ManagerRegistry $registry
      * @param string          $managerName
+     * @param string          $rootPath    path where the filesystem is located
      */
-    public function __construct(ManagerRegistry $registry, $managerName)
+    public function __construct(ManagerRegistry $registry, $managerName, $rootPath = '/')
     {
         $this->managerRegistry = $registry;
         $this->managerName     = $managerName;
+        $this->rootPath        = $rootPath;
     }
 
     /**
@@ -48,10 +51,21 @@ class MediaManager implements MediaManagerInterface
     }
 
     /**
+     * Set the root path were the file system is located;
+     * if not called, the default root path will be used.
+     *
+     * @param string $rootPath
+     */
+    public function setRootPath($rootPath)
+    {
+        $this->rootPath = $rootPath;
+    }
+
+    /**
      * Get the object manager from the registry, based on the current
      * managerName
      *
-     * @return ObjectManager
+     * @return DocumentManager
      */
     protected function getObjectManager()
     {
@@ -77,22 +91,38 @@ class MediaManager implements MediaManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function createPath(MediaInterface $media, $rootPath = null)
+    public function setDefaults(MediaInterface $media, $parentPath = null)
     {
+        $class = ClassUtils::getClass($media);
+
+        // check and add name if possible
+        if (!$media->getName()) {
+            if ($media->getId()) {
+                $media->setName(PathHelper::getNodeName($media->getId()));
+            } else {
+                throw new \RuntimeException(sprintf(
+                    'Unable to set defaults, Media of type "%s" does not have a name or id.',
+                    $class
+                ));
+            }
+        }
+
+        $rootPath = is_null($parentPath) ? $this->rootPath : $parentPath;
         $path = ($rootPath === '/' ? $rootPath : $rootPath . '/') . $media->getName();
 
-        /** @var \Doctrine\ODM\PHPCR\DocumentManager $dm */
+        /** @var DocumentManager $dm */
         $dm = $this->getObjectManager();
 
         // TODO use PHPCR autoname
-        $class = ClassUtils::getClass($media);
         if ($dm->find($class, $path)) {
             // path already exists
             $media->setName($media->getName() . '_' . time() . '_' . rand());
         }
 
-        $parent = $dm->find(null, PathHelper::getParentPath($path));
-        $media->setParent($parent);
+        if (!$media->getParent()) {
+            $parent = $dm->find(null, PathHelper::getParentPath($path));
+            $media->setParent($parent);
+        }
     }
 
     /**

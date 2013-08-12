@@ -157,7 +157,7 @@ class FileUploadHelper
         $editorHelper->setFileDefaults($request, $file);
 
         try {
-            $this->mediaManager->createPath($file, $this->rootPath);
+            $this->mediaManager->setDefaults($file, $this->rootPath);
         } catch (\RuntimeException $e) {
             throw new HttpException(409, $e->getMessage());
         }

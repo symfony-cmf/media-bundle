@@ -37,16 +37,18 @@ interface MediaManagerInterface
     public function getUrlSafePath(MediaInterface $media);
 
     /**
-     * Create and add a path to the media object if needed;
-     * is used fe. by Doctrine PHPCR to generate a unique id.
+     * Set defaults for a media object;
+     * this is used fe. by Doctrine Phpcr to ensure a unique id and add the
+     * parent object.
      *
      * @param MediaInterface $media
+     * @param string         $parentPath optionally add the parent path
      *
      * @return void
      *
-     * @throws \RuntimeException if the path could not be created
+     * @throws \RuntimeException if the defaults could not be set
      */
-    public function createPath(MediaInterface $media, $rootPath = null);
+    public function setDefaults(MediaInterface $media, $parentPath = null);
 
     /**
      * Map the path to an id that can be used to lookup the file in the

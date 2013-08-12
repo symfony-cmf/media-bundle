@@ -22,6 +22,7 @@
         <service id="cmf_media.manager" class="%cmf_media.manager.class%" public="false">
             <argument type="service" id="doctrine_phpcr" />
             <argument>%cmf_media.manager_name%</argument>
+            <argument>%cmf_media.media_basepath%</argument>
         </service>
 
         <service id="cmf_media.file_upload.helper" class="%cmf_media.file_upload.helper.class%" public="false" >
@@ -36,7 +37,7 @@
             <argument type="service" id="doctrine_phpcr" />
             <argument>%cmf_media.manager_name%</argument>
             <argument/>
-            <argument>/</argument>
+            <argument>%cmf_media.media_basepath%</argument>
             <argument type="service" id="cmf_media.manager" />
             <argument type="service" id="cmf_media.file_upload.helper" />
         </service>
@@ -45,7 +46,7 @@
             <argument type="service" id="doctrine_phpcr" />
             <argument>%cmf_media.manager_name%</argument>
             <argument/>
-            <argument>/</argument>
+            <argument>%cmf_media.media_basepath%</argument>
             <argument type="service" id="cmf_media.manager" />
             <argument type="service" id="cmf_media.file_upload.helper" />
         </service>
