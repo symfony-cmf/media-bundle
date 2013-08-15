@@ -4,6 +4,7 @@ namespace Symfony\Cmf\Bundle\MediaBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
@@ -13,8 +14,28 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  */
-class CmfMediaExtension extends Extension
+class CmfMediaExtension extends Extension implements PrependExtensionInterface
 {
+    /**
+     * {@inheritDoc}
+     */
+    public function prepend(ContainerBuilder $container)
+    {
+        // get all Bundles
+        $bundles = $container->getParameter('kernel.bundles');
+
+        if (isset($bundles['CmfCreateBundle'])) {
+            $config = array(
+                'image' => array(
+                    'enabled'     => true,
+                    'model_class' => '%cmf_media.image_class%',
+                    'basepath'    => '%cmf_media.media_basepath%',
+                ),
+            );
+            $container->prependExtensionConfig('cmf_create', $config);
+        }
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -33,6 +54,7 @@ class CmfMediaExtension extends Extension
         $container->setParameter($this->getAlias() . '.media_basepath', $config['media_basepath']);
         $container->setParameter($this->getAlias() . '.manager_registry', $config['manager_registry']);
         $container->setParameter($this->getAlias() . '.manager_name', $config['manager_name']);
+        $container->setParameter($this->getAlias() . '.upload_file_role', $config['upload_file_role']);
 
         if (isset($config['media_class'])) {
             $container->setParameter($this->getAlias() . '.media_class', $config['media_class']);
@@ -54,7 +76,13 @@ class CmfMediaExtension extends Extension
 
         $this->loadDefaultClasses($config, $container);
 
-        $this->loadLiipImagine($config, $loader, $container);
+        if ($config['use_imagine']) {
+            $this->loadLiipImagine($config, $loader, $container);
+        }
+
+        if ($config['use_jms_serializer']) {
+            $this->loadJmsSerializer($config, $loader, $container);
+        }
     }
 
     public function loadDefaultClasses($config, ContainerBuilder $container)
@@ -101,7 +129,17 @@ class CmfMediaExtension extends Extension
         $container->setParameter($this->getAlias() . '.imagine.filter', $config['imagine_filter']);
         $container->setParameter($this->getAlias() . '.imagine.all_filters', $filters);
 
-        $loader->load($config['manager_registry'] . '.imagine.xml');
+        $loader->load('imagine.'.$config['manager_registry'].'.xml');
+    }
+
+    public function loadJmsSerializer($config, XmlFileLoader $loader, ContainerBuilder $container)
+    {
+        $bundles = $container->getParameter('kernel.bundles');
+        if ('auto' === $config['use_jms_serializer'] && !isset($bundles['JMSSerializerBundle'])) {
+            return;
+        }
+
+        $loader->load('serializer.xml');
     }
 
     /**
