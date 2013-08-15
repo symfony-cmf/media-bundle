@@ -3,9 +3,9 @@
 namespace Symfony\Cmf\Bundle\MediaBundle\Templating\Helper;
 
 use Liip\ImagineBundle\Templating\Helper\ImagineHelper;
-use Symfony\Cmf\Bundle\MediaBundle\Doctrine\MediaManagerInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
 use Symfony\Cmf\Bundle\MediaBundle\ImageInterface;
+use Symfony\Cmf\Bundle\MediaBundle\MediaManagerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Templating\Helper\Helper;
 

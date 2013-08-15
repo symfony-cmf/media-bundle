@@ -6,9 +6,9 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 use Imagine\Image\ImagineInterface;
 use Liip\ImagineBundle\Imagine\Data\Loader\AbstractDoctrineLoader;
 use Symfony\Cmf\Bundle\MediaBundle\BinaryInterface;
-use Symfony\Cmf\Bundle\MediaBundle\Doctrine\MediaManagerInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileSystemInterface;
 use Symfony\Cmf\Bundle\MediaBundle\ImageInterface;
+use Symfony\Cmf\Bundle\MediaBundle\MediaManagerInterface;
 use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
 
 /**

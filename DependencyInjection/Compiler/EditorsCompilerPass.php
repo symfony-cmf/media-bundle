@@ -10,10 +10,10 @@ class EditorsCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        $tags = $container->findTaggedServiceIds('cmf_media.editor.helper');
+        $tags = $container->findTaggedServiceIds('cmf_media.upload_editor_helper');
 
-        if (count($tags) > 0 && $container->hasDefinition('cmf_media.file_upload.helper')) {
-            $manager = $container->getDefinition('cmf_media.file_upload.helper');
+        if (count($tags) > 0 && $container->hasDefinition('cmf_media.upload_file_helper')) {
+            $manager = $container->getDefinition('cmf_media.upload_file_helper');
 
             foreach ($tags as $id => $tag) {
                 $manager->addMethodCall('addEditorHelper', array($tag[0]['alias'], new Reference($id)));

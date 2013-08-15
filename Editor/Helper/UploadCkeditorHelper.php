@@ -5,7 +5,7 @@ namespace Symfony\Cmf\Bundle\MediaBundle\Editor\Helper;
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-class CkeditorHelper extends DefaultHelper
+class UploadCkeditorHelper extends UploadDefaultHelper
 {
     /**
      * {@inheritdoc}

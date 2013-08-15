@@ -3,8 +3,8 @@
 namespace Symfony\Cmf\Bundle\MediaBundle\Serializer;
 
 use JMS\Serializer\JsonSerializationVisitor;
-use Symfony\Cmf\Bundle\MediaBundle\Doctrine\MediaManagerInterface;
 use Symfony\Cmf\Bundle\MediaBundle\ImageInterface;
+use Symfony\Cmf\Bundle\MediaBundle\MediaManagerInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 class Handler

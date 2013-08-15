@@ -4,15 +4,15 @@ namespace Symfony\Cmf\Bundle\MediaBundle\File;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Cmf\Bundle\MediaBundle\Doctrine\MediaManagerInterface;
-use Symfony\Cmf\Bundle\MediaBundle\Editor\EditorHelperInterface;
+use Symfony\Cmf\Bundle\MediaBundle\Editor\UploadEditorHelperInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
+use Symfony\Cmf\Bundle\MediaBundle\MediaManagerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class FileUploadHelper
+class UploadFileHelper
 {
     protected $managerRegistry;
     protected $managerName;
@@ -27,7 +27,6 @@ class FileUploadHelper
      * @param string                 $class         fully qualified class name of file
      * @param string                 $rootPath      path where the filesystem is located
      * @param MediaManagerInterface  $mediaManager
-     * @param EditorManager          $editorManager
      */
     public function __construct(
         ManagerRegistry $registry,
@@ -93,7 +92,7 @@ class FileUploadHelper
      * @param string                $name
      * @param EditorHelperInterface $helper
      */
-    public function addEditorHelper($name, EditorHelperInterface $helper)
+    public function addEditorHelper($name, UploadEditorHelperInterface $helper)
     {
         $this->editorHelpers[$name] = $helper;
     }
@@ -103,7 +102,7 @@ class FileUploadHelper
      *
      * @param $name leave null to get the default helper
      *
-     * @return EditorHelperInterface|null
+     * @return UploadEditorHelperInterface|null
      */
     public function getEditorHelper($name = null)
     {

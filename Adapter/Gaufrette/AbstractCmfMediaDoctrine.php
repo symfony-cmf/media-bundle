@@ -10,9 +10,9 @@ use Gaufrette\Adapter\MetadataSupporter;
 use Gaufrette\Util;
 use Symfony\Cmf\Bundle\MediaBundle\DirectoryInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
-use Symfony\Cmf\Bundle\MediaBundle\Doctrine\MediaManagerInterface;
 use Symfony\Cmf\Bundle\MediaBundle\HierarchyInterface;
 use Symfony\Cmf\Bundle\MediaBundle\MediaInterface;
+use Symfony\Cmf\Bundle\MediaBundle\MediaManagerInterface;
 
 /**
  * Cmf doctrine media adapter
@@ -22,6 +22,9 @@ use Symfony\Cmf\Bundle\MediaBundle\MediaInterface;
  *
  * The method getFilePath is used to get the path for a file or directory
  * object. The method mapKeyToId maps a path back to an id.
+ *
+ * If you set the autoFlush flag to false, you will get better performance but
+ * must ensure that flush is called after all media operations are done.
  */
 abstract class AbstractCmfMediaDoctrine implements
     Adapter,
@@ -56,8 +59,8 @@ abstract class AbstractCmfMediaDoctrine implements
      * @param string                $identifier   property used to identify a file and
      *                                            lookup (default NULL: let Doctrine
      *                                            determine the identifier)
-     * @param boolean               $autoFlush    whether to flush write and delete
-     *                                            actions (default: true)
+     * @param boolean               $autoFlush    whether to immediately flush write
+     *                                            and delete actions (default: true)
      */
     public function __construct(
         ManagerRegistry $registry,

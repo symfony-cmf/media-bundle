@@ -1,6 +1,6 @@
 <?php
 
-namespace Symfony\Cmf\Bundle\MediaBundle\Doctrine;
+namespace Symfony\Cmf\Bundle\MediaBundle;
 
 use Symfony\Cmf\Bundle\MediaBundle\MediaInterface;
 

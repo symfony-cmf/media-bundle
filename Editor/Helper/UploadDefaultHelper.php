@@ -2,14 +2,14 @@
 
 namespace Symfony\Cmf\Bundle\MediaBundle\Editor\Helper;
 
-use Symfony\Cmf\Bundle\MediaBundle\Doctrine\MediaManagerInterface;
-use Symfony\Cmf\Bundle\MediaBundle\Editor\EditorHelperInterface;
+use Symfony\Cmf\Bundle\MediaBundle\Editor\UploadEditorHelperInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
+use Symfony\Cmf\Bundle\MediaBundle\MediaManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 
-class DefaultHelper implements EditorHelperInterface
+class UploadDefaultHelper implements UploadEditorHelperInterface
 {
     protected $mediaManager;
     protected $router;

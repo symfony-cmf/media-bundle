@@ -5,10 +5,10 @@ namespace Symfony\Cmf\Bundle\MediaBundle\Controller;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Cmf\Bundle\MediaBundle\BinaryInterface;
-use Symfony\Cmf\Bundle\MediaBundle\Doctrine\MediaManagerInterface;
-use Symfony\Cmf\Bundle\MediaBundle\File\FileUploadHelper;
+use Symfony\Cmf\Bundle\MediaBundle\File\UploadFileHelper;
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileSystemInterface;
+use Symfony\Cmf\Bundle\MediaBundle\MediaManagerInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,7 +25,7 @@ class FileController
     protected $class;
     protected $rootPath;
     protected $mediaManager;
-    protected $fileUploadHelper;
+    protected $uploadFileHelper;
 
     /**
      * @param ManagerRegistry        $registry
@@ -40,14 +40,14 @@ class FileController
         $class,
         $rootPath = '/',
         MediaManagerInterface $mediaManager,
-        FileUploadHelper $fileUploadHelper)
+        UploadFileHelper $uploadFileHelper)
     {
         $this->managerRegistry  = $registry;
         $this->managerName      = $managerName;
         $this->class            = $class === '' ? null : $class;
         $this->rootPath         = $rootPath;
         $this->mediaManager     = $mediaManager;
-        $this->fileUploadHelper = $fileUploadHelper;
+        $this->uploadFileHelper = $uploadFileHelper;
     }
 
     /**
@@ -151,6 +151,6 @@ class FileController
      */
     public function uploadAction(Request $request)
     {
-        return $this->fileUploadHelper->getUploadResponse($request);
+        return $this->uploadFileHelper->getUploadResponse($request);
     }
 }

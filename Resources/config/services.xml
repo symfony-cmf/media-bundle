@@ -8,8 +8,8 @@
         <parameter key="cmf_media.form.image_class">Symfony\Cmf\Bundle\MediaBundle\Form\Type\ImageType</parameter>
         <parameter key="cmf_media.templating.helper.class">Symfony\Cmf\Bundle\MediaBundle\Templating\Helper\MediaHelper</parameter>
         <parameter key="cmf_media.twig.extension.class">Symfony\Cmf\Bundle\MediaBundle\Twig\Extension\MediaExtension</parameter>
-        <parameter key="cmf_media.editor.helper.default.class">Symfony\Cmf\Bundle\MediaBundle\Editor\Helper\DefaultHelper</parameter>
-        <parameter key="cmf_media.editor.helper.ckeditor.class">Symfony\Cmf\Bundle\MediaBundle\Editor\Helper\CkeditorHelper</parameter>
+        <parameter key="cmf_media.upload_editor_helper.default.class">Symfony\Cmf\Bundle\MediaBundle\Editor\Helper\UploadDefaultHelper</parameter>
+        <parameter key="cmf_media.upload_editor_helper.ckeditor.class">Symfony\Cmf\Bundle\MediaBundle\Editor\Helper\UploadCkeditorHelper</parameter>
     </parameters>
 
     <services>
@@ -33,8 +33,8 @@
             <argument type="service" id="cmf_media.templating.helper" />
         </service>
 
-        <service id="cmf_media.editor.helper.default" class="%cmf_media.editor.helper.default.class%">
-            <tag name="cmf_media.editor.helper" alias="default" />
+        <service id="cmf_media.upload_editor_helper.default" class="%cmf_media.upload_editor_helper.default.class%">
+            <tag name="cmf_media.upload_editor_helper" alias="default" />
             <argument type="service" id="cmf_media.manager" />
             <argument type="service" id="router" />
             <argument type="collection">
@@ -43,8 +43,8 @@
             </argument>
         </service>
 
-        <service id="cmf_media.editor.helper.ckeditor" class="%cmf_media.editor.helper.ckeditor.class%">
-            <tag name="cmf_media.editor.helper" alias="ckeditor" />
+        <service id="cmf_media.upload_editor_helper.ckeditor" class="%cmf_media.upload_editor_helper.ckeditor.class%">
+            <tag name="cmf_media.upload_editor_helper" alias="ckeditor" />
             <argument type="service" id="cmf_media.manager" />
             <argument type="service" id="router" />
         </service>

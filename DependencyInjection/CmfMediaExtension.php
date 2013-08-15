@@ -54,9 +54,13 @@ class CmfMediaExtension extends Extension
 
         $this->loadDefaultClasses($config, $container);
 
-        $this->loadLiipImagine($config, $loader, $container);
+        if ($config['use_imagine']) {
+            $this->loadLiipImagine($config, $loader, $container);
+        }
 
-        $this->loadJmsSerializer($config, $loader, $container);
+        if ($config['use_jms_serializer']) {
+            $this->loadJmsSerializer($config, $loader, $container);
+        }
     }
 
     public function loadDefaultClasses($config, ContainerBuilder $container)

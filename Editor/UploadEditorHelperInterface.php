@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Interface
  */
-interface EditorHelperInterface
+interface UploadEditorHelperInterface
 {
     /**
      * Set file defaults from request
