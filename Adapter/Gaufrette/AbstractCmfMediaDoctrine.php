@@ -13,6 +13,7 @@ use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
 use Symfony\Cmf\Bundle\MediaBundle\HierarchyInterface;
 use Symfony\Cmf\Bundle\MediaBundle\MediaInterface;
 use Symfony\Cmf\Bundle\MediaBundle\MediaManagerInterface;
+use Symfony\Cmf\Bundle\MediaBundle\MetadataInterface;
 
 /**
  * Cmf doctrine media adapter
@@ -133,6 +134,9 @@ abstract class AbstractCmfMediaDoctrine implements
     {
         if ($this->exists($key)) {
             $file = $this->find($key);
+            if (! $file instanceof FileInterface) {
+                return false;
+            }
         } else {
             $filePath = $this->computePath($key);
 
@@ -289,8 +293,8 @@ abstract class AbstractCmfMediaDoctrine implements
     /**
      * {@inheritDoc}
      *
-     * @throws RuntimeException If file cannot be found or cannot be written
-     *                          to
+     * @throws \RuntimeException If file cannot be found or cannot be written
+     *                           to
      */
     public function setMetadata($key, $metadata)
     {
@@ -298,6 +302,14 @@ abstract class AbstractCmfMediaDoctrine implements
 
         if (! $file) {
             throw new \RuntimeException(sprintf('The file "%s" does not exist.', $key));
+        }
+
+        if (! $file instanceof MetadataInterface) {
+            $type = is_object($file) ? get_class($file) : gettype($file);
+            throw new \InvalidArgumentException(sprintf(
+                'The class "%s" does not implement Symfony\Cmf\Bundle\MediaBundle\MetadataInterface',
+                $type
+            ));
         }
 
         $file->setMetadata($metadata);
@@ -351,6 +363,7 @@ abstract class AbstractCmfMediaDoctrine implements
      *
      * @param string|int $key Identifier.
      * @param boolean $dir directly try to find a directory
+     *
      * @return FileInterface
      */
     protected function find($key, $dir = false)

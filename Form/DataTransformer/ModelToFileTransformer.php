@@ -14,6 +14,13 @@ class ModelToFileTransformer implements DataTransformerInterface
 
     public function __construct($class)
     {
+        if (!is_subclass_of($class, 'Symfony\Cmf\Bundle\MediaBundle\FileInterface')) {
+            throw new \InvalidArgumentException(sprintf(
+                'The class "%s" does not implement Symfony\Cmf\Bundle\MediaBundle\FileInterface',
+                $class
+            ));
+        }
+
         $this->dataClass = $class;
     }
 

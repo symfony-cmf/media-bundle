@@ -20,7 +20,6 @@ interface MetadataInterface extends MediaInterface
 
     /**
      * @param string $description
-     * @return void
      */
     public function setDescription($description);
 
@@ -33,7 +32,6 @@ interface MetadataInterface extends MediaInterface
 
     /**
      * @param string $copyright
-     * @return void
      */
     public function setCopyright($copyright);
 
@@ -46,7 +44,6 @@ interface MetadataInterface extends MediaInterface
 
     /**
      * @param string $author
-     * @return void
      */
     public function setAuthorName($author);
 
@@ -66,7 +63,9 @@ interface MetadataInterface extends MediaInterface
 
     /**
      * @param string $name
-     * @param null   $default to be used if $name is not set in the metadata
+     * @param string $default to be used if $name is not set in the metadata
+     *
+     * @return string
      */
     public function getMetadataValue($name, $default = null);
 
@@ -74,7 +73,7 @@ interface MetadataInterface extends MediaInterface
      * The metadata value
      *
      * @param string $name
-     * @param mixed  $value
+     * @param string  $value
      */
     public function setMetadataValue($name, $value);
 
