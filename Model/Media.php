@@ -27,7 +27,7 @@ class Media extends BaseMedia implements MetadataInterface
     protected $metadata;
 
     /**
-     * @param string $description
+     * {@inheritDoc}
      */
     public function setDescription($description)
     {
@@ -35,7 +35,7 @@ class Media extends BaseMedia implements MetadataInterface
     }
 
     /**
-     * @return string
+     * {@inheritDoc}
      */
     public function getDescription()
     {
@@ -43,7 +43,7 @@ class Media extends BaseMedia implements MetadataInterface
     }
 
     /**
-     * @param string $copyright
+     * {@inheritDoc}
      */
     public function setCopyright($copyright)
     {
@@ -51,7 +51,7 @@ class Media extends BaseMedia implements MetadataInterface
     }
 
     /**
-     * @return string
+     * {@inheritDoc}
      */
     public function getCopyright()
     {
@@ -59,7 +59,7 @@ class Media extends BaseMedia implements MetadataInterface
     }
 
     /**
-     * @param string $authorName
+     * {@inheritDoc}
      */
     public function setAuthorName($authorName)
     {
@@ -67,7 +67,7 @@ class Media extends BaseMedia implements MetadataInterface
     }
 
     /**
-     * @return string
+     * {@inheritDoc}
      */
     public function getAuthorName()
     {
@@ -75,7 +75,7 @@ class Media extends BaseMedia implements MetadataInterface
     }
 
     /**
-     * @param array $metadata
+     * {@inheritDoc}
      */
     public function setMetadata(array $metadata)
     {
@@ -83,7 +83,7 @@ class Media extends BaseMedia implements MetadataInterface
     }
 
     /**
-     * @return array
+     * {@inheritDoc}
      */
     public function getMetadata()
     {
@@ -91,18 +91,15 @@ class Media extends BaseMedia implements MetadataInterface
     }
 
     /**
-     * @param string $name
-     * @param null $default
-     * @return null
+     * {@inheritDoc}
      */
     public function getMetadataValue($name, $default = null)
     {
-        return isset($metadata[$name]) ? $metadata[$name] : $default;
+        return isset($this->metadata[$name]) ? $this->metadata[$name] : $default;
     }
 
     /**
-     * @param string $name
-     * @param mixed  $value
+     * {@inheritDoc}
      */
     public function setMetadataValue($name, $value)
     {
@@ -114,8 +111,6 @@ class Media extends BaseMedia implements MetadataInterface
      */
     public function unsetMetadataValue($name)
     {
-        $metadata = $this->getMetadata();
-        unset($metadata[$name]);
-        $this->setMetadata($metadata);
+        unset($this->metadata[$name]);
     }
 }
