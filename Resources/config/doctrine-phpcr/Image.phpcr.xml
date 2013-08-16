@@ -7,6 +7,7 @@
 
     <document
         name="Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\Image"
+        repository-class="Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\ImageRepository"
         >
 
         <field name="width" type="int"/>

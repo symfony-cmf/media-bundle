@@ -3,36 +3,59 @@
 namespace Symfony\Cmf\Bundle\MediaBundle\Controller;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Cmf\Bundle\MediaBundle\BinaryInterface;
+use Symfony\Cmf\Bundle\MediaBundle\File\UploadFileHelper;
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileSystemInterface;
+use Symfony\Cmf\Bundle\MediaBundle\MediaManagerInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\SecurityContextInterface;
 
 /**
- * Controller to handle file downloads for things that have a route
+ * Controller to handle file downloads, uploads and other things that have a route
  */
-abstract class AbstractDownloadController
+class FileController
 {
     protected $managerRegistry;
     protected $managerName;
     protected $class;
     protected $rootPath;
+    protected $mediaManager;
+    protected $uploadFileHelper;
+    protected $requiredUploadRole;
+    protected $securityContext;
 
     /**
-     * @param ManagerRegistry $registry
-     * @param string          $managerName
-     * @param string          $class       fully qualified class name of file
-     * @param string          $rootPath    path where the filesystem is located
+     * @param ManagerRegistry        $registry
+     * @param string                 $managerName
+     * @param string                 $class         fully qualified class name of file
+     * @param string                 $rootPath      path where the filesystem is located
+     * @param MediaManagerInterface  $mediaManager
      */
-    public function __construct(ManagerRegistry $registry, $managerName, $class, $rootPath = '/')
+    public function __construct(
+        ManagerRegistry $registry,
+        $managerName,
+        $class,
+        $rootPath = '/',
+        MediaManagerInterface $mediaManager,
+        UploadFileHelper $uploadFileHelper,
+        $requiredUploadRole,
+        SecurityContextInterface $securityContext = null)
     {
-        $this->managerRegistry = $registry;
-        $this->managerName     = $managerName;
-        $this->class           = $class === '' ? null : $class;
-        $this->rootPath        = $rootPath;
+        $this->managerRegistry    = $registry;
+        $this->managerName        = $managerName;
+        $this->class              = $class === '' ? null : $class;
+        $this->rootPath           = $rootPath;
+        $this->mediaManager       = $mediaManager;
+        $this->uploadFileHelper   = $uploadFileHelper;
+        $this->requiredUploadRole = $requiredUploadRole;
+        $this->securityContext    = $securityContext;
     }
 
     /**
@@ -72,7 +95,7 @@ abstract class AbstractDownloadController
      * Get the object manager from the registry, based on the current
      * managerName
      *
-     * @return \Doctrine\Common\Persistence\ObjectManager
+     * @return ObjectManager
      */
     protected function getObjectManager()
     {
@@ -80,26 +103,25 @@ abstract class AbstractDownloadController
     }
 
     /**
-     * Map the requested path (ie. subpath in the URL) to an id that can
-     * be used to lookup the file in the Doctrine store.
+     * Action to download a file object that has a route
      *
      * @param string $path
-     *
-     * @return string
-     */
-    abstract protected function mapPathToId($path);
-
-    /**
-     * Action to download a document that has a route
-     *
-     * @param string $id
      */
     public function downloadAction($path)
     {
-        $contentDocument = $this->getObjectManager()->find($this->class, $this->mapPathToId($path));
+        try {
+            $id = $this->mediaManager->mapUrlSafePathToId($path, $this->rootPath);
+        } catch (\OutOfBoundsException $e) {
+            throw new NotFoundHttpException($e->getMessage());
+        }
+
+        $contentDocument = $this->getObjectManager()->find($this->class, $id);
 
         if (! $contentDocument || ! $contentDocument instanceof FileInterface) {
-            throw new NotFoundHttpException('Content is no file');
+            throw new NotFoundHttpException(sprintf(
+                'Object with identifier %s cannot be resolved to a valid instance of Symfony\Cmf\Bundle\MediaBundle\FileInterface',
+                $path
+            ));
         }
 
         $file = false;
@@ -127,5 +149,20 @@ abstract class AbstractDownloadController
         }
 
         return $response;
+    }
+
+    /**
+     * Action to upload a file
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function uploadAction(Request $request)
+    {
+        if ($this->securityContext && false === $this->securityContext->isGranted($this->requiredUploadRole)) {
+            throw new AccessDeniedException();
+        }
+
+        return $this->uploadFileHelper->getUploadResponse($request);
     }
 }
