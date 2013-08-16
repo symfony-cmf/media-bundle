@@ -1,4 +1,4 @@
-Tests/Functional/App/cache
+vendor/
 composer.lock
-vendor
-.idea/
+Tests/Resources/app/cache
+Tests/Resources/app/logs

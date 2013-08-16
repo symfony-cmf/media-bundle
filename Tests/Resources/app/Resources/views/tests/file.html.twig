@@ -1,0 +1,9 @@
+{% extends "::layout.html.twig" %}
+{% block content %}
+<h2>Download file</h2>
+<ul>
+    {% for file in files %}
+    <li><a href="{{ cmf_media_download_url(file) }}" title="Download {{ file.name }}">Download {{ file.name }}</a></li>
+    {% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,15 @@
+test_index:
+    pattern: /
+    defaults:
+        _controller: Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Controller\TestController::indexAction
+
+file_test:
+    pattern: /file-test
+    defaults:
+        _controller: Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Controller\TestController::fileAction
+
+cmf_media_file:
+    resource: "@CmfMediaBundle/Resources/config/routing/file.xml"
+
+cmf_media_image:
+    resource: "@CmfMediaBundle/Resources/config/routing/image.xml"
