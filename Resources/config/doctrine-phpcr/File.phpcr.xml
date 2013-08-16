@@ -7,7 +7,6 @@
 
     <document
         name="Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\File"
-        node-type="nt:file"
         >
 
         <child name="content" node-name="jcr:content">
@@ -17,7 +16,7 @@
         </child>
 
         <field name="contentType" type="string"/>
-        <field name="extension" type="string"/>
+        <field name="extension" type="string" nullable="true"/>
 
         <field name="size" type="int"/>
 

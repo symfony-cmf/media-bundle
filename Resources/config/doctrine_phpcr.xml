@@ -25,7 +25,15 @@
             <argument>%cmf_media.media_basepath%</argument>
         </service>
 
-        <service id="cmf_media.upload_file_helper" class="%cmf_media.upload_file_helper.class%" public="false" >
+        <service id="cmf_media.upload_file_helper" class="%cmf_media.upload_file_helper.class%">
+            <argument type="service" id="doctrine_phpcr" />
+            <argument>%cmf_media.manager_name%</argument>
+            <argument>%cmf_media.file_class%</argument>
+            <argument>%cmf_media.media_basepath%</argument>
+            <argument type="service" id="cmf_media.manager" />
+        </service>
+
+        <service id="cmf_media.upload_image_helper" class="%cmf_media.upload_file_helper.class%">
             <argument type="service" id="doctrine_phpcr" />
             <argument>%cmf_media.manager_name%</argument>
             <argument>%cmf_media.image_class%</argument>
@@ -33,7 +41,7 @@
             <argument type="service" id="cmf_media.manager" />
         </service>
 
-        <service id="cmf_media.file.controller" class="%cmf_media.file.controller.class%" >
+        <service id="cmf_media.file.controller" class="%cmf_media.file.controller.class%">
             <argument type="service" id="doctrine_phpcr" />
             <argument>%cmf_media.manager_name%</argument>
             <argument/>
@@ -44,13 +52,13 @@
             <argument type="service" id="security.context" on-invalid="ignore" />
         </service>
 
-        <service id="cmf_media.image.controller" class="%cmf_media.image.controller.class%" >
+        <service id="cmf_media.image.controller" class="%cmf_media.image.controller.class%">
             <argument type="service" id="doctrine_phpcr" />
             <argument>%cmf_media.manager_name%</argument>
             <argument/>
             <argument>%cmf_media.media_basepath%</argument>
             <argument type="service" id="cmf_media.manager" />
-            <argument type="service" id="cmf_media.upload_file_helper" />
+            <argument type="service" id="cmf_media.upload_image_helper" />
             <argument>%cmf_media.upload_file_role%</argument>
             <argument type="service" id="security.context" on-invalid="ignore" />
         </service>

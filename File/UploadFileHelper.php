@@ -128,6 +128,8 @@ class UploadFileHelper
     /**
      * Process upload and get a response
      *
+     * @param Request $request
+     *
      * @return Response
      */
     public function getUploadResponse(Request $request)
