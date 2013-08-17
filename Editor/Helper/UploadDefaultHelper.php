@@ -4,6 +4,7 @@ namespace Symfony\Cmf\Bundle\MediaBundle\Editor\Helper;
 
 use Symfony\Cmf\Bundle\MediaBundle\Editor\UploadEditorHelperInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
+use Symfony\Cmf\Bundle\MediaBundle\ImageInterface;
 use Symfony\Cmf\Bundle\MediaBundle\MediaManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -45,10 +46,20 @@ class UploadDefaultHelper implements UploadEditorHelperInterface
     /**
      * {@inheritdoc}
      */
-    public function getUploadResponse(Request $request, FileInterface $file)
+    public function getUploadResponse(Request $request, array $files)
     {
-        $urlSafePath = $this->mediaManager->getUrlSafePath($file);
+        if (!isset($files[0]) && !$files[0] instanceof FileInterface) {
+            throw new \InvalidArgumentException(
+                'Provide at least one Symfony\Cmf\Bundle\MediaBundle\FileInterface file.'
+            );
+        }
 
-        return new RedirectResponse($this->router->generate('cmf_media_image_display', array('path' => $urlSafePath)));
+        $urlSafePath = $this->mediaManager->getUrlSafePath($files[0]);
+
+        if ($files[0] instanceof ImageInterface) {
+            return new RedirectResponse($this->router->generate('cmf_media_image_display', array('path' => $urlSafePath)));
+        } else {
+            return new RedirectResponse($request->headers->get('referer'));
+        }
     }
 }

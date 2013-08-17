@@ -3,10 +3,20 @@ test_index:
     defaults:
         _controller: Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Controller\TestController::indexAction
 
-file_test:
-    pattern: /file-test
+phpcr_file_test:
+    pattern: /phpcr/file-test
     defaults:
-        _controller: Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Controller\TestController::fileAction
+        _controller: Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Controller\PhpcrFileTestController::fileAction
+
+phpcr_file_test_upload:
+    pattern: /phpcr/file-test/upload
+    defaults:
+        _controller: Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Controller\PhpcrFileTestController::uploadAction
+
+phpcr_file_test_upload_editor:
+    pattern: /phpcr/file-test/upload/editor
+    defaults:
+        _controller: Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Controller\PhpcrFileTestController::editorUploadAction
 
 cmf_media_file:
     resource: "@CmfMediaBundle/Resources/config/routing/file.xml"
