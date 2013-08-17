@@ -4,12 +4,12 @@
 <h4>Standard upload</h4>
 <p>The upload is handled by your own controller action. The UploadFileHelper is used to handle the upload and creates a
     FileInterface object, writing the object to storage has to be implemented by yourself.</p>
-{{ form(upload_form) }}
+{{ form(upload_form, { attr: { class: 'standard' } }) }}
 <h4>Web editor upload (default)</h4>
 <p>The upload is completely handled by the FileController::uploadAction. The UploadFileHelper will process the upload,
     writes the created FileInterface object to storage and returns a response that depends on the editor defined in the
     request.</p>
-{{ form(editor_form) }}
+{{ form(editor_form, { attr: { class: 'editor default' } }) }}
 
 <h2>Download file(s)</h2>
 {% if files is empty %}
