@@ -1,6 +1,6 @@
 <?php
 
-namespace Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\DataFixtures\Phpcr;
+namespace Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\DataFixtures\PHPCR;
 
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\DataFixtures\FixtureInterface;
@@ -8,7 +8,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ODM\PHPCR\Document\Generic;
 use Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\File;
 
-class LoadBlockData implements FixtureInterface, DependentFixtureInterface
+class LoadMediaData implements FixtureInterface, DependentFixtureInterface
 {
     public function getDependencies()
     {
@@ -19,11 +19,15 @@ class LoadBlockData implements FixtureInterface, DependentFixtureInterface
 
     public function load(ObjectManager $manager)
     {
-        $root = $manager->find(null, '/test/media');
+        $root = $manager->find(null, '/test');
+        $mediaRoot = new Generic;
+        $mediaRoot->setNodename('media');
+        $mediaRoot->setParent($root);
+        $manager->persist($mediaRoot);
 
         // File
         $file = new File();
-        $file->setParent($root);
+        $file->setParent($mediaRoot);
         $file->setName('file-1.txt');
         $file->setContentFromString('Test file 1.');
         $file->setContentType('text/plain');

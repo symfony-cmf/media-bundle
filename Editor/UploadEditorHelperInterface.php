@@ -23,7 +23,12 @@ interface UploadEditorHelperInterface
     /**
      * Get a response for the upload action of the editor
      *
+     * @param Request $request
+     * @param FileInterface[] $files
+     *
      * @return Response
+     *
+     * @throws InvalidArgumentException if no FileInterface file is provided
      */
-    public function getUploadResponse(Request $request, FileInterface $file);
+    public function getUploadResponse(Request $request, array $files);
 }

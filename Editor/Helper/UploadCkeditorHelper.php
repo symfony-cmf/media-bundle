@@ -10,9 +10,15 @@ class UploadCkeditorHelper extends UploadDefaultHelper
     /**
      * {@inheritdoc}
      */
-    public function getUploadResponse(Request $request, FileInterface $file)
+    public function getUploadResponse(Request $request, array $files)
     {
-        $urlSafePath = $this->mediaManager->getUrlSafePath($file);
+        if (!isset($files[0]) && !$files[0] instanceof FileInterface) {
+            throw new \InvalidArgumentException(
+                'Provide at least one Symfony\Cmf\Bundle\MediaBundle\FileInterface file.'
+            );
+        }
+
+        $urlSafePath = $this->mediaManager->getUrlSafePath($files[0]);
         $url         = $this->router->generate('cmf_media_image_display', array('path' => $urlSafePath));
         $funcNum     = $request->query->get('CKEditorFuncNum');
 
