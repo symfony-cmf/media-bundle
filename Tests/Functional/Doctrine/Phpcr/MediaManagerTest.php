@@ -81,17 +81,19 @@ class MediaManagerTest extends \PHPUnit_Framework_TestCase
     public function testSetDefaults($expectedName = null, $name = null, $nameExists = false, $id = null)
     {
         $returnMediaExists = $nameExists ? new Media() : null;
+        $rootPath = '/test/media/file';
+        $managerName = 'anothermanager';
 
         $this->registryMock->expects($this->once())
             ->method('getManager')
-            ->with($this->equalTo('themanager'))
+            ->with($this->equalTo($managerName))
             ->will($this->returnValue($this->dmMock))
         ;
         $this->dmMock->expects($this->any())
             ->method('find')
             ->will($this->returnValueMap(array(
-                array('Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\Media', '/test/media/'.$name, $returnMediaExists),
-                array(null, '/test/media', $this->testRoot),
+                array('Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\Media', $rootPath.'/'.$name, $returnMediaExists),
+                array(null, $rootPath, $this->testRoot),
             )))
         ;
 
@@ -100,6 +102,8 @@ class MediaManagerTest extends \PHPUnit_Framework_TestCase
         $media->setName($name);
 
         $mediaManager = $this->getMediaManager();
+        $mediaManager->setRootPath($rootPath);
+        $mediaManager->setManagerName($managerName);
         $mediaManager->setDefaults($media);
 
         $this->assertEquals($this->testRoot, $media->getParent());

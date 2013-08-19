@@ -89,8 +89,8 @@ class UploadFileHelper
     /**
      * Add an editor helper
      *
-     * @param string                $name
-     * @param EditorHelperInterface $helper
+     * @param string                      $name
+     * @param UploadEditorHelperInterface $helper
      */
     public function addEditorHelper($name, UploadEditorHelperInterface $helper)
     {
