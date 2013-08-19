@@ -19,7 +19,8 @@
     "require-dev": {
         "symfony-cmf/testing": "1.0.*",
         "jms/serializer-bundle": "0.12.*",
-        "liip/imagine-bundle": "dev-master"
+        "liip/imagine-bundle": "dev-master",
+        "mikey179/vfsStream": "~1.2"
     },
     "suggest": {
         "knplabs/gaufrette": "When using the Gaufrette adapter",

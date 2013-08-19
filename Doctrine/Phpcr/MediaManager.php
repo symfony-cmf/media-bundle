@@ -40,17 +40,6 @@ class MediaManager implements MediaManagerInterface
     }
 
     /**
-     * Set the class to use to get the file object;
-     * if not called, the default class will be used.
-     *
-     * @param string $class fully qualified class name of file
-     */
-    public function setClass($class)
-    {
-        $this->class = $class;
-    }
-
-    /**
      * Set the root path were the file system is located;
      * if not called, the default root path will be used.
      *

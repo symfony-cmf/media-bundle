@@ -10,7 +10,7 @@
         <requirement key="path">.*</requirement>
     </route>
 
-    <route id="cmf_media_upload" pattern="/media/upload/{editor}">
+    <route id="cmf_media_file_upload" pattern="/media/file/upload/{editor}">
         <default key="_controller">cmf_media.file.controller:uploadAction</default>
         <default key="editor">default</default>
         <default key="_format">json</default>

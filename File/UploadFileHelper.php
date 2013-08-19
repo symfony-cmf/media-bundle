@@ -89,8 +89,8 @@ class UploadFileHelper
     /**
      * Add an editor helper
      *
-     * @param string                $name
-     * @param EditorHelperInterface $helper
+     * @param string                      $name
+     * @param UploadEditorHelperInterface $helper
      */
     public function addEditorHelper($name, UploadEditorHelperInterface $helper)
     {
@@ -126,13 +126,42 @@ class UploadFileHelper
     }
 
     /**
+     * Handle the UploadedFile and create a FileInterface object specified by
+     * the configured class.
+     *
+     * @param Request      $request
+     * @param UploadedFile $uploadedFile
+     *
+     * @return FileInterface
+     */
+    public function handleUploadedFile(UploadedFile $uploadedFile)
+    {
+        $this->validateFile($uploadedFile);
+
+        /** @var $file FileInterface */
+        $file = new $this->class;
+        $file->setName($uploadedFile->getClientOriginalName());
+        $file->copyContentFromFile($uploadedFile);
+
+        try {
+            $this->mediaManager->setDefaults($file, $this->rootPath);
+        } catch (\RuntimeException $e) {
+            throw new HttpException(409, $e->getMessage());
+        }
+
+        return $file;
+    }
+
+    /**
      * Process upload and get a response
      *
-     * @param Request $request
+     * @param Request        $request
+     * @param UploadedFile[] $uploadedFiles optionally get the uploaded file(s)
+     *      from the Request yourself
      *
      * @return Response
      */
-    public function getUploadResponse(Request $request)
+    public function getUploadResponse(Request $request, array $uploadedFiles = array())
     {
         /** @var \Symfony\Cmf\Bundle\MediaBundle\Editor\EditorHelperInterface $editorHelper */
         $editorHelper = $this->getEditorHelper($request->get('editor', 'default'));
@@ -144,30 +173,27 @@ class UploadFileHelper
             ));
         }
 
-        $files = $request->files;
-
-        /** @var $file UploadedFile */
-        $uploadedFile = $files->getIterator()->current();
-        $this->validateFile($uploadedFile);
-
-        /** @var $image FileInterface */
-        $file = new $this->class;
-        $file->setName($uploadedFile->getClientOriginalName());
-        $file->copyContentFromFile($uploadedFile);
-
-        $editorHelper->setFileDefaults($request, $file);
-
-        try {
-            $this->mediaManager->setDefaults($file, $this->rootPath);
-        } catch (\RuntimeException $e) {
-            throw new HttpException(409, $e->getMessage());
+        if (count($uploadedFiles) === 0) {
+            // by default get the first file
+            $uploadedFiles = array($request->files->getIterator()->current());
         }
 
-        // persist
-        $this->getObjectManager()->persist($file);
+        // handle the uploaded file(s)
+        $files = array();
+        foreach ($uploadedFiles as $uploadedFile) {
+            $file = $this->handleUploadedFile($uploadedFile);
+
+            $editorHelper->setFileDefaults($request, $file);
+
+            $this->getObjectManager()->persist($file);
+
+            $files[] = $file;
+        }
+
+        // write created FileInterface file(s) to storage
         $this->getObjectManager()->flush();
 
         // response
-        return $editorHelper->getUploadResponse($request, $file);
+        return $editorHelper->getUploadResponse($request, $files);
     }
 }
