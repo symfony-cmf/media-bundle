@@ -9,28 +9,32 @@
 
     <xsd:complexType name="config">
         <xsd:sequence>
+            <xsd:element name="persistence" type="persistence" minOccurs="0" />
             <xsd:element name="extra-filter" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
         </xsd:sequence>
+        <xsd:attribute name="use-imagine" type="enable" />
+        <xsd:attribute name="imagine-filter" type="xsd:string" />
+        <xsd:attribute name="upload-file-role" type="xsd:string" />
+        <xsd:attribute name="use-jms-serializer" type="enable" />
+    </xsd:complexType>
 
-        <xsd:attribute name="manager-registry" type="manager_registry" />
-        <xsd:attribute name="manager-name" type="xsd:string" />
+    <xsd:complexType name="persistence">
+        <xsd:sequence>
+            <xsd:element name="phpcr" type="phpcr" minOccurs="0" />
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="phpcr">
+        <xsd:attribute name="enabled" type="xsd:string" />
         <xsd:attribute name="media-basepath" type="xsd:string" />
+        <xsd:attribute name="manager-name" type="xsd:string" />
         <xsd:attribute name="media-class" type="xsd:string" />
         <xsd:attribute name="file-class" type="xsd:string" />
         <xsd:attribute name="directory-class" type="xsd:string" />
         <xsd:attribute name="image-class" type="xsd:string" />
-        <xsd:attribute name="use-imagine" type="use_imagine" />
-        <xsd:attribute name="imagine-filter" type="xsd:string" />
     </xsd:complexType>
 
-    <xsd:simpleType name="manager_registry">
-        <xsd:restriction base="xsd:string">
-            <xsd:enumeration value="doctrine_orm" />
-            <xsd:enumeration value="doctrine_phpcr" />
-        </xsd:restriction>
-    </xsd:simpleType>
-
-    <xsd:simpleType name="use_imagine">
+    <xsd:simpleType name="enable">
         <xsd:restriction base="xsd:string">
             <xsd:enumeration value="true" />
             <xsd:enumeration value="false" />

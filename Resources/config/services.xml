@@ -4,49 +4,17 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
+    <!--
     <parameters>
-        <parameter key="cmf_media.form.image_class">Symfony\Cmf\Bundle\MediaBundle\Form\Type\ImageType</parameter>
-        <parameter key="cmf_media.templating.helper.class">Symfony\Cmf\Bundle\MediaBundle\Templating\Helper\MediaHelper</parameter>
-        <parameter key="cmf_media.twig.extension.class">Symfony\Cmf\Bundle\MediaBundle\Twig\Extension\MediaExtension</parameter>
-        <parameter key="cmf_media.upload_editor_helper.default.class">Symfony\Cmf\Bundle\MediaBundle\Editor\Helper\UploadDefaultHelper</parameter>
-        <parameter key="cmf_media.upload_editor_helper.ckeditor.class">Symfony\Cmf\Bundle\MediaBundle\Editor\Helper\UploadCkeditorHelper</parameter>
+        <parameter key="cmf_media.example.class">Symfony\Cmf\Bundle\MediaBundle\Example</parameter>
     </parameters>
 
     <services>
-        <service id="cmf_media.form.type.image" class="%cmf_media.form.image_class%">
-            <tag name="form.type" alias="cmf_media_image" />
-            <argument>%cmf_media.image_class%</argument>
-            <argument>%cmf_media.use_imagine%</argument>
-            <argument>%cmf_media.imagine.filter%</argument>
-        </service>
-
-        <service id="cmf_media.templating.helper" class="%cmf_media.templating.helper.class%" public="false">
-            <tag name="templating.helper" alias="cmf_media" />
-            <argument type="service" id="cmf_media.manager" />
-            <argument type="service" id="router" />
-            <argument>%cmf_media.use_imagine%</argument>
-            <argument type="service" id="liip_imagine.templating.helper" on-invalid="null" />
-        </service>
-
-        <service id="cmf_media.twig.extension" class="%cmf_media.twig.extension.class%" public="false">
-            <tag name="twig.extension" />
-            <argument type="service" id="cmf_media.templating.helper" />
-        </service>
-
-        <service id="cmf_media.upload_editor_helper.default" class="%cmf_media.upload_editor_helper.default.class%">
-            <tag name="cmf_media.upload_editor_helper" alias="default" />
-            <argument type="service" id="cmf_media.manager" />
-            <argument type="service" id="router" />
-            <argument type="collection">
-                <argument key="description">description</argument>
-                <argument key="caption">description</argument>
-            </argument>
-        </service>
-
-        <service id="cmf_media.upload_editor_helper.ckeditor" class="%cmf_media.upload_editor_helper.ckeditor.class%">
-            <tag name="cmf_media.upload_editor_helper" alias="ckeditor" />
-            <argument type="service" id="cmf_media.manager" />
-            <argument type="service" id="router" />
+        <service id="cmf_media.example" class="%cmf_media.example.class%">
+            <argument type="service" id="service_id" />
+            <argument>plain_value</argument>
+            <argument>%parameter_name%</argument>
         </service>
     </services>
+    -->
 </container>
