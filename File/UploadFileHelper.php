@@ -139,7 +139,7 @@ class UploadFileHelper
         $this->validateFile($uploadedFile);
 
         /** @var $file FileInterface */
-        $file = new $this->class;
+        $file = new $this->class();
         $file->setName($uploadedFile->getClientOriginalName());
         $file->copyContentFromFile($uploadedFile);
 

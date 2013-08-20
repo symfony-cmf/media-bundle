@@ -2,18 +2,18 @@
 
 namespace Symfony\Cmf\Bundle\MediaBundle\Twig\Extension;
 
-use Symfony\Cmf\Bundle\MediaBundle\Templating\Helper\MediaHelper;
+use Symfony\Cmf\Bundle\MediaBundle\Templating\Helper\CmfMediaHelper;
 
-class MediaExtension extends \Twig_Extension
+class CmfMediaExtension extends \Twig_Extension
 {
-    protected $mediaManager;
+    protected $mediaHelper;
 
     /**
-     * @param MediaHelper $mediaManager
+     * @param MediaHelper $mediaHelper
      */
-    public function __construct(MediaHelper $mediaManager)
+    public function __construct(CmfMediaHelper $mediaHelper)
     {
-        $this->mediaManager = $mediaManager;
+        $this->mediaHelper = $mediaHelper;
     }
 
     /**
@@ -25,11 +25,11 @@ class MediaExtension extends \Twig_Extension
     {
         return array(
             new \Twig_SimpleFunction('cmf_media_download_url',
-                array($this->mediaManager, 'downloadUrl'),
+                array($this->mediaHelper, 'downloadUrl'),
                 array('is_safe' => array('html'))
             ),
             new \Twig_SimpleFunction('cmf_media_display_url',
-                array($this->mediaManager, 'displayUrl'),
+                array($this->mediaHelper, 'displayUrl'),
                 array('is_safe' => array('html'))
             ),
         );
