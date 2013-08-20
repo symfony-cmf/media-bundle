@@ -9,11 +9,13 @@
     </parameters>
 
     <services>
-        <service id="cmf_media.serializer.handler" class="%cmf_media.serializer.handler.class%" public="true">
-            <tag name="jms_serializer.handler" type="%cmf_media.image_class%" direction="serialization" format="json" method="serializeImageToArray" />
-            <argument type="service" id="cmf_media.manager" />
+
+        <service id="cmf_media.serializer.handler" class="%cmf_media.serializer.handler.class%">
+            <tag name="jms_serializer.handler" type="%cmf_media.persistence.phpcr.image.class%" direction="serialization" format="json" method="serializeImageToArray" />
+            <argument type="service" id="cmf_media.persistence.phpcr.manager" />
             <argument type="service" id="router" />
         </service>
+
     </services>
 
 </container>

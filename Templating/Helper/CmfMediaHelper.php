@@ -9,7 +9,7 @@ use Symfony\Cmf\Bundle\MediaBundle\MediaManagerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Templating\Helper\Helper;
 
-class MediaHelper extends Helper
+class CmfMediaHelper extends Helper
 {
     protected $mediaManager;
     protected $generator;

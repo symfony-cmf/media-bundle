@@ -3,9 +3,9 @@
 namespace Symfony\Cmf\Bundle\MediaBundle\Tests\Unit\Templating\Helper;
 
 use Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\File;
-use Symfony\Cmf\Bundle\MediaBundle\Templating\Helper\MediaHelper;
+use Symfony\Cmf\Bundle\MediaBundle\Templating\Helper\CmfMediaHelper;
 
-class CmfBlockHelperTest extends \PHPUnit_Framework_TestCase
+class CmfMediaHelperTest extends \PHPUnit_Framework_TestCase
 {
     public function testDownloadUrl()
     {
@@ -26,7 +26,7 @@ class CmfBlockHelperTest extends \PHPUnit_Framework_TestCase
         $file->setId('/test/media/file-download');
         $file->setContentFromString('File download url test.');
 
-        $mediaHelper = new MediaHelper($mediaManager, $router);
+        $mediaHelper = new CmfMediaHelper($mediaManager, $router);
         $mediaHelper->downloadUrl($file);
     }
 }

@@ -5,7 +5,7 @@ namespace Symfony\Cmf\Bundle\MediaBundle;
 use Symfony\Cmf\Bundle\MediaBundle\MediaInterface;
 
 /**
- * Interface containing media helper methods, these are probably persistance
+ * Interface containing media helper methods, these are probably persistence
  * layer specific.
  */
 interface MediaManagerInterface
