@@ -22,7 +22,6 @@ class CmfMediaBundle extends Bundle
             $container->addCompilerPass(
                 DoctrinePhpcrMappingsPass::createXmlMappingDriver(
                     array(
-                        realpath(__DIR__ . '/Resources/config/doctrine-model') => 'Symfony\Cmf\Bundle\MediaBundle\Model',
                         realpath(__DIR__ . '/Resources/config/doctrine-phpcr') => 'Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr',
                     ),
                     array('cmf_media.manager_name')
