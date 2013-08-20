@@ -6,7 +6,6 @@
 
     <parameters>
         <parameter key="cmf_media.liip_imagine.doctrine_phpcr.data.loader.class">Symfony\Cmf\Bundle\MediaBundle\Adapter\LiipImagine\CmfMediaDoctrineLoader</parameter>
-        <parameter key="cmf_media.subscriber.imagine_cache.class">Symfony\Cmf\Bundle\MediaBundle\EventListener\ImagineCacheInvalidatorSubscriber</parameter>
     </parameters>
 
     <services>
@@ -18,14 +17,6 @@
             <argument>%cmf_media.persistence.phpcr.manager_name%</argument>
             <argument type="service" id="cmf_media.persistence.phpcr.manager" />
             <argument>%cmf_media.persistence.phpcr.image.class%</argument>
-        </service>
-
-        <service id="cmf_media.subscriber.imagine_cache" class="%cmf_media.subscriber.imagine_cache.class%">
-            <tag name="doctrine_phpcr.event_subscriber" />
-            <argument type="service" id="cmf_media.persistence.phpcr.manager" />
-            <argument type="service" id="liip_imagine.cache.manager" />
-            <argument type="service" id="service_container" />
-            <argument>%cmf_media.imagine.all_filters%</argument>
         </service>
 
     </services>

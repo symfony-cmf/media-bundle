@@ -114,12 +114,13 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
 
         if ($useImagine) {
             // load phpcr specific imagine configuration
-            $loader->load('imagine-persistence-phpcr.xml');
+            $loader->load('adapter-imagine-phpcr.xml');
+            $loader->load('event-imagine-phpcr.xml');
         }
 
         if ($useJmsSerializer) {
             // load phpcr specific serializer configuration
-            $loader->load('serializer-persistence-phpcr.xml');
+            $loader->load('serializer-phpcr.xml');
         }
     }
 
