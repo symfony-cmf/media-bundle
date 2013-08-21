@@ -8,17 +8,10 @@ use Symfony\Component\HttpFoundation\Request;
 
 class PhpcrFileTestController extends Controller
 {
-    public function getUploadForm($editor = null)
+    public function getUploadForm()
     {
-        if ($editor) {
-            $action = $this->generateUrl('cmf_media_file_upload', array('editor' => $editor));
-        } else {
-            $action = $this->generateUrl('phpcr_file_test_upload');
-        }
-
-        return $this->container->get('form.factory')->createNamedBuilder(null, 'form', null, array('action' => $action))
+        return $this->container->get('form.factory')->createNamedBuilder(null, 'form')
             ->add('file', 'file')
-            ->add('submit', 'submit')
             ->getForm()
         ;
     }
@@ -30,7 +23,7 @@ class PhpcrFileTestController extends Controller
         $files     = $dm->getRepository($fileClass)->findAll();
 
         $uploadForm = $this->getUploadForm();
-        $editorUploadForm = $this->getUploadForm('default');
+        $editorUploadForm = $this->getUploadForm();
 
         return $this->render('::tests/file.html.twig', array(
             'upload_form'  => $uploadForm->createView(),
@@ -42,20 +35,23 @@ class PhpcrFileTestController extends Controller
     public function uploadAction(Request $request)
     {
         $form = $this->getUploadForm();
-        $form->handleRequest($request);
 
-        if ($form->isValid()) {
-            /** @var UploadFileHelper $uploadFileHelper */
-            $uploadFileHelper = $this->get('cmf_media.upload_file_helper');
+        if ($request->isMethod('POST')) {
+            $form->bind($request);
 
-            $uploadedFile = $request->files->get('file');
+            if ($form->isValid()) {
+                /** @var UploadFileHelper $uploadFileHelper */
+                $uploadFileHelper = $this->get('cmf_media.upload_file_helper');
 
-            $file = $uploadFileHelper->handleUploadedFile($uploadedFile);
+                $uploadedFile = $request->files->get('file');
 
-            // persist
-            $dm = $this->get('doctrine_phpcr')->getManager('default');
-            $dm->persist($file);
-            $dm->flush();
+                $file = $uploadFileHelper->handleUploadedFile($uploadedFile);
+
+                // persist
+                $dm = $this->get('doctrine_phpcr')->getManager('default');
+                $dm->persist($file);
+                $dm->flush();
+            }
         }
 
         return $this->redirect($this->generateUrl('phpcr_file_test'));
