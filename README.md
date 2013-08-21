@@ -27,7 +27,7 @@ MediaBundle provides integration with SonataMediaBundle.
 
 For the install guide and reference, see:
 
-* [MediaBundle documentation](http://symfony.com/doc/master/cmf/bundles/media.html
+* [MediaBundle documentation](http://symfony.com/doc/master/cmf/bundles/media.html)
 
 See also:
 
