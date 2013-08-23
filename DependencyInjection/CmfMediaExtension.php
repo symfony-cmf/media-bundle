@@ -127,7 +127,7 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
 
     public function loadLiipImagine($enabled, $config, XmlFileLoader $loader, ContainerBuilder $container)
     {
-        if ($enabled) {
+        if (! $enabled) {
             $container->setParameter($this->getAlias() . '.use_imagine', false);
             $container->setParameter($this->getAlias() . '.imagine.filter', false);
             $container->setParameter($this->getAlias() . '.imagine.all_filters', array());
