@@ -57,7 +57,8 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
         $config = $this->processConfiguration($configuration, $configs);
 
         // detect bundles
-        if ($config['use_imagine'] ||
+        $bundles = $container->getParameter('kernel.bundles');
+        if (true === $config['use_imagine'] ||
             ('auto' === $config['use_imagine'] && isset($bundles['LiipImagineBundle']))
         ) {
             $useImagine = true;
@@ -65,7 +66,7 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
             $useImagine = false;
         }
 
-        if ($config['use_jms_serializer'] ||
+        if (true === $config['use_jms_serializer'] ||
             ('auto' === $config['use_jms_serializer'] && isset($bundles['JMSSerializerBundle']))
         ) {
             $useJmsSerializer = true;
