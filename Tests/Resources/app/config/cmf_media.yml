@@ -1,3 +1,8 @@
+twig:
+    form:
+        resources:
+            - 'CmfMediaBundle:Form:fields.html.twig'
+
 cmf_media:
     persistence:
         phpcr:
@@ -8,6 +13,7 @@ cmf_media:
 # to a specific format. (ie a controller render the file)
 # more information can be found here : https://github.com/liip/LiipImagineBundle
 liip_imagine:
+    web_root: %kernel.cmf_test_web_dir%
     filter_sets:
         # define the filter to be used with the image preview
         image_upload_thumbnail:

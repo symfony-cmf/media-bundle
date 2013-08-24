@@ -25,7 +25,7 @@
     {% else %}
         <ul class="downloads">
             {% for file in files %}
-                <li><a href="{{ cmf_media_download_url(file) }}" title="Download {{ file.name }}">Download {{ file.name }}</a></li>
+                <li><a href="{{ cmf_media_download_url(file) }}" title="Download {{ file.name }}">Download {{ file.name }} (id: {{ file.id }})</a></li>
             {% endfor %}
         </ul>
     {% endif %}

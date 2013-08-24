@@ -24,7 +24,8 @@ class FileTest extends BaseTestCase
         $resp = $client->getResponse();
 
         $this->assertEquals(200, $resp->getStatusCode());
-        $this->assertGreaterThanOrEqual(1, $crawler->filter('.downloads li a')->count());
+        // 1 file and 1 image
+        $this->assertGreaterThanOrEqual(2, $crawler->filter('.downloads li a')->count());
     }
 
     public function testUpload()
