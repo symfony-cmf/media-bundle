@@ -2,16 +2,21 @@
 
 namespace Symfony\Cmf\Bundle\MediaBundle\Adapter\ElFinder;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ODM\PHPCR\Document\Generic;
 use Doctrine\ODM\PHPCR\Document\Resource;
 use FM\ElFinderPHP\Driver\ElFinderVolumeDriver;
 use Doctrine\ODM\PHPCR\DocumentManager;
+use PHPCR\Util\PathHelper;
 use Symfony\Cmf\Bundle\MediaBundle\DirectoryInterface;
 use Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\Directory;
 use Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\File;
 use Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\Image;
+use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
 use Symfony\Cmf\Bundle\MediaBundle\HierarchyInterface;
 use Symfony\Cmf\Bundle\MediaBundle\ImageInterface;
+use Symfony\Cmf\Bundle\MediaBundle\MediaManagerInterface;
+use Symfony\Cmf\Bundle\MediaBundle\Templating\Helper\CmfMediaHelper;
 
 /**
  * @author Sjoerd Peters <sjoerd.peters@gmail.com>
@@ -28,20 +33,48 @@ class PHPCRDriver extends ElFinderVolumeDriver
    	protected $driverId = 'p';
 
     /**
-     * @var \Doctrine\ODM\PHPCR\DocumentManager
+     * @var DocumentManager
      */
     protected $dm;
 
     /**
-     * @param DocumentManager $manager
+     * @var MediaManagerInterface
      */
-    function __construct(DocumentManager $manager)
+    protected $mediaManager;
+
+    /**
+     * @var CmfMediaHelper
+     */
+    protected $mediaHelper;
+
+    /**
+     * Constructor.
+     *
+     * @param ManagerRegistry       $registry
+     * @param string                $managerName
+     * @param MediaManagerInterface $mediaManager
+     * @param CmfMediaHelper        $mediaHelper
+     */
+    public function __construct(
+        ManagerRegistry $registry,
+        $managerName,
+        MediaManagerInterface $mediaManager,
+        CmfMediaHelper $mediaHelper)
     {
-        $this->dm = $manager;
+        $this->dm = $registry->getManager($managerName);
+        $this->mediaManager = $mediaManager;
+        $this->mediaHelper = $mediaHelper;
 
         $opts = array(
             'workspace'     => '',
             'manager'       => '',
+            // TODO: remove when implemented/ errors are fixed
+            'disabled'      => array(
+                'archive',
+                'extract',
+                'rename',
+                'resize',
+            )
         );
         $this->options = array_merge($this->options, $opts);
     }
@@ -53,8 +86,9 @@ class PHPCRDriver extends ElFinderVolumeDriver
    	 * @return string
    	 * @author Dmitry (dio) Levashov
    	 **/
-   	protected function _dirname($path) {
-   		return dirname($path);
+   	protected function _dirname($path)
+    {
+        return PathHelper::getParentPath($path);
    	}
 
    	/**
@@ -64,8 +98,9 @@ class PHPCRDriver extends ElFinderVolumeDriver
    	 * @return string
    	 * @author Dmitry (dio) Levashov
    	 **/
-   	protected function _basename($path) {
-   		return basename($path);
+   	protected function _basename($path)
+    {
+        return PathHelper::getNodeName($path);
    	}
 
    	/**
@@ -87,7 +122,8 @@ class PHPCRDriver extends ElFinderVolumeDriver
    	 * @return string
    	 * @author Troex Nevelin
    	 **/
-   	protected function _normpath($path) {
+   	protected function _normpath($path)
+    {
    		if (empty($path)) {
    			return '.';
    		}
@@ -137,7 +173,8 @@ class PHPCRDriver extends ElFinderVolumeDriver
    	 * @return string
    	 * @author Dmitry (dio) Levashov
    	 **/
-   	protected function _relpath($path) {
+   	protected function _relpath($path)
+    {
    		return $path == $this->root ? '' : substr($path, strlen($this->root)+1);
    	}
 
@@ -148,7 +185,8 @@ class PHPCRDriver extends ElFinderVolumeDriver
    	 * @return string
    	 * @author Dmitry (dio) Levashov
    	 **/
-   	protected function _abspath($path) {
+   	protected function _abspath($path)
+    {
    		return $path == DIRECTORY_SEPARATOR ? $this->root : $this->root.DIRECTORY_SEPARATOR.$path;
    	}
 
@@ -159,7 +197,8 @@ class PHPCRDriver extends ElFinderVolumeDriver
    	 * @return string
    	 * @author Dmitry (dio) Levashov
    	 **/
-   	protected function _path($path) {
+   	protected function _path($path)
+    {
    		return $this->rootName.($path == $this->root ? '' : $this->separator.$this->_relpath($path));
    	}
 
@@ -171,7 +210,8 @@ class PHPCRDriver extends ElFinderVolumeDriver
    	 * @return bool
    	 * @author Dmitry (dio) Levashov
    	 **/
-   	protected function _inpath($path, $parent) {
+   	protected function _inpath($path, $parent)
+    {
    		return $path == $parent || strpos($path, $parent.DIRECTORY_SEPARATOR) === 0;
    	}
 
@@ -187,6 +227,7 @@ class PHPCRDriver extends ElFinderVolumeDriver
      * - (bool)   hidden  is object hidden. optionally
      * - (string) alias   for symlinks - link target path relative to root path. optionally
      * - (string) target  for symlinks - link target path. optionally
+     * - (string) url     for displaying a preview, handle double click. required
      *
      * If file does not exists - returns empty array or false.
      *
@@ -199,7 +240,7 @@ class PHPCRDriver extends ElFinderVolumeDriver
         /** @var File $doc */
         $doc = $this->dm->find(null, $path);
 
-        if($path == $this->root && !$doc){
+        if($path == $this->root && !$doc) {
             // @TODO not sure if this the best way / place for this. should a user create the media root manually?
             $doc = new Directory();
             $doc->setId($this->root);
@@ -212,7 +253,6 @@ class PHPCRDriver extends ElFinderVolumeDriver
         }
 
         $dir = $doc instanceof DirectoryInterface || $doc instanceof Generic;
-//        $ts = $doc->getUpdatedAt() ? $doc->getUpdatedAt()->getTimestamp() : $doc->getCreatedAt()->getTimestamp();
 
         if($doc instanceof DirectoryInterface && $ua = $doc->getUpdatedAt()){
             $ts = $ua->getTimestamp();
@@ -223,6 +263,14 @@ class PHPCRDriver extends ElFinderVolumeDriver
             $ts = $dt->getTimestamp();
         }
 
+        if ($doc instanceof ImageInterface) {
+            $url = $this->mediaHelper->displayUrl($doc);
+        } elseif ($doc instanceof FileInterface) {
+            $url = $this->mediaHelper->downloadUrl($doc);
+        } else {
+            $url = false;
+        }
+
         $stat = array(
             'size' => $dir ? 0 : $doc->getSize(),
             'ts' => $ts,
@@ -231,6 +279,7 @@ class PHPCRDriver extends ElFinderVolumeDriver
             'write' => true,
             'locked' => false,
             'hidden' => false,
+            'url' => $url,
         );
 
         return $stat;
@@ -360,18 +409,16 @@ class PHPCRDriver extends ElFinderVolumeDriver
         $file->setContentFromString('');
         $file->setId($filename);
 
-        // @TODO failing cascade persist
-        $content = $file->getContent();
-        $content->setParent($file);
+        $this->mediaManager->setDefaults($file);
 
         $pi = pathinfo($filename);
         if(isset($pi['extension']) && !empty($pi['extension'])){
+            $file->setExtension($pi['extension']);
             if(isset(self::$mimetypes[$pi['extension']])){
                 $file->setContentType(self::$mimetypes[$pi['extension']]);
             }
         }
 
-        $this->dm->persist($content);
         $this->dm->persist($file);
         $this->dm->flush();
 
@@ -412,7 +459,7 @@ class PHPCRDriver extends ElFinderVolumeDriver
     }
 
     /**
-     * Move file into another parent dir.
+     * Move file into another parent dir or rename file.
      * Return new file path or false.
      *
      * @param  string $source  source file path
@@ -425,6 +472,7 @@ class PHPCRDriver extends ElFinderVolumeDriver
     {
         try {
             $doc = $this->dm->find(null, $source);
+            // TODO rename file causes error: Detached document or new document with already existing id passed to persist()
             $this->dm->move($doc, $this->_joinPath($targetDir, $name));
             $this->dm->flush();
         } catch(\Exception $e) {
@@ -442,14 +490,18 @@ class PHPCRDriver extends ElFinderVolumeDriver
      **/
     protected function _unlink($path)
     {
-        try {
-            $doc = $this->dm->find(null, $path);
-            $this->dm->remove($doc);
-            $this->dm->flush();
-        } catch(\Exception $e) {
-            return false;
+        if($doc = $this->dm->find(null, $path)){
+            try {
+                $this->dm->remove($doc);
+                $this->dm->flush();
+
+                return true;
+            } catch(\Exception $e){
+                return false;
+            }
         }
-        return true;
+
+        return false;
     }
 
     /**
@@ -461,15 +513,7 @@ class PHPCRDriver extends ElFinderVolumeDriver
      **/
     protected function _rmdir($path)
     {
-        if($doc = $this->dm->find(null, $path)){
-            try {
-                $this->dm->remove($doc);
-                $this->dm->flush($doc);
-                return true;
-            } catch(\Exception $e){
-            }
-        }
-        return false;
+        return $this->_unlink($path);
     }
 
     /**
@@ -487,10 +531,6 @@ class PHPCRDriver extends ElFinderVolumeDriver
     {
         $filename = $this->_joinPath($dir, $name);
 
-        if($this->dm->find(null, $filename)){
-            return false;
-        }
-
         $mime = $stat['mime']; // @TODO implement a proper system to map a mime-type to a phpcr class
         if(isset($stat['height']) && $stat['height'] && isset($stat['width']) && $stat['width']){
             $file = new Image();
@@ -498,18 +538,20 @@ class PHPCRDriver extends ElFinderVolumeDriver
             $file = new File();
         }
 
-        $file->setContentFromStream($fp);
+        // do not pass file pointer directly to prevent it is closed multiple
+        // times causing an error
+        $stream = fopen('php://memory', 'rwb+');
+        stream_copy_to_stream($fp, $stream);
+        $file->setContentFromStream($stream);
         $file->setContentType($mime);
         $file->setId($filename);
 
-//        try {
+        $this->mediaManager->setDefaults($file);
+
         $this->dm->persist($file);
         $this->dm->flush();
-//        } catch (\Exception $e) {
-//            return false;
-//        }
 
-        return $filename;
+        return $file->getId();
     }
 
     /**
@@ -527,7 +569,7 @@ class PHPCRDriver extends ElFinderVolumeDriver
         if(!$doc instanceof File){
             return false;
         }
-        return $doc->getContentAsStream();
+        return $doc->getContentAsString();
     }
 
     /**
@@ -546,7 +588,13 @@ class PHPCRDriver extends ElFinderVolumeDriver
         if(!$doc instanceof File){
             return false;
         }
-        return $doc->setContentFromString($content);
+
+        $doc->setContentFromString($content);
+
+        $this->dm->persist($doc);
+        $this->dm->flush();
+
+        return true;
     }
 
     /**
@@ -590,6 +638,4 @@ class PHPCRDriver extends ElFinderVolumeDriver
     {
         // TODO: Implement _checkArchivers() method.
     }
-
-
 }

@@ -74,12 +74,20 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
             $useJmsSerializer = false;
         }
 
+        if (true === $config['use_elfinder'] ||
+            ('auto' === $config['use_elfinder'] && isset($bundles['FMElfinderBundle']))
+        ) {
+            $useElfinder = true;
+        } else {
+            $useElfinder = false;
+        }
+
         // load config
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
 
         if (!empty($config['persistence']['phpcr']['enabled'])) {
-            $this->loadPhpcr($config['persistence']['phpcr'], $loader, $container, $useImagine, $useJmsSerializer);
+            $this->loadPhpcr($config['persistence']['phpcr'], $loader, $container, $useImagine, $useJmsSerializer, $useElfinder);
         }
 
         $container->setParameter($this->getAlias() . '.upload_file_role', $config['upload_file_role']);
@@ -88,7 +96,7 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
         $this->loadLiipImagine($useImagine, $config, $loader, $container);
     }
 
-    public function loadPhpcr($config, XmlFileLoader $loader, ContainerBuilder $container, $useImagine, $useJmsSerializer)
+    public function loadPhpcr($config, XmlFileLoader $loader, ContainerBuilder $container, $useImagine, $useJmsSerializer, $useElfinder)
     {
         $container->setParameter($this->getAlias() . '.backend_type_phpcr', true);
 
@@ -122,6 +130,11 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
         if ($useJmsSerializer) {
             // load phpcr specific serializer configuration
             $loader->load('serializer-phpcr.xml');
+        }
+
+        if ($useElfinder) {
+            // load phpcr specific elfinder configuration
+            $loader->load('adapter-elfinder-phpcr.xml');
         }
     }
 

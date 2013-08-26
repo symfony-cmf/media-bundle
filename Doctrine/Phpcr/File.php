@@ -19,6 +19,16 @@ class File extends Media implements FileInterface, BinaryInterface
     protected $content;
 
     /**
+     * @var int $size
+     */
+    protected $size;
+
+    /**
+     * @var string $contentType
+     */
+    protected $contentType;
+
+    /**
      * @var string $extension
      */
     protected $extension;
@@ -129,7 +139,7 @@ class File extends Media implements FileInterface, BinaryInterface
     }
 
     /**
-     * @return \Symfony\Cmf\Bundle\MediaBundle\stream
+     * @return stream
      */
     public function getContentAsStream()
     {
@@ -154,14 +164,19 @@ class File extends Media implements FileInterface, BinaryInterface
     }
 
     /**
+     * @param int $size
+     */
+    public function setSize($size)
+    {
+        $this->size = $size;
+    }
+
+    /**
      * @return int
      */
     public function getSize()
     {
-        $stream = $this->getContentAsStream();
-
-        $stat = fstat($stream);
-        return $stat['size'];
+        return (int) $this->size;
     }
 
     /**
@@ -169,6 +184,7 @@ class File extends Media implements FileInterface, BinaryInterface
      */
     public function setContentType($contentType)
     {
+        $this->contentType = $contentType;
         $this->getContent()->setMimeType($contentType);
     }
 
@@ -177,7 +193,7 @@ class File extends Media implements FileInterface, BinaryInterface
      */
     public function getContentType()
     {
-        return $this->getContent()->getMimeType();
+        return $this->contentType;
     }
 
     /**
@@ -201,9 +217,10 @@ class File extends Media implements FileInterface, BinaryInterface
      */
     protected function updateDimensionsFromContent()
     {
-//        $stream = $this->getContentAsStream();
-//
-//        $stat = fstat($stream);
-//        $this->size = $stat['size'];
+        $stream = $this->getContentAsStream();
+
+        $stat = fstat($stream);
+        $this->size = $stat['size'];
+        $this->contentType = $this->getContent()->getMimeType();
     }
 }
