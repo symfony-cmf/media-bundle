@@ -14,6 +14,7 @@
             <argument>%cmf_media.persistence.phpcr.manager_name%</argument>
             <argument type="service" id="cmf_media.persistence.phpcr.manager" />
             <argument type="service" id="cmf_media.templating.helper" />
+            <argument>%cmf_media.imagine.elfinder_filter%</argument>
         </service>
     </services>
 </container>

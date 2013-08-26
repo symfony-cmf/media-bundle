@@ -32,20 +32,11 @@ class PHPCRDriver extends ElFinderVolumeDriver
    	 **/
    	protected $driverId = 'p';
 
-    /**
-     * @var DocumentManager
-     */
+
     protected $dm;
-
-    /**
-     * @var MediaManagerInterface
-     */
     protected $mediaManager;
-
-    /**
-     * @var CmfMediaHelper
-     */
     protected $mediaHelper;
+    protected $imagineFilter;
 
     /**
      * Constructor.
@@ -54,16 +45,19 @@ class PHPCRDriver extends ElFinderVolumeDriver
      * @param string                $managerName
      * @param MediaManagerInterface $mediaManager
      * @param CmfMediaHelper        $mediaHelper
+     * @param string                $imagineFilter
      */
     public function __construct(
         ManagerRegistry $registry,
         $managerName,
         MediaManagerInterface $mediaManager,
-        CmfMediaHelper $mediaHelper)
+        CmfMediaHelper $mediaHelper,
+        $imagineFilter = false)
     {
-        $this->dm = $registry->getManager($managerName);
-        $this->mediaManager = $mediaManager;
-        $this->mediaHelper = $mediaHelper;
+        $this->dm            = $registry->getManager($managerName);
+        $this->mediaManager  = $mediaManager;
+        $this->mediaHelper   = $mediaHelper;
+        $this->imagineFilter = $imagineFilter;
 
         $opts = array(
             'workspace'     => '',
@@ -89,7 +83,7 @@ class PHPCRDriver extends ElFinderVolumeDriver
    	protected function _dirname($path)
     {
         return PathHelper::getParentPath($path);
-   	}
+    }
 
    	/**
    	 * Return file name
@@ -101,7 +95,7 @@ class PHPCRDriver extends ElFinderVolumeDriver
    	protected function _basename($path)
     {
         return PathHelper::getNodeName($path);
-   	}
+    }
 
    	/**
    	 * Join dir name and file name and retur full path
@@ -111,9 +105,10 @@ class PHPCRDriver extends ElFinderVolumeDriver
    	 * @return string
    	 * @author Dmitry (dio) Levashov
    	 **/
-   	protected function _joinPath($dir, $name) {
+   	protected function _joinPath($dir, $name)
+    {
    		return $dir.DIRECTORY_SEPARATOR.$name;
-   	}
+    }
 
    	/**
    	 * Return normalized path, this works the same as os.path.normpath() in Python
@@ -164,7 +159,7 @@ class PHPCRDriver extends ElFinderVolumeDriver
    		}
 
    		return $path ? $path : '.';
-   	}
+    }
 
    	/**
    	 * Return file path related to root dir
@@ -176,7 +171,7 @@ class PHPCRDriver extends ElFinderVolumeDriver
    	protected function _relpath($path)
     {
    		return $path == $this->root ? '' : substr($path, strlen($this->root)+1);
-   	}
+    }
 
    	/**
    	 * Convert path related to root dir into real path
@@ -188,7 +183,7 @@ class PHPCRDriver extends ElFinderVolumeDriver
    	protected function _abspath($path)
     {
    		return $path == DIRECTORY_SEPARATOR ? $this->root : $this->root.DIRECTORY_SEPARATOR.$path;
-   	}
+    }
 
    	/**
    	 * Return fake path started from root dir
@@ -200,7 +195,7 @@ class PHPCRDriver extends ElFinderVolumeDriver
    	protected function _path($path)
     {
    		return $this->rootName.($path == $this->root ? '' : $this->separator.$this->_relpath($path));
-   	}
+    }
 
    	/**
    	 * Return true if $path is children of $parent
@@ -213,7 +208,7 @@ class PHPCRDriver extends ElFinderVolumeDriver
    	protected function _inpath($path, $parent)
     {
    		return $path == $parent || strpos($path, $parent.DIRECTORY_SEPARATOR) === 0;
-   	}
+    }
 
     /**
      * Return stat for given path.
@@ -244,8 +239,9 @@ class PHPCRDriver extends ElFinderVolumeDriver
             // @TODO not sure if this the best way / place for this. should a user create the media root manually?
             $doc = new Directory();
             $doc->setId($this->root);
+
             $this->dm->persist($doc);
-            $this->dm->flush($doc);
+            $this->dm->flush();
         }
 
         if(!($doc instanceof HierarchyInterface || $doc instanceof Generic)){
@@ -264,7 +260,7 @@ class PHPCRDriver extends ElFinderVolumeDriver
         }
 
         if ($doc instanceof ImageInterface) {
-            $url = $this->mediaHelper->displayUrl($doc);
+            $url = $this->mediaHelper->displayUrl($doc, array('imagine_filter' => $this->imagineFilter));
         } elseif ($doc instanceof FileInterface) {
             $url = $this->mediaHelper->downloadUrl($doc);
         } else {
@@ -272,14 +268,14 @@ class PHPCRDriver extends ElFinderVolumeDriver
         }
 
         $stat = array(
-            'size' => $dir ? 0 : $doc->getSize(),
-            'ts' => $ts,
-            'mime' => $dir ? 'directory' : $doc->getContentType(),
-            'read' => true,
-            'write' => true,
+            'size'   => $dir ? 0 : $doc->getSize(),
+            'ts'     => $ts,
+            'mime'   => $dir ? 'directory' : $doc->getContentType(),
+            'read'   => true,
+            'write'  => true,
             'locked' => false,
             'hidden' => false,
-            'url' => $url,
+            'url'    => $url,
         );
 
         return $stat;
@@ -312,7 +308,6 @@ class PHPCRDriver extends ElFinderVolumeDriver
      **/
     protected function _dimensions($path, $mime)
     {
-        //return '';
         // @TODO we can't store the width and height on the current nodeType
         $doc = $this->dm->find(null, $path);
         if($doc instanceof ImageInterface){
@@ -387,7 +382,7 @@ class PHPCRDriver extends ElFinderVolumeDriver
         $dir->setName($name);
         $dir->setId($dirname);
         $this->dm->persist($dir);
-        $this->dm->flush($dir);
+        $this->dm->flush();
         return $dirname;
     }
 

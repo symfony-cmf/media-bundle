@@ -144,6 +144,7 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
             $container->setParameter($this->getAlias() . '.use_imagine', false);
             $container->setParameter($this->getAlias() . '.imagine.filter', false);
             $container->setParameter($this->getAlias() . '.imagine.all_filters', array());
+            $container->setParameter($this->getAlias() . '.imagine.elfinder_filter', false);
 
             return;
         }
@@ -155,6 +156,7 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
         $container->setParameter($this->getAlias() . '.use_imagine', true);
         $container->setParameter($this->getAlias() . '.imagine.filter', $config['imagine_filter']);
         $container->setParameter($this->getAlias() . '.imagine.all_filters', $filters);
+        $container->setParameter($this->getAlias() . '.imagine.elfinder_filter', $config['elfinder_imagine_filter']);
     }
 
     /**
