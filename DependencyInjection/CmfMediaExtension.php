@@ -77,9 +77,9 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
         if (true === $config['use_elfinder'] ||
             ('auto' === $config['use_elfinder'] && isset($bundles['FMElfinderBundle']))
         ) {
-            $useElfinder = true;
+            $useElFinder = true;
         } else {
-            $useElfinder = false;
+            $useElFinder = false;
         }
 
         // load config
@@ -87,7 +87,7 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
         $loader->load('services.xml');
 
         if (!empty($config['persistence']['phpcr']['enabled'])) {
-            $this->loadPhpcr($config['persistence']['phpcr'], $loader, $container, $useImagine, $useJmsSerializer, $useElfinder);
+            $this->loadPhpcr($config['persistence']['phpcr'], $loader, $container, $useImagine, $useJmsSerializer, $useElFinder);
         }
 
         $container->setParameter($this->getAlias() . '.upload_file_role', $config['upload_file_role']);
@@ -96,7 +96,7 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
         $this->loadLiipImagine($useImagine, $config, $loader, $container);
     }
 
-    public function loadPhpcr($config, XmlFileLoader $loader, ContainerBuilder $container, $useImagine, $useJmsSerializer, $useElfinder)
+    public function loadPhpcr($config, XmlFileLoader $loader, ContainerBuilder $container, $useImagine, $useJmsSerializer, $useElFinder)
     {
         $container->setParameter($this->getAlias() . '.backend_type_phpcr', true);
 
@@ -132,7 +132,7 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
             $loader->load('serializer-phpcr.xml');
         }
 
-        if ($useElfinder) {
+        if ($useElFinder) {
             // load phpcr specific elfinder configuration
             $loader->load('adapter-elfinder-phpcr.xml');
         }
@@ -156,7 +156,7 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
         $container->setParameter($this->getAlias() . '.use_imagine', true);
         $container->setParameter($this->getAlias() . '.imagine.filter', $config['imagine_filter']);
         $container->setParameter($this->getAlias() . '.imagine.all_filters', $filters);
-        $container->setParameter($this->getAlias() . '.imagine.elfinder_filter', $config['elfinder_imagine_filter']);
+        $container->setParameter($this->getAlias() . '.imagine.elfinder_filter', $config['imagine_filter']);
     }
 
     /**

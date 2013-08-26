@@ -14,8 +14,10 @@
         </xsd:sequence>
         <xsd:attribute name="use-imagine" type="enable" />
         <xsd:attribute name="imagine-filter" type="xsd:string" />
+        <xsd:attribute name="elfinder-imagine-filter" type="xsd:string" />
         <xsd:attribute name="upload-file-role" type="xsd:string" />
         <xsd:attribute name="use-jms-serializer" type="enable" />
+        <xsd:attribute name="use-elfinder" type="enable" />
     </xsd:complexType>
 
     <xsd:complexType name="persistence">

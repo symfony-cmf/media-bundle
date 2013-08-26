@@ -20,7 +20,7 @@ use Symfony\Cmf\Bundle\MediaBundle\Templating\Helper\CmfMediaHelper;
 /**
  * @author Sjoerd Peters <sjoerd.peters@gmail.com>
  */
-class PHPCRDriver extends ElFinderVolumeDriver
+class PhpcrDriver extends ElFinderVolumeDriver
 {
     /**
      * Driver id
@@ -149,7 +149,7 @@ class PHPCRDriver extends ElFinderVolumeDriver
             {
                 array_push($new_comps, $comp);
             } elseif ($new_comps) {
-               array_pop($new_comps);
+                array_pop($new_comps);
             }
         }
         $comps = $new_comps;
