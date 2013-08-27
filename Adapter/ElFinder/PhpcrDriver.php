@@ -34,7 +34,6 @@ class PhpcrDriver extends ElFinderVolumeDriver
     protected $dm;
     protected $mediaManager;
     protected $mediaHelper;
-    protected $imagineFilter;
 
     /**
      * Constructor.
@@ -43,19 +42,16 @@ class PhpcrDriver extends ElFinderVolumeDriver
      * @param string                $managerName
      * @param MediaManagerInterface $mediaManager
      * @param CmfMediaHelper        $mediaHelper
-     * @param string                $imagineFilter
      */
     public function __construct(
         ManagerRegistry $registry,
         $managerName,
         MediaManagerInterface $mediaManager,
-        CmfMediaHelper $mediaHelper,
-        $imagineFilter = false)
+        CmfMediaHelper $mediaHelper)
     {
         $this->dm            = $registry->getManager($managerName);
         $this->mediaManager  = $mediaManager;
         $this->mediaHelper   = $mediaHelper;
-        $this->imagineFilter = $imagineFilter;
 
         $opts = array(
             'workspace'     => '',
@@ -260,7 +256,7 @@ class PhpcrDriver extends ElFinderVolumeDriver
         }
 
         if ($doc instanceof ImageInterface) {
-            $url = $this->mediaHelper->displayUrl($doc, array('imagine_filter' => $this->imagineFilter));
+            $url = $this->mediaHelper->displayUrl($doc);
         } elseif ($doc instanceof FileInterface) {
             $url = $this->mediaHelper->downloadUrl($doc);
         } else {
