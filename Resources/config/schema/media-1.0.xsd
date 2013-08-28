@@ -13,7 +13,7 @@
             <xsd:element name="extra-filter" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
         </xsd:sequence>
         <xsd:attribute name="use-imagine" type="enable" />
-        <xsd:attribute name="imagine-filter" type="xsd:string" />
+        <xsd:attribute name="imagine-filter" type="imagine-filter" />
         <xsd:attribute name="upload-file-role" type="xsd:string" />
         <xsd:attribute name="use-jms-serializer" type="enable" />
         <xsd:attribute name="use-elfinder" type="enable" />
@@ -42,4 +42,9 @@
             <xsd:enumeration value="auto" />
         </xsd:restriction>
     </xsd:simpleType>
+
+    <xsd:complexType name="imagine-filter">
+        <xsd:attribute name="upload-thumbnail" type="xsd:string" />
+        <xsd:attribute name="elfinder-thumbnail" type="xsd:string" />
+    </xsd:complexType>
 </xsd:schema>
