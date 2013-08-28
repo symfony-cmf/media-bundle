@@ -5,6 +5,7 @@ namespace Symfony\Cmf\Bundle\MediaBundle\Adapter\ElFinder;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ODM\PHPCR\Document\Generic;
 use Doctrine\ODM\PHPCR\Document\Resource;
+use Doctrine\ODM\PHPCR\DocumentManager;
 use FM\ElFinderPHP\Driver\ElFinderVolumeDriver;
 use PHPCR\Util\PathHelper;
 use Symfony\Cmf\Bundle\MediaBundle\DirectoryInterface;
@@ -31,7 +32,11 @@ class PhpcrDriver extends ElFinderVolumeDriver
      **/
     protected $driverId = 'p';
 
+    /**
+     * @var DocumentManager
+     */
     protected $dm;
+
     protected $mediaManager;
     protected $mediaHelper;
 
@@ -60,7 +65,6 @@ class PhpcrDriver extends ElFinderVolumeDriver
             'disabled'      => array(
                 'archive',
                 'extract',
-                'rename',
                 'resize',
             )
         );
@@ -467,11 +471,21 @@ class PhpcrDriver extends ElFinderVolumeDriver
      **/
     protected function _move($source, $targetDir, $name)
     {
+        $filename  = $this->_joinPath($targetDir, $name);
+        $sourceDir = $this->_dirname($source);
+
         try {
             $doc = $this->dm->find(null, $source);
-            // TODO rename file causes error: Detached document or new document with already existing id passed to persist()
-            $this->dm->move($doc, $this->_joinPath($targetDir, $name));
-            $this->dm->flush();
+
+            if ($sourceDir === $targetDir) {
+                // rename
+                // TODO rename file causes error: Detached document or new document with already existing id passed to persist()
+                return false;
+            } else {
+                // move
+                $this->dm->move($doc, $filename);
+                $this->dm->flush();
+            }
         } catch (\Exception $e) {
             return false;
         }
