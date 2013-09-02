@@ -73,12 +73,4 @@ class BaseMedia implements MediaInterface
     {
         return $this->updatedAt;
     }
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return (string) $this->id;
-    }
 }
