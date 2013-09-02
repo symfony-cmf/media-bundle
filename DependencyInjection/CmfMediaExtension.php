@@ -36,7 +36,6 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
                     'persistence' => array(
                         'phpcr' => array(
                             'image' => array(
-                                'enabled'     => true,
                                 'model_class' => $config['persistence']['phpcr']['image_class'],
                                 'basepath'    => $config['persistence']['phpcr']['media_basepath'],
                             ),
