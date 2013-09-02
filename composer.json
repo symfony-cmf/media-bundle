@@ -14,7 +14,8 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=5.3.3",
-        "symfony/framework-bundle": "~2.1"
+        "symfony/framework-bundle": "~2.1",
+        "symfony-cmf/media": "*"
     },
     "require-dev": {
         "symfony-cmf/testing": "1.0.*",
@@ -33,6 +34,12 @@
             "Symfony\\Cmf\\Bundle\\MediaBundle": ""
         }
     },
+    "repositories":[
+        {
+            "type": "vcs",
+            "url":  "https://github.com/iampersistent/Media.git"
+        }
+    ],
     "target-dir": "Symfony/Cmf/Bundle/MediaBundle",
     "extra": {
         "branch-alias": {
