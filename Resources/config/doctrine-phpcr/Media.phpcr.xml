@@ -6,7 +6,7 @@
     >
 
     <document
-        name="Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\Media"
+        name="Media\Entity\Doctrine\Phpcr\Media"
         referenceable="true"
         >
 

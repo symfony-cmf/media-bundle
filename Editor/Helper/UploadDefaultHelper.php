@@ -3,9 +3,9 @@
 namespace Symfony\Cmf\Bundle\MediaBundle\Editor\Helper;
 
 use Symfony\Cmf\Bundle\MediaBundle\Editor\UploadEditorHelperInterface;
-use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
-use Symfony\Cmf\Bundle\MediaBundle\ImageInterface;
-use Symfony\Cmf\Bundle\MediaBundle\MediaManagerInterface;
+use Media\FileInterface;
+use Media\ImageInterface;
+use Media\MediaManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
@@ -50,7 +50,7 @@ class UploadDefaultHelper implements UploadEditorHelperInterface
     {
         if (!isset($files[0]) && !$files[0] instanceof FileInterface) {
             throw new \InvalidArgumentException(
-                'Provide at least one Symfony\Cmf\Bundle\MediaBundle\FileInterface file.'
+                'Provide at least one Media\FileInterface file.'
             );
         }
 

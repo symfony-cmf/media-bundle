@@ -49,11 +49,11 @@ class UploadFileHelperTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock()
         ;
-        $this->mediaManagerMock = $this->getMockBuilder('Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\MediaManager')
+        $this->mediaManagerMock = $this->getMockBuilder('Media\Model\Doctrine\Phpcr\MediaManager')
             ->disableOriginalConstructor()
             ->getMock()
         ;
-        $this->class = 'Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\File';
+        $this->class = 'Media\Model\Doctrine\Phpcr\File';
         $this->rootPath = '/test/media';
     }
 
@@ -92,7 +92,7 @@ class UploadFileHelperTest extends \PHPUnit_Framework_TestCase
         $testFile = vfsStream::url('home/test.txt');
         file_put_contents($testFile, "Test file content.");
 
-        $class = 'Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\File';
+        $class = 'Media\Model\Doctrine\Phpcr\File';
         $uploadFileHelper = $this->getUploadFileHelper();
         $uploadFileHelper->setClass($class);
         $uploadFileHelper->setRootPath($this->rootPath.'/file');

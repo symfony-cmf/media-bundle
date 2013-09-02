@@ -18,7 +18,7 @@ class PhpcrFileTestController extends Controller
 
     public function fileAction(Request $request)
     {
-        $fileClass = 'Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\File';
+        $fileClass = 'Media\Model\Doctrine\Phpcr\File';
         $dm        = $this->get('doctrine_phpcr')->getManager('default');
         $files     = $dm->getRepository($fileClass)->findAll();
 

@@ -5,10 +5,10 @@ namespace Symfony\Cmf\Bundle\MediaBundle\Adapter\LiipImagine;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Imagine\Image\ImagineInterface;
 use Liip\ImagineBundle\Imagine\Data\Loader\AbstractDoctrineLoader;
-use Symfony\Cmf\Bundle\MediaBundle\BinaryInterface;
-use Symfony\Cmf\Bundle\MediaBundle\FileSystemInterface;
-use Symfony\Cmf\Bundle\MediaBundle\ImageInterface;
-use Symfony\Cmf\Bundle\MediaBundle\MediaManagerInterface;
+use Media\BinaryInterface;
+use Media\FileSystemInterface;
+use Media\ImageInterface;
+use Media\MediaManagerInterface;
 use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
 
 /**
@@ -61,7 +61,7 @@ class CmfMediaDoctrineLoader extends AbstractDoctrineLoader
             throw new UnsupportedMediaTypeHttpException(
                 sprintf('Source image of type "%s" does not implement "%s"',
                     $type,
-                    'Symfony\Cmf\Bundle\MediaBundle\ImageInterface'
+                    'Media\ImageInterface'
                 )
             );
         }

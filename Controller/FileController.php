@@ -4,11 +4,11 @@ namespace Symfony\Cmf\Bundle\MediaBundle\Controller;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Cmf\Bundle\MediaBundle\BinaryInterface;
+use Media\BinaryInterface;
+use Media\FileInterface;
+use Media\FileSystemInterface;
+use Media\MediaManagerInterface;
 use Symfony\Cmf\Bundle\MediaBundle\File\UploadFileHelper;
-use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
-use Symfony\Cmf\Bundle\MediaBundle\FileSystemInterface;
-use Symfony\Cmf\Bundle\MediaBundle\MediaManagerInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -119,7 +119,7 @@ class FileController
 
         if (! $contentDocument || ! $contentDocument instanceof FileInterface) {
             throw new NotFoundHttpException(sprintf(
-                'Object with identifier %s cannot be resolved to a valid instance of Symfony\Cmf\Bundle\MediaBundle\FileInterface',
+                'Object with identifier %s cannot be resolved to a valid instance of Media\FileInterface',
                 $path
             ));
         }

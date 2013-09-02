@@ -6,7 +6,7 @@
     >
 
     <document
-        name="Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\File"
+        name="Media\Entity\Doctrine\Phpcr\File"
         >
 
         <child name="content" node-name="jcr:content">

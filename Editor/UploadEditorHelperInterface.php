@@ -2,7 +2,7 @@
 
 namespace Symfony\Cmf\Bundle\MediaBundle\Editor;
 
-use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
+use Media\FileInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 

@@ -22,7 +22,7 @@ class CmfMediaBundle extends Bundle
             $container->addCompilerPass(
                 DoctrinePhpcrMappingsPass::createXmlMappingDriver(
                     array(
-                        realpath(__DIR__ . '/Resources/config/doctrine-phpcr') => 'Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr',
+                        realpath(__DIR__ . '/Resources/config/doctrine-phpcr') => 'Media\Model\Doctrine\Phpcr',
                     ),
                     array('cmf_media.persistence.phpcr.manager_name'),
                     'cmf_media.backend_type_phpcr'

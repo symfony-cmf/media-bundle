@@ -6,7 +6,7 @@
     >
 
     <document
-        name="Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\Directory"
+        name="Media\Entity\Doctrine\Phpcr\Directory"
         node-type="nt:folder"
         >
 

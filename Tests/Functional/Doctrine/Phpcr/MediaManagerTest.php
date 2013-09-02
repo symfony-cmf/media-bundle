@@ -2,9 +2,9 @@
 
 namespace Symfony\Cmf\Bundle\MediaBundle\Tests\Functional\Doctrine\Phpcr;
 
-use Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\Directory;
-use Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\Media;
-use Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\MediaManager;
+use Media\Model\Doctrine\Phpcr\Directory;
+use Media\Model\Doctrine\Phpcr\Media;
+use Media\Model\Doctrine\Phpcr\MediaManager;
 
 class MediaManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -92,7 +92,7 @@ class MediaManagerTest extends \PHPUnit_Framework_TestCase
         $this->dmMock->expects($this->any())
             ->method('find')
             ->will($this->returnValueMap(array(
-                array('Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\Media', $rootPath.'/'.$name, $returnMediaExists),
+                array('Media\Model\Doctrine\Phpcr\Media', $rootPath.'/'.$name, $returnMediaExists),
                 array(null, $rootPath, $this->testRoot),
             )))
         ;

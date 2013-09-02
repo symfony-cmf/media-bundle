@@ -2,7 +2,7 @@
 
 namespace Symfony\Cmf\Bundle\MediaBundle\Editor\Helper;
 
-use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
+use Media\FileInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class UploadCkeditorHelper extends UploadDefaultHelper
@@ -14,7 +14,7 @@ class UploadCkeditorHelper extends UploadDefaultHelper
     {
         if (!isset($files[0]) && !$files[0] instanceof FileInterface) {
             throw new \InvalidArgumentException(
-                'Provide at least one Symfony\Cmf\Bundle\MediaBundle\FileInterface file.'
+                'Provide at least one Media\FileInterface file.'
             );
         }
 

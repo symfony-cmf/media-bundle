@@ -2,8 +2,8 @@
 
 namespace Symfony\Cmf\Bundle\MediaBundle\Controller;
 
-use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
-use Symfony\Cmf\Bundle\MediaBundle\ImageInterface;
+use Media\FileInterface;
+use Media\ImageInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,7 +31,7 @@ class ImageController extends FileController
 
         if (! $contentObject || ! $contentObject instanceof ImageInterface) {
             throw new NotFoundHttpException(sprintf(
-                'Object with identifier %s cannot be resolved to a valid instance of Symfony\Cmf\Bundle\MediaBundle\ImageInterface',
+                'Object with identifier %s cannot be resolved to a valid instance of Media\ImageInterface',
                 $path
             ));
         }
