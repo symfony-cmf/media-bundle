@@ -9,7 +9,7 @@ class CmfMediaExtension extends \Twig_Extension
     protected $mediaHelper;
 
     /**
-     * @param MediaHelper $mediaHelper
+     * @param CmfMediaHelper $mediaHelper
      */
     public function __construct(CmfMediaHelper $mediaHelper)
     {

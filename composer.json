@@ -26,7 +26,8 @@
         "knplabs/gaufrette": "When using the Gaufrette adapter",
         "phpcr/phpcr-utils": "When using the Gaufrette adapter",
         "jms/serializer-bundle": "When using the serializer handler",
-        "liip/imagine-bundle": "When using the ImagineBlock"
+        "liip/imagine-bundle": "When using the ImagineBlock",
+        "helios-ag/fm-elfinder-bundle": "When using the elFinder media browser"
     },
     "autoload":{
         "psr-0":{

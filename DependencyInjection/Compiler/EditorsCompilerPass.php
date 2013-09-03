@@ -29,5 +29,17 @@ class EditorsCompilerPass implements CompilerPassInterface
                 }
             }
         }
+
+        $tags = $container->findTaggedServiceIds('cmf_media.browser_file_helper');
+
+        if (count($tags) > 0) {
+            if ($container->hasDefinition('cmf_media.browser_file_helper')) {
+                $manager = $container->getDefinition('cmf_media.browser_file_helper');
+
+                foreach ($tags as $id => $tag) {
+                    $manager->addMethodCall('addEditorHelper', array($tag[0]['editor'], $tag[0]['browser'], new Reference($id)));
+                }
+            }
+        }
     }
 }

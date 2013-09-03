@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="cmf_media.adapter.elfinder.phpcr_driver.class">Symfony\Cmf\Bundle\MediaBundle\Adapter\ElFinder\PhpcrDriver</parameter>
+        <parameter key="cmd_media.browser_file_helper.default_elfinder.class">Symfony\Cmf\Bundle\MediaBundle\Editor\Helper\BrowserDefaultHelper</parameter>
+    </parameters>
+
+    <services>
+
+        <service id="cmf_media.adapter.elfinder.phpcr_driver" class="%cmf_media.adapter.elfinder.phpcr_driver.class%">
+            <argument type="service" id="doctrine_phpcr" />
+            <argument>%cmf_media.persistence.phpcr.manager_name%</argument>
+            <argument type="service" id="cmf_media.persistence.phpcr.manager" />
+            <argument type="service" id="cmf_media.templating.helper" />
+            <argument>%cmf_media.imagine.filter.elfinder_thumbnail%</argument>
+        </service>
+
+        <service id="cmd_media.browser_file_helper.default_elfinder" class="%cmd_media.browser_file_helper.default_elfinder.class%" public="false">
+            <tag name="cmf_media.browser_file_helper" editor="default" browser="elfinder" />
+            <argument type="service" id="router" />
+            <argument>elfinder</argument>
+        </service>
+
+    </services>
+</container>

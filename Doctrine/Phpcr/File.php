@@ -139,7 +139,7 @@ class File extends Media implements FileInterface, BinaryInterface
     }
 
     /**
-     * @return \Symfony\Cmf\Bundle\MediaBundle\stream
+     * @return stream
      */
     public function getContentAsStream()
     {

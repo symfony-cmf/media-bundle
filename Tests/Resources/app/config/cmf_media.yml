@@ -12,8 +12,16 @@ liip_imagine:
         # define the filter to be used with the image preview
         image_upload_thumbnail:
             data_loader: cmf_media_doctrine_phpcr
+            quality: 85
             filters:
                 thumbnail: { size: [100, 100], mode: outbound }
+
+        # default filter to be used for elfinder thumbnails
+        elfinder_thumbnail:
+            data_loader: cmf_media_doctrine_phpcr
+            quality: 85
+            filters:
+                thumbnail: { size: [48, 48], mode: inset }
 
         cmf_block:
             data_loader: cmf_media_doctrine_phpcr
