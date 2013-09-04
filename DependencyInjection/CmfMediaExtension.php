@@ -30,7 +30,7 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
         $configs = $parameterBag->resolveValue($configs);
         $config = $this->processConfiguration(new Configuration(), $configs);
 
-        if(!empty($config['persistence']['phpcr']['enabled'])) {
+        if ($config['persistence']['phpcr']['enabled']) {
             if (isset($bundles['CmfCreateBundle'])) {
                 $config = array(
                     'persistence' => array(
@@ -85,7 +85,7 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
 
-        if (!empty($config['persistence']['phpcr']['enabled'])) {
+        if ($config['persistence']['phpcr']['enabled']) {
             $this->loadPhpcr($config['persistence']['phpcr'], $loader, $container, $useImagine, $useJmsSerializer, $useElFinder);
         }
 

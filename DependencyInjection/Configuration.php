@@ -24,10 +24,12 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->arrayNode('persistence')
+                    ->addDefaultsIfNotSet()
                     ->children()
                         ->arrayNode('phpcr')
+                            ->addDefaultsIfNotSet()
                             ->children()
-                                ->scalarNode('enabled')->defaultNull()->end()
+                                ->booleanNode('enabled')->defaultFalse()->end()
                                 ->scalarNode('media_basepath')->defaultValue('/cms/media')->end()
                                 ->scalarNode('manager_name')->defaultNull()->end()
                                 ->scalarNode('media_class')->defaultValue('Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\Media')->end()
