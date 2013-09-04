@@ -6,17 +6,34 @@ test_index:
 phpcr_file_test:
     pattern: /phpcr/file-test
     defaults:
-        _controller: Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Controller\PhpcrFileTestController::fileAction
+        _controller: Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Controller\PhpcrFileTestController::indexAction
 
 phpcr_file_test_upload:
     pattern: /phpcr/file-test/upload
     defaults:
         _controller: Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Controller\PhpcrFileTestController::uploadAction
 
-phpcr_file_test_upload_editor:
-    pattern: /phpcr/file-test/upload/editor
+phpcr_image_test:
+    pattern: /phpcr/image-test
     defaults:
-        _controller: Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Controller\PhpcrFileTestController::editorUploadAction
+        _controller: Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Controller\PhpcrImageTestController::indexAction
+
+phpcr_image_test_upload:
+    pattern: /phpcr/image-test/upload
+    defaults:
+        _controller: Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Controller\PhpcrImageTestController::uploadAction
+
+phpcr_image_test_content_new:
+    pattern: /phpcr/image-test/content/new
+    defaults:
+        _controller: Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Controller\PhpcrImageTestController::newAction
+
+phpcr_image_test_content_edit:
+    pattern: /phpcr/image-test/content/edit/{path}
+    defaults:
+        _controller: Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Controller\PhpcrImageTestController::editAction
+    requirements:
+        path: .*
 
 cmf_media_file:
     resource: "@CmfMediaBundle/Resources/config/routing/file.xml"

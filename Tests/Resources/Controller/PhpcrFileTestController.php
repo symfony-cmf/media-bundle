@@ -16,7 +16,7 @@ class PhpcrFileTestController extends Controller
         ;
     }
 
-    public function fileAction(Request $request)
+    public function indexAction(Request $request)
     {
         $fileClass = 'Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\File';
         $dm        = $this->get('doctrine_phpcr')->getManager('default');
@@ -26,9 +26,9 @@ class PhpcrFileTestController extends Controller
         $editorUploadForm = $this->getUploadForm();
 
         return $this->render('::tests/file.html.twig', array(
-            'upload_form'  => $uploadForm->createView(),
-            'editor_form'  => $editorUploadForm->createView(),
-            'files' => $files,
+            'upload_form' => $uploadForm->createView(),
+            'editor_form' => $editorUploadForm->createView(),
+            'files'       => $files,
         ));
     }
 

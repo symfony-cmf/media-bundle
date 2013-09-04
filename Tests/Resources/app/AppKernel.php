@@ -23,4 +23,17 @@ class AppKernel extends TestKernel
     {
         $loader->load(__DIR__.'/config/config.php');
     }
+
+    /**
+     * Returns the kernel parameters.
+     *
+     * @return array An array of kernel parameters
+     */
+    protected function getKernelParameters()
+    {
+        return array_merge(
+            parent::getKernelParameters(),
+            array('kernel.cmf_test_web_dir' => CMF_TEST_ROOT_DIR . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'web')
+        );
+    }
 }
