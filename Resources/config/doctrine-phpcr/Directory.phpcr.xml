@@ -7,7 +7,6 @@
 
     <document
         name="Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\Directory"
-        node-type="nt:folder"
         >
 
         <mixins>

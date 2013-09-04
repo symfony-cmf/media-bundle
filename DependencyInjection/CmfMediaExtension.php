@@ -73,21 +73,33 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
             $useJmsSerializer = false;
         }
 
+        if (true === $config['use_elfinder'] ||
+            ('auto' === $config['use_elfinder'] && isset($bundles['FMElfinderBundle']))
+        ) {
+            $useElFinder = true;
+        } else {
+            $useElFinder = false;
+        }
+
         // load config
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
 
         if (!empty($config['persistence']['phpcr']['enabled'])) {
-            $this->loadPhpcr($config['persistence']['phpcr'], $loader, $container, $useImagine, $useJmsSerializer);
+            $this->loadPhpcr($config['persistence']['phpcr'], $loader, $container, $useImagine, $useJmsSerializer, $useElFinder);
         }
 
         $container->setParameter($this->getAlias() . '.upload_file_role', $config['upload_file_role']);
+
+        if ($useElFinder) {
+            $container->setParameter($this->getAlias() . '.default_browser', 'elfinder');
+        }
 
         // load general liip imagine configuration
         $this->loadLiipImagine($useImagine, $config, $loader, $container);
     }
 
-    public function loadPhpcr($config, XmlFileLoader $loader, ContainerBuilder $container, $useImagine, $useJmsSerializer)
+    public function loadPhpcr($config, XmlFileLoader $loader, ContainerBuilder $container, $useImagine, $useJmsSerializer, $useElFinder)
     {
         $container->setParameter($this->getAlias() . '.backend_type_phpcr', true);
 
@@ -122,24 +134,31 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
             // load phpcr specific serializer configuration
             $loader->load('serializer-phpcr.xml');
         }
+
+        if ($useElFinder) {
+            // load phpcr specific elfinder configuration
+            $loader->load('adapter-elfinder-phpcr.xml');
+        }
     }
 
     public function loadLiipImagine($enabled, $config, XmlFileLoader $loader, ContainerBuilder $container)
     {
         if (! $enabled) {
             $container->setParameter($this->getAlias() . '.use_imagine', false);
-            $container->setParameter($this->getAlias() . '.imagine.filter', false);
+            $container->setParameter($this->getAlias() . '.imagine.filter.upload_thumbnail', false);
+            $container->setParameter($this->getAlias() . '.imagine.filter.elfinder_thumbnail', false);
             $container->setParameter($this->getAlias() . '.imagine.all_filters', array());
 
             return;
         }
 
         $filters = isset($config['extra_filters']) && is_array($config['extra_filters'])
-            ? array_merge(array($config['imagine_filter']), $config['extra_filters'])
+            ? array_merge($config['imagine_filter'], $config['extra_filters'])
             : array();
 
         $container->setParameter($this->getAlias() . '.use_imagine', true);
-        $container->setParameter($this->getAlias() . '.imagine.filter', $config['imagine_filter']);
+        $container->setParameter($this->getAlias() . '.imagine.filter.upload_thumbnail', $config['imagine_filter']['upload_thumbnail']);
+        $container->setParameter($this->getAlias() . '.imagine.filter.elfinder_thumbnail', $config['imagine_filter']['elfinder_thumbnail']);
         $container->setParameter($this->getAlias() . '.imagine.all_filters', $filters);
     }
 
