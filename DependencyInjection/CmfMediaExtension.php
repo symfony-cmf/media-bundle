@@ -36,6 +36,10 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
                     'persistence' => array(
                         'phpcr' => array(
                             'image' => array(
+                                // enable imaging inside CreateBundle, general
+                                // phpcr persistence still needs to be enabled
+                                // explicitly or by CoreBundle
+                                'enabled'     => true,
                                 'model_class' => $config['persistence']['phpcr']['image_class'],
                                 'basepath'    => $config['persistence']['phpcr']['media_basepath'],
                             ),
