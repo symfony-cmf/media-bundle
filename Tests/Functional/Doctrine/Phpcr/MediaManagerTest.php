@@ -11,10 +11,6 @@ class MediaManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $containerMock;
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     private $registryMock;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -27,10 +23,6 @@ class MediaManagerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->containerMock = $this->getMockBuilder('Symfony\Component\DependencyInjection\ContainerInterface')
-            ->disableOriginalConstructor()
-            ->getMock()
-        ;
         $this->registryMock = $this->getMockBuilder('Doctrine\Bundle\PHPCRBundle\ManagerRegistry')
             ->disableOriginalConstructor()
             ->getMock()
