@@ -102,8 +102,6 @@ class File extends Media implements FileInterface, BinaryInterface
      */
     public function setContentFromString($content)
     {
-        $this->getContent();
-
         if (!is_resource($content)) {
             $stream = fopen('php://memory', 'rwb+');
             fwrite($stream, $content);
