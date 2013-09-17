@@ -25,19 +25,17 @@ class ImageRepository extends DocumentRepository implements ImageRepositoryInter
      */
     public function searchImages($term, $limit = 0, $offset = 0)
     {
-        $qb = $this->createQueryBuilder();
+        $qb = $this->createQueryBuilder('i');
 
         if ($this->rootPath) {
-            $qb->andWhere($qb->expr()->descendant($this->rootPath));
+            $qb->andWhere()->descendant($this->rootPath, 'i');
         }
 
         if (strlen($term)) {
-            $qb->andWhere(
-                $qb->expr()->orX(
-                    $qb->expr()->likeNodeName('%'.$term.'%'),
-                    $qb->expr()->like('description', '%'.$term.'%')
-                )
-            );
+            $qb->andWhere()->orX()
+                ->like()->documentLocalName('i')->literal('%'.$term.'%')
+                ->like()->field('i.description')->literal('%'.$term.'%')
+            ;
         }
 
         $qb->setFirstResult($offset);
