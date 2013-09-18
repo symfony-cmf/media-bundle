@@ -157,12 +157,12 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
         }
 
         $filters = isset($config['extra_filters']) && is_array($config['extra_filters'])
-            ? array_merge($config['imagine_filter'], $config['extra_filters'])
+            ? array_merge($config['imagine_filters'], $config['extra_filters'])
             : array();
 
         $container->setParameter($this->getAlias() . '.use_imagine', true);
-        $container->setParameter($this->getAlias() . '.imagine.filter.upload_thumbnail', $config['imagine_filter']['upload_thumbnail']);
-        $container->setParameter($this->getAlias() . '.imagine.filter.elfinder_thumbnail', $config['imagine_filter']['elfinder_thumbnail']);
+        $container->setParameter($this->getAlias() . '.imagine.filter.upload_thumbnail', $config['imagine_filters']['upload_thumbnail']);
+        $container->setParameter($this->getAlias() . '.imagine.filter.elfinder_thumbnail', $config['imagine_filters']['elfinder_thumbnail']);
         $container->setParameter($this->getAlias() . '.imagine.all_filters', $filters);
     }
 

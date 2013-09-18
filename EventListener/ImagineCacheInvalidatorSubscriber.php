@@ -4,6 +4,7 @@ namespace Symfony\Cmf\Bundle\MediaBundle\EventListener;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
+use Doctrine\ODM\PHPCR\Document\Resource;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Symfony\Cmf\Bundle\MediaBundle\ImageInterface;
 use Symfony\Cmf\Bundle\MediaBundle\MediaManagerInterface;
@@ -94,13 +95,9 @@ class ImagineCacheInvalidatorSubscriber implements EventSubscriber
     private function invalidateCache(LifecycleEventArgs $args)
     {
         $object = $args->getObject();
-        // TODO: do we still need this?
-//        if ($document instanceof Resource) {
-//            $document = $document->getParent();
-//        }
-//        if ($document instanceof File) {
-//            $document = $document->getParent();
-//        }
+        if ($object instanceof Resource) {
+            $object = $object->getParent();
+        }
         if ($object instanceof ImageInterface) {
             if (! $this->container->isScopeActive('request')
                 || ! $request = $this->container->get('request')

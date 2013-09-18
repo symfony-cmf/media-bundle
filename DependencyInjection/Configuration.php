@@ -64,13 +64,14 @@ class Configuration implements ConfigurationInterface
     private function addImageSection(ArrayNodeDefinition $node)
     {
         $node
+            ->fixXmlConfig('imagine_filter')
             ->fixXmlConfig('extra_filter')
             ->children()
                 ->enumNode('use_imagine')
                     ->values(array(true, false, 'auto'))
                     ->defaultValue('auto')
                 ->end()
-                ->arrayNode('imagine_filter')
+                ->arrayNode('imagine_filters')
                     ->addDefaultsIfNotSet()
                     ->children()
                         ->scalarNode('upload_thumbnail')->defaultValue('image_upload_thumbnail')->end()
