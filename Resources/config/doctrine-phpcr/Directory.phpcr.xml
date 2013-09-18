@@ -7,22 +7,15 @@
 
     <document
         name="Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\Directory"
+        referenceable="true"
         >
 
         <mixins>
-            <mixin type="mix:created" />
             <mixin type="mix:lastModified" />
         </mixins>
 
-        <id name="id">
-            <generator strategy="PARENT"/>
-        </id>
-        <nodename name="name"/>
-        <parent-document name="parent"/>
+        <field name="updatedBy" type="string" property="jcr:lastModifiedBy"/>
 
-        <children name="children"/>
-
-        <field name="createdAt" type="date" property="jcr:created"/>
         <field name="updatedAt" type="date" property="jcr:lastModified"/>
 
     </document>

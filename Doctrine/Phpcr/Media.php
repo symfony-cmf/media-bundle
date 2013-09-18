@@ -2,20 +2,16 @@
 
 namespace Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr;
 
-use Symfony\Cmf\Bundle\MediaBundle\HierarchyInterface;
-use Symfony\Cmf\Bundle\MediaBundle\Model\Media as BaseMedia;
-
-class Media extends BaseMedia implements HierarchyInterface
+/**
+ * Note: the modified information is stored in the document because it has no
+ * content child (Resource) doing it.
+ */
+class Media extends AbstractMedia
 {
     /**
-     * @var object
+     * @var \DateTime
      */
-    protected $parent;
-
-    /**
-     * @var string
-     */
-    protected $createdBy;
+    protected $updatedAt;
 
     /**
      * @var string
@@ -23,35 +19,11 @@ class Media extends BaseMedia implements HierarchyInterface
     protected $updatedBy;
 
     /**
-     * @param Object $parent
+     * {@inheritdoc}
      */
-    public function setParent($parent)
+    public function getUpdatedAt()
     {
-        $this->parent = $parent;
-
-        if ($parent instanceof Directory) {
-            $parent->addChild($this);
-        }
-    }
-
-    /**
-     * @return Object|null
-     */
-    public function getParent()
-    {
-        return $this->parent;
-    }
-
-    /**
-     * Getter for createdBy
-     * The createdBy is assigned by the content repository
-     * This is the name of the (jcr) user that created the node
-     *
-     * @return string name of the (jcr) user who created the file
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
+        return $this->updatedAt;
     }
 
     /**
