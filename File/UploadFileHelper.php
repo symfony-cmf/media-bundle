@@ -21,6 +21,7 @@ class UploadFileHelper
     protected $rootPath;
     protected $mediaManager;
     protected $editorHelpers;
+    protected $allowNonUploadedFiles = false;
 
     /**
      * @param ManagerRegistry        $registry
@@ -41,6 +42,16 @@ class UploadFileHelper
         $this->class           = $class === '' ? null : $class;
         $this->rootPath        = $rootPath;
         $this->mediaManager    = $mediaManager;
+    }
+
+    /**
+     * Allow non-uploaded files to validate for testing purposes.
+     * 
+     * @param boolean $boolean
+     */
+    public function setAllowNonUploadedFiles($boolean)
+    {
+        $this->allowNonUploadedFiles = $boolean;
     }
 
     /**
@@ -123,38 +134,46 @@ class UploadFileHelper
      */
     protected function validateFile(UploadedFile $file)
     {
-        if (false === $file->isValid()) {
-            switch ($file->getError()) { 
-                case UPLOAD_ERR_INI_SIZE: 
-                    $message = "The uploaded file exceeds the upload_max_filesize directive in php.ini"; 
-                    break; 
-                case UPLOAD_ERR_FORM_SIZE: 
-                    $message = "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form"; 
-                    break; 
-                case UPLOAD_ERR_PARTIAL: 
-                    $message = "The uploaded file was only partially uploaded"; 
-                    break; 
-                case UPLOAD_ERR_NO_FILE: 
-                    $message = "No file was uploaded"; 
-                    break; 
-                case UPLOAD_ERR_NO_TMP_DIR: 
-                    $message = "Missing a temporary folder"; 
-                    break; 
-                case UPLOAD_ERR_CANT_WRITE: 
-                    $message = "Failed to write file to disk"; 
-                    break; 
-                case UPLOAD_ERR_EXTENSION: 
-                    $message = "File upload stopped by extension"; 
-                    break; 
-                default: 
-                    $message = "Unknown upload error"; 
-                    break; 
-            }
+        if (false === $this->allowNonUploadedFiles && false === is_uploaded_file($file->getPathname())) {
+            throw new UploadException(sprintf('is_uploaded_file says "%s" was not uploaded via. HTTP POST', $file->getPathname()));
+        }
 
+        switch ($file->getError()) { 
+            case UPLOAD_ERR_INI_SIZE: 
+                $message = "The uploaded file exceeds the upload_max_filesize directive in php.ini"; 
+                break; 
+            case UPLOAD_ERR_FORM_SIZE: 
+                $message = "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form"; 
+                break; 
+            case UPLOAD_ERR_PARTIAL: 
+                $message = "The uploaded file was only partially uploaded"; 
+                break; 
+            case UPLOAD_ERR_NO_FILE: 
+                $message = "No file was uploaded"; 
+                break; 
+            case UPLOAD_ERR_NO_TMP_DIR: 
+                $message = "Missing a temporary folder"; 
+                break; 
+            case UPLOAD_ERR_CANT_WRITE: 
+                $message = "Failed to write file to disk"; 
+                break; 
+            case UPLOAD_ERR_EXTENSION: 
+                $message = "File upload stopped by extension"; 
+                break; 
+            case UPLOAD_ERR_OK:
+                $message = null;
+                break;
+            default: 
+                $message = sprintf('Unknown upload error : \"%s\"', $file->getError());
+                break; 
+        }
+
+        if ($message) {
             throw new UploadException($message);
         }
 
         return true;
+
     }
 
     /**
