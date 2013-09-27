@@ -429,7 +429,7 @@ class PhpcrDriver extends ElFinderVolumeDriver
         $this->dm->persist($file);
         $this->dm->flush();
 
-        return $filename;
+        return $file->getId();
     }
 
     /**
@@ -484,20 +484,14 @@ class PhpcrDriver extends ElFinderVolumeDriver
         try {
             $doc = $this->dm->find(null, $source);
 
-            if ($sourceDir === $targetDir) {
-                // rename
-                // TODO rename file causes error: Detached document or new document with already existing id passed to persist()
-                return false;
-            } else {
-                // move
-                $this->dm->move($doc, $filename);
-                $this->dm->flush();
-            }
+            // move
+            $this->dm->move($doc, $filename);
+            $this->dm->flush();
         } catch (\Exception $e) {
             return false;
         }
 
-        return true;
+        return $filename;
     }
 
     /**
