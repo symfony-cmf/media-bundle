@@ -238,13 +238,8 @@ class PhpcrDriver extends ElFinderVolumeDriver
         /** @var File $doc */
         $doc = $this->dm->find(null, $path);
 
-        if ($path == $this->root && !$doc) {
-            // @TODO not sure if this the best way / place for this. should a user create the media root manually?
-            $doc = new Directory();
-            $doc->setId($this->root);
-
-            $this->dm->persist($doc);
-            $this->dm->flush();
+        if (!$doc) {
+            return false;
         }
 
         if (!($doc instanceof HierarchyInterface || $doc instanceof Generic)) {
