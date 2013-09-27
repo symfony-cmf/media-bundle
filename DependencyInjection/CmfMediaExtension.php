@@ -101,6 +101,11 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
 
         // load general liip imagine configuration
         $this->loadLiipImagine($useImagine, $config, $loader, $container);
+
+        // misc
+        if (true === $config['upload_file_helper']['allow_non_uploaded_files']) {
+            $container->setParameter($this->getAlias() . '.upload_file_helper.allow_non_uploaded_files', true);
+        }
     }
 
     public function loadPhpcr($config, XmlFileLoader $loader, ContainerBuilder $container, $useImagine, $useJmsSerializer, $useElFinder)

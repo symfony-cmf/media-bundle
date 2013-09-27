@@ -53,7 +53,12 @@ class Configuration implements ConfigurationInterface
                     ->defaultValue('auto')
                 ->end()
 
-            ->end()
+                ->arrayNode('upload_file_helper')
+                    ->addDefaultsIfNotset()
+                    ->children()
+                      ->scalarNode('allow_non_uploaded_files')->defaultFalse()->end()
+                    ->end()
+                ->end()
         ;
 
         $this->addImageSection($rootNode);

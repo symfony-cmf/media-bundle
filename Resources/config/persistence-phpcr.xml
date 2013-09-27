@@ -42,6 +42,9 @@
             <argument>%cmf_media.persistence.phpcr.file.class%</argument>
             <argument>%cmf_media.persistence.phpcr.media_basepath%</argument>
             <argument type="service" id="cmf_media.persistence.phpcr.manager" />
+            <call method="setAllowNonUploadedFiles">
+                <argument>%cmf_media.upload_file_helper.allow_non_uploaded_files%</argument>
+            </call>
         </service>
 
         <service id="cmf_media.upload_image_helper" class="%cmf_media.upload_file_helper.class%">
@@ -50,6 +53,9 @@
             <argument>%cmf_media.persistence.phpcr.image.class%</argument>
             <argument>%cmf_media.persistence.phpcr.media_basepath%</argument>
             <argument type="service" id="cmf_media.persistence.phpcr.manager" />
+            <call method="setAllowNonUploadedFiles">
+                <argument>%cmf_media.upload_file_helper.allow_non_uploaded_files%</argument>
+            </call>
         </service>
 
         <service id="cmf_media.file_controller" class="%cmf_media.file_controller.class%">
