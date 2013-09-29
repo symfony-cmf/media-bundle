@@ -5,6 +5,7 @@ namespace Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Controller;
 use Doctrine\ODM\PHPCR\Document\Generic;
 use PHPCR\Util\PathHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Cmf\Bundle\MediaBundle\File\UploadFileHelperInterface;
 use Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Document\Content;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -92,7 +93,7 @@ class PhpcrImageTestController extends Controller
             $form->bind($request);
 
             if ($form->isValid()) {
-                /** @var UploadFileHelper $uploadFileHelper */
+                /** @var UploadFileHelperInterface $uploadFileHelper */
                 $uploadImageHelper = $this->get('cmf_media.upload_image_helper');
 
                 $uploadedFile = $request->files->get('image');

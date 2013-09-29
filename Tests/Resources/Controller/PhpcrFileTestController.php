@@ -3,7 +3,7 @@
 namespace Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Cmf\Bundle\MediaBundle\File\UploadFileHelper;
+use Symfony\Cmf\Bundle\MediaBundle\File\UploadFileHelperInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class PhpcrFileTestController extends Controller
@@ -40,7 +40,7 @@ class PhpcrFileTestController extends Controller
             $form->bind($request);
 
             if ($form->isValid()) {
-                /** @var UploadFileHelper $uploadFileHelper */
+                /** @var UploadFileHelperInterface $uploadFileHelper */
                 $uploadFileHelper = $this->get('cmf_media.upload_file_helper');
 
                 $uploadedFile = $request->files->get('file');

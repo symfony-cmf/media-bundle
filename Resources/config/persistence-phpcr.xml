@@ -14,7 +14,7 @@
         <parameter key="cmf_media.templating.helper.class">Symfony\Cmf\Bundle\MediaBundle\Templating\Helper\CmfMediaHelper</parameter>
         <parameter key="cmf_media.twig.extension.class">Symfony\Cmf\Bundle\MediaBundle\Twig\Extension\CmfMediaExtension</parameter>
 
-        <parameter key="cmf_media.upload_file_helper.class">Symfony\Cmf\Bundle\MediaBundle\File\UploadFileHelper</parameter>
+        <parameter key="cmf_media.persistence.phpcr.upload_file_helper.class">Symfony\Cmf\Bundle\MediaBundle\File\UploadFileHelperDoctrine</parameter>
         <parameter key="cmf_media.upload_editor_helper.default.class">Symfony\Cmf\Bundle\MediaBundle\Editor\Helper\UploadDefaultHelper</parameter>
         <parameter key="cmf_media.upload_editor_helper.ckeditor.class">Symfony\Cmf\Bundle\MediaBundle\Editor\Helper\UploadCkeditorHelper</parameter>
 
@@ -36,7 +36,7 @@
             <argument>%cmf_media.persistence.phpcr.media_basepath%</argument>
         </service>
 
-        <service id="cmf_media.upload_file_helper" class="%cmf_media.upload_file_helper.class%">
+        <service id="cmf_media.persistence.phpcr.upload_file_helper" class="%cmf_media.persistence.phpcr.upload_file_helper.class%">
             <argument type="service" id="doctrine_phpcr" />
             <argument>%cmf_media.persistence.phpcr.manager_name%</argument>
             <argument>%cmf_media.persistence.phpcr.file.class%</argument>
@@ -44,7 +44,7 @@
             <argument type="service" id="cmf_media.persistence.phpcr.manager" />
         </service>
 
-        <service id="cmf_media.upload_image_helper" class="%cmf_media.upload_file_helper.class%">
+        <service id="cmf_media.persistence.phpcr.upload_image_helper" class="%cmf_media.persistence.phpcr.upload_file_helper.class%">
             <argument type="service" id="doctrine_phpcr" />
             <argument>%cmf_media.persistence.phpcr.manager_name%</argument>
             <argument>%cmf_media.persistence.phpcr.image.class%</argument>

@@ -5,7 +5,7 @@ namespace Symfony\Cmf\Bundle\MediaBundle\Controller;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Cmf\Bundle\MediaBundle\BinaryInterface;
-use Symfony\Cmf\Bundle\MediaBundle\File\UploadFileHelper;
+use Symfony\Cmf\Bundle\MediaBundle\File\UploadFileHelperInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileSystemInterface;
 use Symfony\Cmf\Bundle\MediaBundle\MediaManagerInterface;
@@ -32,11 +32,17 @@ class FileController
     protected $securityContext;
 
     /**
-     * @param ManagerRegistry        $registry
-     * @param string                 $managerName
-     * @param string                 $class         fully qualified class name of file
-     * @param string                 $rootPath      path where the filesystem is located
-     * @param MediaManagerInterface  $mediaManager
+     * @param ManagerRegistry           $registry
+     * @param string                    $managerName
+     * @param string                    $class            fully qualified class
+     *      name of file
+     * @param string                    $rootPath         path where the
+     *      filesystem is located
+     * @param MediaManagerInterface     $mediaManager
+     * @param UploadFileHelperInterface $uploadFileHelper
+     * @param string                    $requiredRole     the role name for the
+     *      security check
+     * @param SecurityContextInterface  $securityContext
      */
     public function __construct(
         ManagerRegistry $registry,
@@ -44,7 +50,7 @@ class FileController
         $class,
         $rootPath = '/',
         MediaManagerInterface $mediaManager,
-        UploadFileHelper $uploadFileHelper,
+        UploadFileHelperInterface $uploadFileHelper,
         $requiredUploadRole,
         SecurityContextInterface $securityContext = null)
     {
