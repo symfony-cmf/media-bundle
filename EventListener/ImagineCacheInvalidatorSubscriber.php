@@ -99,6 +99,7 @@ class ImagineCacheInvalidatorSubscriber implements EventSubscriber
             $object = $object->getParent();
         }
         if ($object instanceof ImageInterface) {
+            // TODO: make this a synchronized service when we update to symfony 2.3 only. we do not have CmfCoreBundle required so we can't use the BC tag
             if (! $this->container->isScopeActive('request')
                 || ! $request = $this->container->get('request')
             ) {
