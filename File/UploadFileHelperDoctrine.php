@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 
 class UploadFileHelperDoctrine implements UploadFileHelperInterface
 {
@@ -124,7 +125,41 @@ class UploadFileHelperDoctrine implements UploadFileHelperInterface
      */
     protected function validateFile(UploadedFile $file)
     {
-        return true;
+        if ($file->isValid()) {
+            return true;
+        }
+
+        switch ($file->getError()) {
+            case UPLOAD_ERR_INI_SIZE:
+                $message = "The uploaded file exceeds the upload_max_filesize directive in php.ini";
+                break;
+            case UPLOAD_ERR_FORM_SIZE:
+                $message = "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form";
+                break;
+            case UPLOAD_ERR_PARTIAL:
+                $message = "The uploaded file was only partially uploaded";
+                break;
+            case UPLOAD_ERR_NO_FILE:
+                $message = "No file was uploaded";
+                break;
+            case UPLOAD_ERR_NO_TMP_DIR:
+                $message = "Missing a temporary folder";
+                break;
+            case UPLOAD_ERR_CANT_WRITE:
+                $message = "Failed to write file to disk";
+                break;
+            case UPLOAD_ERR_EXTENSION:
+                $message = "File upload stopped by extension";
+                break;
+            case UPLOAD_ERR_OK:
+                $message = "The file likely did not pass the is_uploaded_file() check";
+                break;
+            default:
+                $message = sprintf('Unknown upload error : \"%s\"', $file->getError());
+                break;
+        }
+
+        throw new UploadException($message);
     }
 
     /**
