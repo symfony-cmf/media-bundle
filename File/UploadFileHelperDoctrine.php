@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class UploadFileHelper
+class UploadFileHelperDoctrine implements UploadFileHelperInterface
 {
     protected $managerRegistry;
     protected $managerName;
@@ -20,6 +20,7 @@ class UploadFileHelper
     protected $rootPath;
     protected $mediaManager;
     protected $editorHelpers;
+    protected $allowNonUploadedFiles = false;
 
     /**
      * @param ManagerRegistry        $registry
@@ -40,6 +41,14 @@ class UploadFileHelper
         $this->class           = $class === '' ? null : $class;
         $this->rootPath        = $rootPath;
         $this->mediaManager    = $mediaManager;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setAllowNonUploadedFiles($boolean)
+    {
+        $this->allowNonUploadedFiles = $boolean;
     }
 
     /**
@@ -87,10 +96,7 @@ class UploadFileHelper
     }
 
     /**
-     * Add an editor helper
-     *
-     * @param string                      $name
-     * @param UploadEditorHelperInterface $helper
+     * {@inheritDoc}
      */
     public function addEditorHelper($name, UploadEditorHelperInterface $helper)
     {
@@ -98,11 +104,7 @@ class UploadFileHelper
     }
 
     /**
-     * Get helper
-     *
-     * @param $name leave null to get the default helper
-     *
-     * @return UploadEditorHelperInterface|null
+     * {@inheritDoc}
      */
     public function getEditorHelper($name = null)
     {
@@ -126,13 +128,7 @@ class UploadFileHelper
     }
 
     /**
-     * Handle the UploadedFile and create a FileInterface object specified by
-     * the configured class.
-     *
-     * @param Request      $request
-     * @param UploadedFile $uploadedFile
-     *
-     * @return FileInterface
+     * {@inheritDoc}
      */
     public function handleUploadedFile(UploadedFile $uploadedFile)
     {
@@ -153,13 +149,7 @@ class UploadFileHelper
     }
 
     /**
-     * Process upload and get a response
-     *
-     * @param Request        $request
-     * @param UploadedFile[] $uploadedFiles optionally get the uploaded file(s)
-     *      from the Request yourself
-     *
-     * @return Response
+     * {@inheritDoc}
      */
     public function getUploadResponse(Request $request, array $uploadedFiles = array())
     {
