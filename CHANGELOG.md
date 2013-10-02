@@ -1,6 +1,9 @@
 Changelog
 =========
 
+1.0.0-RC2
+---------
+
 * **2013-09-29**: [File] changed UploadFileHelper class to an interface and
   a Doctrine implementation
 
