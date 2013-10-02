@@ -51,7 +51,10 @@ class UploadFileHelperTest extends \PHPUnit_Framework_TestCase
 
     private function getUploadFileHelper()
     {
-        return new UploadFileHelper($this->registryMock, 'themanager', $this->class, $this->rootPath, $this->mediaManagerMock);
+        $helper = new UploadFileHelper($this->registryMock, 'themanager', $this->class, $this->rootPath, $this->mediaManagerMock);
+        $helper->setAllowNonUploadedFiles(true);
+
+        return $helper;
     }
 
     public function testAddGetEditorHelper()
@@ -78,25 +81,68 @@ class UploadFileHelperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($uploadCkeditorHelper, $uploadFileHelper->getEditorHelper('ckeditor'));
     }
 
-    public function testHandleUploadedFile()
+    public function provideHandleUploadedFile()
     {
+        return array(
+            array(array(
+                'allow_non_uploaded_file' => false,
+                'expected_exception' => array(
+                    'symfony\component\httpfoundation\file\exception\uploadexception',
+                    'is_uploaded_file says',
+                ),
+            )),
+            array(array(
+                'upload_error' => UPLOAD_ERR_INI_SIZE,
+                'expected_exception' => array(
+                    'symfony\component\httpfoundation\file\exception\uploadexception',
+                    'The uploaded file exceeds the upload_max_filesize directive in php.ini',
+                ),
+            )),
+            array(array(
+                'allow_non_uploaded_file' => true,
+                'expected_exception' => null,
+            )),
+        );
+    }
+
+    /**
+     * @dataProvider provideHandleUploadedFile
+     */
+    public function testHandleUploadedFile($options)
+    {
+        $options = array_merge(array(
+            'allow_non_uploaded_file' => null,
+            'expected_exception' => null,
+            'upload_error' => null,
+        ), $options);
+
         vfsStream::setup('home');
         $testFile = vfsStream::url('home/test.txt');
         file_put_contents($testFile, "Test file content.");
 
         $class = 'Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\File';
         $uploadFileHelper = $this->getUploadFileHelper();
+
         $uploadFileHelper->setClass($class);
         $uploadFileHelper->setRootPath($this->rootPath.'/file');
-        $uploadedFile = new UploadedFile($testFile, 'test.txt');
+        $uploadedFile = new UploadedFile($testFile, 'test.txt', null, null, $options['upload_error']);
 
-        $this->mediaManagerMock->expects($this->once())
-            ->method('setDefaults')
-            ->with(
-                $this->isInstanceOf($this->class),
-                $this->equalTo($this->rootPath.'/file')
-            )
-        ;
+        if (null !== $options['allow_non_uploaded_file']) {
+            $uploadFileHelper->setAllowNonUploadedFiles($options['allow_non_uploaded_file']);
+        }
+
+        if (null !== $options['expected_exception']) {
+            list($eType, $eMessage) = $options['expected_exception'];
+            $this->setExpectedException($eType, $eMessage);
+        } else {
+            $this->mediaManagerMock->expects($this->once())
+                ->method('setDefaults')
+                ->with(
+                    $this->isInstanceOf($this->class),
+                    $this->equalTo($this->rootPath.'/file')
+                )
+                ;
+        }
 
         $file = $uploadFileHelper->handleUploadedFile($uploadedFile);
 
