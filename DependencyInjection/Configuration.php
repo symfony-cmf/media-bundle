@@ -43,6 +43,9 @@ class Configuration implements ConfigurationInterface
 
                 ->scalarNode('upload_file_role')->defaultValue('ROLE_CAN_UPLOAD_FILE')->end()
 
+                ->scalarNode('upload_file_helper_service_id')->end()
+                ->scalarNode('upload_image_helper_service_id')->end()
+
                 ->enumNode('use_jms_serializer')
                     ->values(array(true, false, 'auto'))
                     ->defaultValue('auto')

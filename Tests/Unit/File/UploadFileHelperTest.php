@@ -3,7 +3,7 @@
 namespace Symfony\Cmf\Bundle\MediaBundle\Tests\Unit\File;
 
 use org\bovigo\vfs\vfsStream;
-use Symfony\Cmf\Bundle\MediaBundle\File\UploadFileHelper;
+use Symfony\Cmf\Bundle\MediaBundle\File\UploadFileHelperDoctrine;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -51,7 +51,7 @@ class UploadFileHelperTest extends \PHPUnit_Framework_TestCase
 
     private function getUploadFileHelper()
     {
-        return new UploadFileHelper($this->registryMock, 'themanager', $this->class, $this->rootPath, $this->mediaManagerMock);
+        return new UploadFileHelperDoctrine($this->registryMock, 'themanager', $this->class, $this->rootPath, $this->mediaManagerMock);
     }
 
     public function testAddGetEditorHelper()

@@ -95,6 +95,13 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
 
         $container->setParameter($this->getAlias() . '.upload_file_role', $config['upload_file_role']);
 
+        if (isset($config['upload_file_helper_service_id'])) {
+            $container->setAlias($this->getAlias() . '.upload_file_helper', $config['upload_file_helper_service_id']);
+        }
+        if (isset($config['upload_image_helper_service_id'])) {
+            $container->setAlias($this->getAlias() . '.upload_image_helper', $config['upload_image_helper_service_id']);
+        }
+
         if ($useElFinder) {
             $container->setParameter($this->getAlias() . '.default_browser', 'elfinder');
         }
@@ -106,6 +113,7 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
     public function loadPhpcr($config, XmlFileLoader $loader, ContainerBuilder $container, $useImagine, $useJmsSerializer, $useElFinder)
     {
         $container->setParameter($this->getAlias() . '.backend_type_phpcr', true);
+        $prefix = $this->getAlias() . '.persistence.phpcr';
 
         $keys = array(
             'media_class' => 'media.class',
@@ -119,7 +127,7 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
         foreach ($keys as $sourceKey => $targetKey) {
             if (isset($config[$sourceKey])) {
                 $container->setParameter(
-                    $this->getAlias() . '.persistence.phpcr.' . $targetKey,
+                    $prefix . '.' . $targetKey,
                     $config[$sourceKey]
                 );
             }
@@ -127,6 +135,10 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
 
         // load phpcr specific configuration
         $loader->load('persistence-phpcr.xml');
+
+        // aliases
+        $container->setAlias($this->getAlias() . '.upload_file_helper', $prefix.'.upload_file_helper');
+        $container->setAlias($this->getAlias() . '.upload_image_helper', $prefix.'.upload_image_helper');
 
         if ($useImagine) {
             // load phpcr specific imagine configuration
