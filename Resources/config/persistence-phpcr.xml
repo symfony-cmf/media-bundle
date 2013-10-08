@@ -30,14 +30,14 @@
             <argument><![CDATA[
 <cmf = 'http://cmf.symfony.com/phpcr/1.0'>
 
+[cmf:mediaNode] > nt:hierarchyNode, cmf:media
+
 [cmf:media] mixin
   - description (string)
   - copyright (string)
   - authorName (string)
   - metadata (string)
   - metadataKeys (string)
-
-[cmf:mediaNode] > nt:hierarchyNode, cmf:media
 
 [cmf:image] > cmf:media mixin
   - width (long) mandatory
