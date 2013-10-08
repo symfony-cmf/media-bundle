@@ -2,11 +2,11 @@
 
 namespace Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr;
 
-use Doctrine\ODM\PHPCR\PHPCRBadMethodCallException;
+use Doctrine\ODM\PHPCR\Document\File as DoctrineOdmFile;
+use Doctrine\ODM\PHPCR\Exception\BadMethodCallException;
 use Symfony\Cmf\Bundle\MediaBundle\BinaryInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileSystemInterface;
-use Doctrine\ODM\PHPCR\Document\File as DoctrineOdmFile;
 
 /**
  * This class represents a CmfMedia Doctrine Phpcr file.
@@ -242,7 +242,7 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
     {
         try {
             $size = (int) $this->getContent()->getSize();
-        } catch (PHPCRBadMethodCallException $e) {
+        } catch (BadMethodCallException $e) {
             $stat = fstat($this->getContentAsStream());
             $size = $stat['size'];
         }
