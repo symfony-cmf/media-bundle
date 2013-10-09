@@ -2,10 +2,21 @@
 
 namespace Symfony\Cmf\Bundle\MediaBundle\Model;
 
+use Symfony\Cmf\Bundle\MediaBundle\MediaInterface;
 use Symfony\Cmf\Bundle\MediaBundle\MetadataInterface;
 
-class Media extends BaseMedia implements MetadataInterface
+abstract class AbstractMedia implements MediaInterface, MetadataInterface
 {
+    /**
+     * @var string $id
+     */
+    protected $id;
+
+    /**
+     * @var string $name
+     */
+    protected $name;
+
     /**
      * @var string $description
      */
@@ -25,6 +36,53 @@ class Media extends BaseMedia implements MetadataInterface
      * @var array $metadata
      */
     protected $metadata;
+
+    /**
+     * @var \DateTime
+     */
+    protected $createdAt;
+
+    /**
+     * String representation
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->name;
+    }
+
+    /**
+     * @param string $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
 
     /**
      * {@inheritDoc}
@@ -113,4 +171,17 @@ class Media extends BaseMedia implements MetadataInterface
     {
         unset($this->metadata[$name]);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    abstract public function getUpdatedAt();
 }

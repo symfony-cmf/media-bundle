@@ -3,29 +3,45 @@
 namespace Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ODM\PHPCR\Document\Folder;
 use Symfony\Cmf\Bundle\MediaBundle\DirectoryInterface;
 use Symfony\Cmf\Bundle\MediaBundle\HierarchyInterface;
-use Symfony\Cmf\Bundle\MediaBundle\Model\BaseMedia;
 
-class Directory extends BaseMedia implements DirectoryInterface
+class Directory extends Folder implements DirectoryInterface
 {
     /**
-     * @var Object $parent
+     * @var \DateTime
      */
-    protected $parent;
+    protected $updatedAt;
 
     /**
-     * @var HierarchyInterface[] $children
+     * @var string
      */
-    protected $children;
+    protected $updatedBy;
 
-    public function __construct($name = null)
+    public function __construct()
     {
         $this->children = new ArrayCollection();
     }
 
     /**
-     * @param mixed $parent
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return $this->nodename;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setName($name)
+    {
+        $this->nodename = $name;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function setParent($parent)
     {
@@ -37,30 +53,29 @@ class Directory extends BaseMedia implements DirectoryInterface
     }
 
     /**
-     * @return mixed
+     * {@inheritdoc}
      */
-    public function getParent()
+    public function getCreatedAt()
     {
-        return $this->parent;
+        return $this->created;
     }
 
     /**
-     * Returns the contents of this directory.
-     *
-     * @return HierarchyInterface[]
+     * {@inheritdoc}
      */
-    public function getChildren()
+    public function getUpdatedAt()
     {
-        return $this->children;
+        return $this->updatedAt;
     }
 
     /**
-     * Add a child to this directory
+     * The createdBy is assigned by the content repository
+     * This is the name of the (jcr) user that updated the node
      *
-     * @param HierarchyInterface $child
+     * @return string name of the (jcr) user who updated the file
      */
-    public function addChild(HierarchyInterface $child)
+    public function getUpdatedBy()
     {
-        $this->children->add($child);
+        return $this->updatedBy;
     }
 }

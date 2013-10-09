@@ -403,19 +403,16 @@ class PhpcrDriver extends ElFinderVolumeDriver
      **/
     protected function _mkfile($path, $name)
     {
-        if ($this->dm->find(null, $filename = $this->_joinPath($path, $name))) {
-            return false;
-        }
+        $filename = $this->_joinPath($path, $name);
 
         $file = new File();
         $file->setContentFromString('');
         $file->setId($filename);
 
-        $this->mediaManager->setDefaults($file);
+        $this->mediaManager->setDefaults($file, $path);
 
         $pi = pathinfo($filename);
         if (isset($pi['extension']) && !empty($pi['extension'])) {
-            $file->setExtension($pi['extension']);
             if (isset(self::$mimetypes[$pi['extension']])) {
                 $file->setContentType(self::$mimetypes[$pi['extension']]);
             }
@@ -554,7 +551,7 @@ class PhpcrDriver extends ElFinderVolumeDriver
         $file->setContentType($mime);
         $file->setId($filename);
 
-        $this->mediaManager->setDefaults($file);
+        $this->mediaManager->setDefaults($file, $dir);
 
         $this->dm->persist($file);
         $this->dm->flush();
