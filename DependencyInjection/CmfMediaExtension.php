@@ -140,6 +140,9 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
         $container->setAlias($this->getAlias() . '.upload_file_helper', $prefix.'.upload_file_helper');
         $container->setAlias($this->getAlias() . '.upload_image_helper', $prefix.'.upload_image_helper');
 
+        // load doctrine event listeners and subscribers
+        $loader->load('event-doctrine-phpcr.xml');
+
         if ($useImagine) {
             // load phpcr specific imagine configuration
             $loader->load('adapter-imagine-phpcr.xml');

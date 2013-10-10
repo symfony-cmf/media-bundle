@@ -21,6 +21,8 @@ class CmfMediaHelper extends Helper
      *
      * @param MediaManagerInterface  $mediaManager
      * @param UrlGeneratorInterface  $router       A Router instance
+     * @param bool                   $useImagine
+     * @param ImagineHelper          $imagineHelper
      */
     public function __construct(MediaManagerInterface $mediaManager, UrlGeneratorInterface $router, $useImagine = false, ImagineHelper $imagineHelper = null)
     {
