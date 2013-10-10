@@ -21,8 +21,6 @@ interface FileInterface extends HierarchyInterface, MetadataInterface
      * Set the content
      *
      * @param string $content
-     *
-     * @return boolean
      */
     public function setContentFromString($content);
 
@@ -45,7 +43,7 @@ interface FileInterface extends HierarchyInterface, MetadataInterface
     public function getContentType();
 
     /**
-     * Get the default file name extension for files of this format
+     * Returns the extension of the file
      *
      * @return string
      */

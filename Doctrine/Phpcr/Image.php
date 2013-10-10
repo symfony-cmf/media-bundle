@@ -5,7 +5,6 @@ namespace Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr;
 use Symfony\Cmf\Bundle\MediaBundle\ImageInterface;
 
 /**
- * TODO: create and add cmf:image mixin
  * This class represents a CmfMedia Doctrine PHPCR image.
  */
 class Image extends File implements ImageInterface
@@ -21,7 +20,7 @@ class Image extends File implements ImageInterface
     protected $height;
 
     /**
-     * @param int $width
+     * {@inheritdoc}
      */
     public function setWidth($width)
     {
@@ -29,7 +28,7 @@ class Image extends File implements ImageInterface
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getWidth()
     {
@@ -60,8 +59,15 @@ class Image extends File implements ImageInterface
     {
         parent::updateDimensionsFromContent();
 
-        $resource = imagecreatefromstring($this->getContentAsString());
-        $this->setWidth(imagesx($resource));
-        $this->setHeight(imagesy($resource));
+        $content = $this->getContentAsString();
+
+        if (is_string($content) && strlen($content) > 0) {
+            $resource = imagecreatefromstring($content);
+            $this->setWidth(imagesx($resource));
+            $this->setHeight(imagesy($resource));
+        } else {
+            $this->setWidth(0);
+            $this->setHeight(0);
+        }
     }
 }

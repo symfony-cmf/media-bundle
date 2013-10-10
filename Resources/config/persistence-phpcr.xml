@@ -27,6 +27,22 @@
             <argument type="collection">
                 <argument>%cmf_media.persistence.phpcr.media_basepath%</argument>
             </argument>
+            <argument><![CDATA[
+<cmf = 'http://cmf.symfony.com/phpcr/1.0'>
+
+[cmf:mediaNode] > nt:hierarchyNode, cmf:media
+
+[cmf:media] mixin
+  - description (string)
+  - copyright (string)
+  - authorName (string)
+  - metadata (string)
+  - metadataKeys (string)
+
+[cmf:image] > cmf:media mixin
+  - width (long) mandatory
+  - height (long) mandatory
+            ]]></argument>
             <tag name="doctrine_phpcr.initializer" />
         </service>
 

@@ -10,6 +10,10 @@
         repository-class="Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\ImageRepository"
         >
 
+        <mixins>
+            <mixin type="cmf:image" />
+        </mixins>
+
         <field name="width" type="int"/>
         <field name="height" type="int"/>
 

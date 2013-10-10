@@ -2,94 +2,171 @@
 
 namespace Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr;
 
-use Doctrine\ODM\PHPCR\Document\Resource;
+use Doctrine\ODM\PHPCR\Document\File as DoctrineOdmFile;
+use Doctrine\ODM\PHPCR\Exception\BadMethodCallException;
 use Symfony\Cmf\Bundle\MediaBundle\BinaryInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileSystemInterface;
 
 /**
- * TODO: create and add cmf:file mixin
  * This class represents a CmfMedia Doctrine Phpcr file.
+ *
+ * Note: the modified information from the content is used.
  */
-class File extends Media implements FileInterface, BinaryInterface
+class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
 {
     /**
-     * @var Resource $content
+     * @var string $description
      */
-    protected $content;
+    protected $description;
 
     /**
-     * @var int $size
+     * @var string $copyright
      */
-    protected $size;
+    protected $copyright;
 
     /**
-     * @var string $contentType
+     * @var string $authorName
      */
-    protected $contentType;
+    protected $authorName;
 
     /**
-     * @var string $extension
+     * @var array $metadata
      */
-    protected $extension;
+    protected $metadata;
 
     /**
-     * Set the content for this file from the given filename.
-     * Calls file_get_contents with the given filename
-     *
-     * @param string $filename name of the file which contents should be used
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return $this->nodename;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setName($name)
+    {
+        $this->nodename = $name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setParent($parent)
+    {
+        $this->parent = $parent;
+
+        if ($parent instanceof Directory) {
+            $parent->addChild($this);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setCopyright($copyright)
+    {
+        $this->copyright = $copyright;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCopyright()
+    {
+        return $this->copyright;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setAuthorName($authorName)
+    {
+        $this->authorName = $authorName;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getAuthorName()
+    {
+        return $this->authorName;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setMetadata(array $metadata)
+    {
+        $this->metadata = $metadata;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMetadata()
+    {
+        return $this->metadata;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMetadataValue($name, $default = null)
+    {
+        return isset($this->metadata[$name]) ? $this->metadata[$name] : $default;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setMetadataValue($name, $value)
+    {
+        $this->metadata[$name] = $value;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function unsetMetadataValue($name)
+    {
+        unset($this->metadata[$name]);
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function setFileContentFromFilesystem($filename)
     {
-        $this->getContent();
-        $stream = fopen($filename, 'rb');
-        if (! $stream) {
-            throw new \RuntimeException("File '$filename' not found");
-        }
-
-        $this->content->setData($stream);
-        $this->content->setLastModified(new \DateTime('@'.filemtime($filename)));
-
-        $finfo = new \finfo();
-        $this->content->setEncoding($finfo->file($filename,FILEINFO_MIME_ENCODING));
-        $this->content->setMimeType($finfo->file($filename,FILEINFO_MIME_TYPE));
+        parent::setFileContentFromFilesystem($filename);
 
         $this->updateDimensionsFromContent();
     }
 
     /**
-     * Set the content for this file from the given Resource.
-     *
-     * @param Resource $content
-     */
-    public function setContent(Resource $content)
-    {
-        $this->content = $content;
-    }
-
-    /**
-     * Get the resource representing the data of this file.
-     *
-     * Ensures the content object is created
-     *
-     * @return Resource
-     */
-    public function getContent()
-    {
-        if ($this->content === null) {
-            $this->content = new Resource();
-            $this->content->setLastModified(new \DateTime());
-        }
-
-        return $this->content;
-    }
-
-    /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getContentAsString()
     {
-        $stream = $this->getContent()->getData();
+        $stream = $this->getContentAsStream();
         $content = stream_get_contents($stream);
         rewind($stream);
 
@@ -97,8 +174,7 @@ class File extends Media implements FileInterface, BinaryInterface
     }
 
     /**
-     * @param string $content
-     * @return bool|void
+     * {@inheritdoc}
      */
     public function setContentFromString($content)
     {
@@ -114,8 +190,7 @@ class File extends Media implements FileInterface, BinaryInterface
     }
 
     /**
-     * @param \SplFileInfo|FileInterface $file
-     * @throws \InvalidArgumentException
+     * {@inheritdoc}
      */
     public function copyContentFromFile($file)
     {
@@ -137,7 +212,7 @@ class File extends Media implements FileInterface, BinaryInterface
     }
 
     /**
-     * @return stream
+     * {@inheritdoc}
      */
     public function getContentAsStream()
     {
@@ -148,8 +223,7 @@ class File extends Media implements FileInterface, BinaryInterface
     }
 
     /**
-     * @param $stream
-     * @throws \InvalidArgumentException
+     * {@inheritdoc}
      */
     public function setContentFromStream($stream)
     {
@@ -162,19 +236,18 @@ class File extends Media implements FileInterface, BinaryInterface
     }
 
     /**
-     * @param int $size
-     */
-    public function setSize($size)
-    {
-        $this->size = $size;
-    }
-
-    /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getSize()
     {
-        return (int) $this->size;
+        try {
+            $size = (int) $this->getContent()->getSize();
+        } catch (BadMethodCallException $e) {
+            $stat = fstat($this->getContentAsStream());
+            $size = $stat['size'];
+        }
+
+        return $size;
     }
 
     /**
@@ -182,32 +255,23 @@ class File extends Media implements FileInterface, BinaryInterface
      */
     public function setContentType($contentType)
     {
-        $this->contentType = $contentType;
         $this->getContent()->setMimeType($contentType);
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getContentType()
     {
-        return $this->contentType;
+        return $this->getContent()->getMimeType();
     }
 
     /**
-     * @param string $extension
-     */
-    public function setExtension($extension)
-    {
-        $this->extension = $extension;
-    }
-
-    /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getExtension()
     {
-        return $this->extension;
+        return pathinfo($this->getName(), PATHINFO_EXTENSION);
     }
 
     /**
@@ -215,10 +279,32 @@ class File extends Media implements FileInterface, BinaryInterface
      */
     protected function updateDimensionsFromContent()
     {
-        $stream = $this->getContentAsStream();
+        // nothing to do by default, override to add dimensions to be set
+    }
 
-        $stat = fstat($stream);
-        $this->size = $stat['size'];
-        $this->contentType = $this->getContent()->getMimeType();
+    /**
+     * {@inheritdoc}
+     */
+    public function getCreatedAt()
+    {
+        return $this->created;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUpdatedAt()
+    {
+        return $this->getContent()->getLastModified();
+    }
+
+    /**
+     * Getter for updatedBy
+     *
+     * @return string name of the (jcr) user who updated the file
+     */
+    public function getUpdatedBy()
+    {
+        return $this->getContent()->getLastModifiedBy();
     }
 }
