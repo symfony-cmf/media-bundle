@@ -4,7 +4,7 @@ Changelog
 * **2013-10-09**: [Model] Added cmf:media, cmf:image mixin and changed the node
     types to nt:folder, nt:file and created the cmf:mediaNode.
 
-    To upgrade create a migrator, see https://gist.github.com/rmsint/6776300
+    To upgrade create a migrator, see https://github.com/symfony-cmf/migration-scripts/blob/master/src/media_bundle_mixin_types.php,
     and run from the project root:
 
     $ app/console doctrine:phpcr:repository:init
