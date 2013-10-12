@@ -154,19 +154,13 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
     /**
      * {@inheritdoc}
      */
-    public function setFileContentFromFilesystem($filename)
-    {
-        parent::setFileContentFromFilesystem($filename);
-
-        $this->updateDimensionsFromContent();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getContentAsString()
     {
         $stream = $this->getContentAsStream();
+        if (! is_resource($stream)) {
+            return '';
+        }
+
         $content = stream_get_contents($stream);
         rewind($stream);
 
@@ -217,6 +211,9 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
     public function getContentAsStream()
     {
         $stream = $this->getContent()->getData();
+        if (!is_resource($stream)) {
+            return null;
+        }
         rewind($stream);
 
         return $stream;
@@ -232,7 +229,6 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
         }
 
         $this->getContent()->setData($stream);
-        $this->updateDimensionsFromContent();
     }
 
     /**
@@ -242,7 +238,7 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
     {
         try {
             $size = (int) $this->getContent()->getSize();
-        } catch (BadMethodCallException $e) {
+        } catch (\BadMethodCallException $e) {
             $stat = fstat($this->getContentAsStream());
             $size = $stat['size'];
         }
@@ -272,14 +268,6 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
     public function getExtension()
     {
         return pathinfo($this->getName(), PATHINFO_EXTENSION);
-    }
-
-    /**
-     * Update dimensions like file size after content is set
-     */
-    protected function updateDimensionsFromContent()
-    {
-        // nothing to do by default, override to add dimensions to be set
     }
 
     /**

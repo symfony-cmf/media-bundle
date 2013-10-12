@@ -1,6 +1,6 @@
 <?php
 
-namespace Symfony\Cmf\Bundle\MediaBundle\Tests\Functional\Doctrine\Phpcr;
+namespace Symfony\Cmf\Bundle\MediaBundle\Tests\Unit\Doctrine\Phpcr;
 
 use Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\Directory;
 use Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\Media;

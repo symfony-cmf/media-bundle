@@ -2,7 +2,6 @@
 
 namespace Symfony\Cmf\Bundle\MediaBundle\Form\DataTransformer;
 
-use Symfony\Cmf\Bundle\MediaBundle\BinaryInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -12,6 +11,9 @@ class ModelToFileTransformer implements DataTransformerInterface
 {
     private $dataClass;
 
+    /**
+     * @param string $class
+     */
     public function __construct($class)
     {
         if (!is_subclass_of($class, 'Symfony\Cmf\Bundle\MediaBundle\FileInterface')) {

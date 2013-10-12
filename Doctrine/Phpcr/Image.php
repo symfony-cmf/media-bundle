@@ -12,12 +12,12 @@ class Image extends File implements ImageInterface
     /**
      * @var int
      */
-    protected $width;
+    protected $width = 0;
 
     /**
      * @var int
      */
-    protected $height;
+    protected $height = 0;
 
     /**
      * {@inheritdoc}
@@ -49,25 +49,5 @@ class Image extends File implements ImageInterface
     public function getHeight()
     {
         return $this->height;
-    }
-
-    /**
-     * Determine the with and height of the object from
-     * the binary image data
-     */
-    protected function updateDimensionsFromContent()
-    {
-        parent::updateDimensionsFromContent();
-
-        $content = $this->getContentAsString();
-
-        if (is_string($content) && strlen($content) > 0) {
-            $resource = imagecreatefromstring($content);
-            $this->setWidth(imagesx($resource));
-            $this->setHeight(imagesy($resource));
-        } else {
-            $this->setWidth(0);
-            $this->setHeight(0);
-        }
     }
 }

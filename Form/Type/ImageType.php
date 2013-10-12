@@ -15,6 +15,11 @@ class ImageType extends AbstractType
     private $useImagine;
     private $defaultFilter;
 
+    /**
+     * @param string $class
+     * @param bool   $useImagine
+     * @param bool   $defaultFilter
+     */
     public function __construct($class, $useImagine = false, $defaultFilter = false)
     {
         $this->dataClass = $class;
