@@ -3,10 +3,12 @@
 namespace Symfony\Cmf\Bundle\MediaBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
@@ -61,29 +63,23 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
 
         // detect bundles
         $bundles = $container->getParameter('kernel.bundles');
-        if (true === $config['use_imagine'] ||
-            ('auto' === $config['use_imagine'] && isset($bundles['LiipImagineBundle']))
-        ) {
-            $useImagine = true;
-        } else {
-            $useImagine = false;
-        }
+        $useImagine = true === $config['use_imagine']
+            || ('auto' === $config['use_imagine']
+                && isset($bundles['LiipImagineBundle'])
+            )
+        ;
 
-        if (true === $config['use_jms_serializer'] ||
-            ('auto' === $config['use_jms_serializer'] && isset($bundles['JMSSerializerBundle']))
-        ) {
-            $useJmsSerializer = true;
-        } else {
-            $useJmsSerializer = false;
-        }
+        $useJmsSerializer = true === $config['use_jms_serializer']
+            || ('auto' === $config['use_jms_serializer']
+                && isset($bundles['JMSSerializerBundle'])
+            )
+        ;
 
-        if (true === $config['use_elfinder'] ||
-            ('auto' === $config['use_elfinder'] && isset($bundles['FMElfinderBundle']))
-        ) {
-            $useElFinder = true;
-        } else {
-            $useElFinder = false;
-        }
+        $useElFinder = true === $config['use_elfinder']
+            || ('auto' === $config['use_elfinder']
+                && isset($bundles['FMElfinderBundle'])
+            )
+        ;
 
         // load config
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
@@ -107,7 +103,7 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
         }
 
         // load general liip imagine configuration
-        $this->loadLiipImagine($useImagine, $config, $loader, $container);
+        $this->loadLiipImagine($useImagine, $config, $loader, $container, $useElFinder);
     }
 
     public function loadPhpcr($config, XmlFileLoader $loader, ContainerBuilder $container, $useImagine, $useJmsSerializer, $useElFinder)
@@ -140,10 +136,31 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
         $container->setAlias($this->getAlias() . '.upload_file_helper', $prefix.'.upload_file_helper');
         $container->setAlias($this->getAlias() . '.upload_image_helper', $prefix.'.upload_image_helper');
 
+        if (!$config['event_listeners']['stream_rewind']) {
+            $container->removeDefinition('cmf_media.persistence.phpcr.subscriber.stream_rewind');
+        }
+        if (!$config['event_listeners']['image_dimensions']) {
+            $container->removeDefinition('cmf_media.persistence.phpcr.subscriber.image_dimensions');
+        } elseif ($useImagine) {
+            $definition = $container->getDefinition($this->getAlias() . '.persistence.phpcr.subscriber.image_dimensions');
+            $definition->addArgument(new Reference('liip_imagine'));
+        } elseif (!function_exists('imagecreatefromstring')) {
+            throw new InvalidConfigurationException('persistence.phpcr.subscriber.image_dimensions must be set to false if Imagine is not enabled and the GD PHP extension is not available.');
+        }
+
         if ($useImagine) {
             // load phpcr specific imagine configuration
             $loader->load('adapter-imagine-phpcr.xml');
-            $loader->load('event-imagine-phpcr.xml');
+            if (false !== $config['event_listeners']['imagine_cache']) {
+                $loader->load('persistence-phpcr-event-imagine.xml');
+            }
+
+            // TODO: this should not be phcpr specific but the MediaManagerInterface service should be an alias instead
+            $definition = $container->getDefinition($this->getAlias() . '.templating.helper');
+            $definition->addArgument(new Reference('liip_imagine.templating.helper'));
+
+        } elseif (true === $config['event_listeners']['imagine_cache']) {
+            throw new InvalidConfigurationException('persistence.phpcr.event_listeners.imagine_cache may not be forced enabled if Imagine is not enabled.');
         }
 
         if ($useJmsSerializer) {
@@ -157,7 +174,7 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
         }
     }
 
-    public function loadLiipImagine($enabled, $config, XmlFileLoader $loader, ContainerBuilder $container)
+    public function loadLiipImagine($enabled, $config, XmlFileLoader $loader, ContainerBuilder $container, $useElFinder)
     {
         if (! $enabled) {
             $container->setParameter($this->getAlias() . '.use_imagine', false);
@@ -171,6 +188,12 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
         $filters = isset($config['extra_filters']) && is_array($config['extra_filters'])
             ? array_merge($config['imagine_filters'], $config['extra_filters'])
             : array();
+        if (!$useElFinder) {
+            unset($filters['elfinder_thumbnail']);
+        }
+        if ($key = array_search(null, $filters)) {
+            throw new InvalidConfigurationException("Imagine filter name for $key may not be null");
+        }
 
         $container->setParameter($this->getAlias() . '.use_imagine', true);
         $container->setParameter($this->getAlias() . '.imagine.filter.upload_thumbnail', $config['imagine_filters']['upload_thumbnail']);

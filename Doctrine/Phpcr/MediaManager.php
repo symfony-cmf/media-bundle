@@ -105,7 +105,8 @@ class MediaManager implements MediaManagerInterface
         // TODO use PHPCR autoname once this is done: http://www.doctrine-project.org/jira/browse/PHPCR-103
         if ($dm->find($class, $path)) {
             // path already exists
-            $media->setName($media->getName() . '_' . time() . '_' . rand());
+            $ext = pathinfo($media->getName(), PATHINFO_EXTENSION);
+            $media->setName($media->getName() . '_' . time() . '_' . rand() . ($ext ? '.' . $ext : ''));
         }
 
         if (!$media->getParent()) {

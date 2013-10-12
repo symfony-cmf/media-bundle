@@ -84,6 +84,8 @@ class ImageTest extends BaseTestCase
         $resp = $client->getResponse();
 
         $this->assertEquals(200, $resp->getStatusCode());
+        // check that the content is not empty, this could be caused by the stream cursor that is not at the beginning
+        // when doctrine persist a file object
         $this->assertNotEmpty($resp->getContent());
         $this->assertEquals('image/png', $resp->headers->get('Content-Type')); // check that the response is an image
 

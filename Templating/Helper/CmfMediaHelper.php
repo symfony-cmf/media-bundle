@@ -13,20 +13,19 @@ class CmfMediaHelper extends Helper
 {
     protected $mediaManager;
     protected $generator;
-    protected $useImagine;
     protected $imagineHelper;
 
     /**
      * Constructor.
      *
      * @param MediaManagerInterface  $mediaManager
-     * @param UrlGeneratorInterface  $router       A Router instance
+     * @param UrlGeneratorInterface  $router        A Router instance
+     * @param ImagineHelper          $imagineHelper Imagine helper to use if available
      */
-    public function __construct(MediaManagerInterface $mediaManager, UrlGeneratorInterface $router, $useImagine = false, ImagineHelper $imagineHelper = null)
+    public function __construct(MediaManagerInterface $mediaManager, UrlGeneratorInterface $router, ImagineHelper $imagineHelper = null)
     {
         $this->mediaManager  = $mediaManager;
         $this->generator     = $router;
-        $this->useImagine    = $useImagine;
         $this->imagineHelper = $imagineHelper;
     }
 
@@ -58,7 +57,7 @@ class CmfMediaHelper extends Helper
     {
         $urlSafePath = $this->mediaManager->getUrlSafePath($file);
 
-        if ($this->useImagine && $this->imagineHelper && isset($options['imagine_filter']) && is_string($options['imagine_filter'])) {
+        if ($this->imagineHelper && isset($options['imagine_filter']) && is_string($options['imagine_filter'])) {
             return $this->imagineHelper->filter(
                 $urlSafePath,
                 $options['imagine_filter'],
