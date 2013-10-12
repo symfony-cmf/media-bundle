@@ -10,7 +10,7 @@ class DoctrineImageDimensionsTest extends \PHPUnit_Framework_TestCase
 {
     private function getDoctrineEventSubscriber($useImagine = false)
     {
-        return new DoctrineImageDimensionsSubscriber($useImagine, new Imagine());
+        return new DoctrineImageDimensionsSubscriber($useImagine ? new Imagine() : null);
     }
 
     public function updateDimensionsFromContentProvider()
