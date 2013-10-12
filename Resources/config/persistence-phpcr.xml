@@ -96,8 +96,6 @@
             <tag name="templating.helper" alias="cmf_media" />
             <argument type="service" id="cmf_media.persistence.phpcr.manager" />
             <argument type="service" id="router" />
-            <argument>%cmf_media.use_imagine%</argument>
-            <argument type="service" id="liip_imagine.templating.helper" on-invalid="null" />
         </service>
 
         <service id="cmf_media.twig.extension" class="%cmf_media.twig.extension.class%" public="false">
