@@ -69,14 +69,26 @@ class DoctrineImageDimensionsSubscriber implements EventSubscriber
         }
 
         if ($this->imagine) {
+            /** @var $image \Imagine\Image\ImageInterface */
+            $image = false;
+
             // use imagine to determine the dimensions
             if ($object instanceof BinaryInterface) {
                 $stream = $object->getContentAsStream();
-                $image = $this->imagine->read($stream);
+                try {
+                    $image = $this->imagine->read($stream);
+                } catch(\Imagine\Exception\InvalidArgumentException $e) {
+                    // ignore this exception, we will set the dimensions to 0
+                }
             } elseif ($object instanceof FileSystemInterface) {
-                $image = $this->imagine->open($object->getFileSystemPath());
+                if ($object->getFileSystemPath()) {
+                    $image = $this->imagine->open($object->getFileSystemPath());
+                }
             } else {
-                $image = $this->imagine->load($object->getContentAsString());
+                $content = $object->getContentAsString();
+                if ($content) {
+                    $image = $this->imagine->load($content);
+                }
             }
 
             if ($image) {
@@ -103,6 +115,8 @@ class DoctrineImageDimensionsSubscriber implements EventSubscriber
                 $object->setWidth(0);
                 $object->setHeight(0);
             }
+
+            return;
         }
 
         throw new \RuntimeException('Neither have Imagine nor the gd PHP extension');
