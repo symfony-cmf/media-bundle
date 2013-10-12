@@ -3,9 +3,8 @@
 namespace Symfony\Cmf\Bundle\MediaBundle\Tests\Unit\Doctrine\Phpcr;
 
 use Doctrine\ODM\PHPCR\Document\File;
-use Imagine\Gd\Imagine;
 use org\bovigo\vfs\vfsStream;
-use Symfony\Cmf\Bundle\MediaBundle\EventListener\DoctrineFileStreamSubscriber;
+use Symfony\Cmf\Bundle\MediaBundle\Doctrine\DoctrineStreamRewindSubscriber;
 
 class DoctrineFileStreamTest extends \PHPUnit_Framework_TestCase
 {
@@ -55,8 +54,8 @@ class DoctrineFileStreamTest extends \PHPUnit_Framework_TestCase
                 ->will($this->returnValue($image))
             ;
 
-            $subscriber = new DoctrineFileStreamSubscriber();
-            $subscriber->resetStream($lifecycleEventArgsMock);
+            $subscriber = new DoctrineStreamRewindSubscriber();
+            $subscriber->rewindStream($lifecycleEventArgsMock);
 
             if ($image instanceof File) {
                 $stream = $image->getContent()->getData();

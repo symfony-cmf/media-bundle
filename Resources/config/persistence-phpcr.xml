@@ -19,7 +19,9 @@
         <parameter key="cmf_media.upload_editor_helper.ckeditor.class">Symfony\Cmf\Bundle\MediaBundle\Editor\Helper\UploadCkeditorHelper</parameter>
 
         <parameter key="cmf_media.form.image.class">Symfony\Cmf\Bundle\MediaBundle\Form\Type\ImageType</parameter>
-    </parameters>
+
+        <parameter key="cmf_media.persistence.phpcr.subscriber.stream_rewind.class">Symfony\Cmf\Bundle\MediaBundle\Doctrine\DoctrineStreamRewindSubscriber</parameter>
+        <parameter key="cmf_media.persistence.phpcr.subscriber.image_dimensions.class">Symfony\Cmf\Bundle\MediaBundle\Doctrine\DoctrineImageDimensionsSubscriber</parameter>    </parameters>
 
     <services>
 
@@ -124,6 +126,14 @@
             <argument>%cmf_media.persistence.phpcr.image.class%</argument>
             <argument>%cmf_media.use_imagine%</argument>
             <argument>%cmf_media.imagine.filter.upload_thumbnail%</argument>
+        </service>
+
+        <service id="cmf_media.persistence.phpcr.subscriber.stream_rewind" class="%cmf_media.persistence.phpcr.subscriber.stream_rewind.class%">
+            <tag name="doctrine_phpcr.event_subscriber" priority="-50" />
+        </service>
+
+        <service id="cmf_media.persistence.phpcr.subscriber.image_dimensions" class="%cmf_media.persistence.phpcr.subscriber.image_dimensions.class%">
+            <tag name="doctrine_phpcr.event_subscriber" />
         </service>
 
     </services>

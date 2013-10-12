@@ -157,6 +157,10 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
     public function getContentAsString()
     {
         $stream = $this->getContentAsStream();
+        if (! is_resource($stream)) {
+            return '';
+        }
+
         $content = stream_get_contents($stream);
         rewind($stream);
 
@@ -207,6 +211,9 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
     public function getContentAsStream()
     {
         $stream = $this->getContent()->getData();
+        if (!is_resource($stream)) {
+            return null;
+        }
         rewind($stream);
 
         return $stream;
@@ -231,7 +238,7 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
     {
         try {
             $size = (int) $this->getContent()->getSize();
-        } catch (BadMethodCallException $e) {
+        } catch (\BadMethodCallException $e) {
             $stat = fstat($this->getContentAsStream());
             $size = $stat['size'];
         }

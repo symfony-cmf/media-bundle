@@ -4,7 +4,7 @@ namespace Symfony\Cmf\Bundle\MediaBundle\Tests\Unit\Doctrine\Phpcr;
 
 use Imagine\Gd\Imagine;
 use org\bovigo\vfs\vfsStream;
-use Symfony\Cmf\Bundle\MediaBundle\EventListener\DoctrineImageDimensionsSubscriber;
+use Symfony\Cmf\Bundle\MediaBundle\Doctrine\DoctrineImageDimensionsSubscriber;
 
 class DoctrineImageDimensionsTest extends \PHPUnit_Framework_TestCase
 {
