@@ -107,7 +107,11 @@ class DoctrineImageDimensionsSubscriber implements EventSubscriber
         if (function_exists('imagecreatefromstring')) {
             // use gd to determine the dimensions
             $content = $object->getContentAsString();
-            $resource = imagecreatefromstring($content);
+            if ($content) {
+                $resource = imagecreatefromstring($content);
+            } else {
+                $resource = false;
+            }
             if ($resource) {
                 $object->setWidth(imagesx($resource));
                 $object->setHeight(imagesy($resource));
