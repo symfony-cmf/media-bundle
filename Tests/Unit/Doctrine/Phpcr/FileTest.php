@@ -143,4 +143,23 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(18, $file->getSize());
         $this->assertInstanceOf('DateTime', $file->getUpdatedAt());
     }
+
+    public function getSizeProvider()
+    {
+        return array(
+            array('', 0),
+            array('Test file content.', 18),
+        );
+    }
+
+    /**
+     * @dataProvider getSizeProvider
+     */
+    public function testSize($content, $expectedSize)
+    {
+        $file = new File();
+        $file->setContentFromString($content);
+
+        $this->assertSame($expectedSize, $file->getSize());
+    }
 }

@@ -3,7 +3,6 @@
 namespace Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr;
 
 use Doctrine\ODM\PHPCR\Document\File as DoctrineOdmFile;
-use Doctrine\ODM\PHPCR\Exception\BadMethodCallException;
 use Symfony\Cmf\Bundle\MediaBundle\BinaryInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileSystemInterface;
