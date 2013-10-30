@@ -23,6 +23,7 @@
         "mikey179/vfsStream": "~1.2"
     },
     "suggest": {
+        "symfony-cmf/core-bundle": "Simplifies configuration with other CMF bundles, use PHP >=5.3.9 with PHPCR",
         "knplabs/gaufrette": "When using the Gaufrette adapter",
         "phpcr/phpcr-utils": "When using the Gaufrette adapter",
         "jms/serializer-bundle": "When using the serializer handler",
