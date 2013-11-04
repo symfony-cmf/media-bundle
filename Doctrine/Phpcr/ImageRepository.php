@@ -33,7 +33,7 @@ class ImageRepository extends DocumentRepository implements ImageRepositoryInter
 
         if (strlen($term)) {
             $qb->andWhere()->orX()
-                ->like()->documentLocalName('i')->literal('%'.$term.'%')
+                ->like()->localName('i')->literal('%'.$term.'%')->end()
                 ->like()->field('i.description')->literal('%'.$term.'%')
             ;
         }
