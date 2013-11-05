@@ -52,6 +52,12 @@ class LoadMediaData implements FixtureInterface, DependentFixtureInterface
         $image->setFileContentFromFilesystem($testDataDir .'/cmf-logo.png');
         $manager->persist($image);
 
+        $image2 = new Image();
+        $image2->setParent($contentRoot);
+        $image2->setName('cmf-logo-2.png');
+        $image2->setFileContentFromFilesystem($testDataDir .'/cmf-logo.png');
+        $manager->persist($image2);
+
         // Content
         $content = new Content();
         $content->setParent($contentRoot);
