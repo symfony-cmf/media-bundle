@@ -1,6 +1,9 @@
 Changelog
 =========
 
+1.0.0
+-----
+
 * **2013-10-09**: [Model] Added cmf:media, cmf:image mixin and changed the node
     types to nt:folder, nt:file and created the cmf:mediaNode.
 
