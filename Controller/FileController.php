@@ -52,8 +52,8 @@ class FileController
         MediaManagerInterface $mediaManager,
         UploadFileHelperInterface $uploadFileHelper,
         $requiredUploadRole,
-        SecurityContextInterface $securityContext = null)
-    {
+        SecurityContextInterface $securityContext = null
+    ) {
         $this->managerRegistry    = $registry;
         $this->managerName        = $managerName;
         $this->class              = $class === '' ? null : $class;
@@ -165,10 +165,29 @@ class FileController
      */
     public function uploadAction(Request $request)
     {
-        if ($this->securityContext && false === $this->securityContext->isGranted($this->requiredUploadRole)) {
-            throw new AccessDeniedException();
-        }
+        $this->checkSecurityUpload($request);
 
         return $this->uploadFileHelper->getUploadResponse($request);
+    }
+
+    /**
+     * Decide whether the user is allowed to upload a file.
+     *
+     * @throws AccessDeniedException if the current user is not allowed to
+     *      upload.
+     */
+    protected function checkSecurityUpload(Request $request)
+    {
+        if (false === $this->requiredUploadRole) {
+            return;
+        }
+        if ($this->securityContext
+            && $this->securityContext->getToken()
+            && $this->securityContext->isGranted($this->requiredUploadRole)
+        ) {
+            return;
+        }
+
+        throw new AccessDeniedException();
     }
 }
