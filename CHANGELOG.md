@@ -1,6 +1,11 @@
 Changelog
 =========
 
+* **2013-12-26**: 1.0 allowed everybody to edit content if there was no
+  firewall configured on a route. This version is more secure, preventing
+  editing if there is no firewall configured. If you want to allow everybody
+  to edit content, set `cmf_media.upload_file_role: false`.
+
 1.0.0
 -----
 
