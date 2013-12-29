@@ -87,12 +87,7 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
                 ->arrayNode('extra_filters')
-                    ->prototype('array')
-                        ->children()
-                            ->requiresAtLeastOneElement()
-                            ->prototype('scalar')->end()
-                        ->end()
-                    ->end()
+                    ->prototype('scalar')->end()
                 ->end()
             ->end()
         ;
