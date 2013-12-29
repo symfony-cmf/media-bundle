@@ -108,7 +108,7 @@ class PhpcrDriver extends ElFinderVolumeDriver
      **/
     protected function _joinPath($dir, $name)
     {
-        return $dir.DIRECTORY_SEPARATOR.$name;
+        return $dir."/".$name;
     }
 
     /**
@@ -185,7 +185,7 @@ class PhpcrDriver extends ElFinderVolumeDriver
      **/
     protected function _abspath($path)
     {
-        return $path == DIRECTORY_SEPARATOR ? $this->root : $this->root.DIRECTORY_SEPARATOR.$path;
+        return $path == "/" ? $this->root : $this->root."/".$path;
     }
 
     /**
@@ -210,7 +210,7 @@ class PhpcrDriver extends ElFinderVolumeDriver
      **/
     protected function _inpath($path, $parent)
     {
-        return $path == $parent || strpos($path, $parent.DIRECTORY_SEPARATOR) === 0;
+        return $path == $parent || strpos($path, $parent."/") === 0;
     }
 
     /**
