@@ -5,7 +5,7 @@
     bootstrap="vendor/symfony-cmf/testing/bootstrap/bootstrap.php"
 >
     <testsuites>
-        <testsuite name="Symfony CmfBlockBundle Test Suite">
+        <testsuite name="Symfony CmfMediaBundle Test Suite">
             <directory>./Tests/</directory>
         </testsuite>
     </testsuites>
