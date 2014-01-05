@@ -1,0 +1,24 @@
+<config xmlns="http://cmf.symfony.com/schema/dic/media"
+    upload-file-role="ROLE_CAN_UPLOAD_FILE"
+    upload-file-helper-service-id="acme.file_helper"
+    upload-image-helper-service-id="acme.image_helper"
+    use-jms-serializer="auto"
+    use-elfinder="auto">
+
+    <persistence>
+        <phpcr enabled="true"
+            media-basepath="/cms/media"
+            manager-name="default"
+            media-class="Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\Media"
+            file-class="Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\File"
+            directory-class="Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\Directory"
+            image-class="Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\Image"
+        >
+            <event-listeners
+                stream-rewind="true"
+                image-dimensions="true"
+                imagine-cache="auto"
+            />
+        </phpcr>
+    </persistence>
+</config>

@@ -17,7 +17,7 @@
         "symfony/framework-bundle": "~2.2"
     },
     "require-dev": {
-        "symfony-cmf/testing": "1.0.*",
+        "symfony-cmf/testing": "1.1.*",
         "jms/serializer-bundle": "0.12.*",
         "liip/imagine-bundle": "~0.12",
         "mikey179/vfsStream": "~1.2"
