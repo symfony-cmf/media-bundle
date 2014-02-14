@@ -26,6 +26,7 @@
     <services>
 
         <service id="cmf_media.initializer" class="Doctrine\Bundle\PHPCRBundle\Initializer\GenericInitializer">
+            <argument>CmfMediaBundle</argument>
             <argument type="collection">
                 <argument>%cmf_media.persistence.phpcr.media_basepath%</argument>
             </argument>
