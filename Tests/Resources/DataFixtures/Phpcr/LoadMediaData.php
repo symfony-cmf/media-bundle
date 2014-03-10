@@ -75,7 +75,6 @@ class LoadMediaData implements FixtureInterface, DependentFixtureInterface
         $content->setTitle('Content document with image embedded');
 
         $contentImage = new Image();
-        $contentImage->setName('cmf-logo.png');
         $contentImage->setFileContentFromFilesystem($testDataDir .'/cmf-logo.png');
 
         $content->setImage($contentImage);
