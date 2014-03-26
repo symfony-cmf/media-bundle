@@ -48,6 +48,7 @@ class ModelToFileTransformer implements DataTransformerInterface
         /** @var $file FileInterface */
         $file = new $this->dataClass;
         $file->copyContentFromFile($uploadedFile);
+        $file->setName($uploadedFile->getClientOriginalName());
 
         return $file;
     }
