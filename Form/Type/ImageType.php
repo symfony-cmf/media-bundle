@@ -49,7 +49,7 @@ class ImageType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $transformer = new ModelToFileTransformer($this->dataClass);
+        $transformer = new ModelToFileTransformer($options['data_class']);
         $builder->addModelTransformer($transformer);
     }
 
