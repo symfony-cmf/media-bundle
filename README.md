@@ -1,6 +1,6 @@
 # Symfony CMF Media Bundle
 
-[![Build Status](https://secure.travis-ci.org/symfony-cmf/MediaBundle.png)](http://travis-ci.org/symfony-cmf/MediaBundle)
+[![Build Status](https://secure.travis-ci.org/symfony-cmf/MediaBundle.png?branch=master)](http://travis-ci.org/symfony-cmf/MediaBundle)
 [![Latest Stable Version](https://poser.pugx.org/symfony-cmf/media-bundle/version.png)](https://packagist.org/packages/symfony-cmf/media-bundle)
 [![Total Downloads](https://poser.pugx.org/symfony-cmf/media-bundle/d/total.png)](https://packagist.org/packages/symfony-cmf/media-bundle)
 
