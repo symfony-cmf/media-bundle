@@ -48,30 +48,35 @@ class ImagineCacheInvalidatorSubscriber implements EventSubscriber
     private $manager;
 
     /**
-     * Used to get the request from to remove cache
-     * @var Container
-     */
-    private $container;
-
-    /**
      * Filter names to invalidate
      * @var array
      */
     private $filters;
 
     /**
+     * @var Request
+     */
+    private $request;
+
+    /**
      * @param MediaManagerInterface $mediaManager
      * @param CacheManager          $manager      the imagine cache manager
-     * @param Container             $container    to get the request from. Need to inject
      *                                            this as otherwise we have a scope problem
      * @param array                 $filter       list of filter names to invalidate
      */
-    public function __construct(MediaManagerInterface $mediaManager, CacheManager $manager, Container $container, $filters)
+    public function __construct(MediaManagerInterface $mediaManager, CacheManager $manager, $filters)
     {
         $this->mediaManager = $mediaManager;
         $this->manager      = $manager;
-        $this->container    = $container;
         $this->filters      = $filters;
+    }
+
+    /**
+     * @param Request $request
+     */
+    public function setRequest(Request $request = null)
+    {
+        $this->request = $request;
     }
 
     /**
@@ -125,16 +130,13 @@ class ImagineCacheInvalidatorSubscriber implements EventSubscriber
             return;
         }
 
-        // TODO: make this a synchronized service when we update to symfony 2.3 only. we do not have CmfCoreBundle required so we can't use the BC tag
-        if (! $this->container->isScopeActive('request')
-            || ! $request = $this->container->get('request')
-        ) {
+        if (null === $this->request) {
             // do not fail on CLI
             return;
         }
 
         foreach ($this->filters as $filter) {
-            $path = $this->manager->resolve($request, $this->mediaManager->getUrlSafePath($object), $filter);
+            $path = $this->manager->resolve($this->request, $this->mediaManager->getUrlSafePath($object), $filter);
             if ($path instanceof RedirectResponse) {
                 $path = $path->getTargetUrl();
             }

@@ -14,8 +14,8 @@
             <tag name="doctrine_phpcr.event_subscriber" />
             <argument type="service" id="cmf_media.persistence.phpcr.manager" />
             <argument type="service" id="liip_imagine.cache.manager" />
-            <argument type="service" id="service_container" />
             <argument>%cmf_media.imagine.all_filters%</argument>
+            <call method="setRequest"><argument type="service" id="request" on-invalid="null" strict="false"/></call>
         </service>
 
     </services>

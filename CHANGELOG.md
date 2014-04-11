@@ -1,6 +1,15 @@
 Changelog
 =========
 
+1.1.0-RC2
+---------
+
+* **2014-04-14**: ImagineCacheInvalidatorSubscriber receives a service container instance
+* **2014-04-11**: drop Symfony 2.2 compatibility
+
+1.1.0-RC1
+---------
+
 * **2013-12-26**: 1.0 allowed everybody to edit content if there was no
   firewall configured on a route. This version is more secure, preventing
   editing if there is no firewall configured. If you want to allow everybody

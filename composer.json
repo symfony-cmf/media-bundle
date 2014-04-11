@@ -14,7 +14,7 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=5.3.3",
-        "symfony/framework-bundle": "~2.2"
+        "symfony/framework-bundle": "~2.3"
     },
     "require-dev": {
         "symfony-cmf/testing": "1.1.*",
