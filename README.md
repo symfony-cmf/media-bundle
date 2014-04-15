@@ -20,7 +20,7 @@ MediaBundle provides integration with SonataMediaBundle.
 
 ## Requirements
 
-* Symfony 2.2.x
+* Symfony 2.3+
 * See also the `require` section of [composer.json](composer.json)
 
 ## Documentation

@@ -112,7 +112,7 @@ class MediaManager implements MediaManagerInterface
         /** @var DocumentManager $dm */
         $dm = $this->getObjectManager();
 
-        // TODO use PHPCR autoname once this is done: http://www.doctrine-project.org/jira/browse/PHPCR-103
+        // TODO use PHPCR autoname
         if ($dm->find($class, $path)) {
             // path already exists
             $ext = pathinfo($media->getName(), PATHINFO_EXTENSION);
