@@ -38,6 +38,7 @@ interface MediaInterface
 
     /**
      * @param $name
+     *
      * @return void
      */
     public function setName($name);

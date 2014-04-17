@@ -67,7 +67,9 @@ interface MetadataInterface extends MediaInterface
     /**
      * Set all metadata
      *
-     * @return array $metadata
+     * @param array $metadata
+     *
+     * @return mixed
      */
     public function setMetadata(array $metadata);
 
@@ -83,7 +85,7 @@ interface MetadataInterface extends MediaInterface
      * The metadata value
      *
      * @param string $name
-     * @param string  $value
+     * @param string $value
      */
     public function setMetadataValue($name, $value);
 
