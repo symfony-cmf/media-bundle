@@ -97,14 +97,14 @@ class UploadFileHelperTest extends \PHPUnit_Framework_TestCase
                 'upload_error' => UPLOAD_ERR_OK,
                 'expected_exception' => array(
                     'symfony\component\httpfoundation\file\exception\uploadexception',
-                    'The file likely did not pass the is_uploaded_file() check',
+                    'The file "test.txt" was not uploaded due to an unknown error.',
                 ),
             )),
             array(array(
                 'upload_error' => UPLOAD_ERR_INI_SIZE,
                 'expected_exception' => array(
                     'symfony\component\httpfoundation\file\exception\uploadexception',
-                    'The uploaded file exceeds the upload_max_filesize directive in php.ini',
+                    'The file "test.txt" exceeds your upload_max_filesize ini directive (limit is ',
                 ),
             )),
             array(array()),

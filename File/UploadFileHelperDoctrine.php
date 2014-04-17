@@ -49,7 +49,7 @@ class UploadFileHelperDoctrine implements UploadFileHelperInterface
     {
         $this->managerRegistry = $registry;
         $this->managerName     = $managerName;
-        $this->class           = $class === '' ? null : $class;
+        $this->setClass($class);
         $this->rootPath        = $rootPath;
         $this->mediaManager    = $mediaManager;
     }
@@ -81,6 +81,18 @@ class UploadFileHelperDoctrine implements UploadFileHelperInterface
      */
     public function setClass($class)
     {
+        if (empty($class)) {
+            $this->class = null;
+
+            return;
+        }
+
+        if (!is_subclass_of($class, 'Symfony\Cmf\Bundle\MediaBundle\FileInterface')) {
+            throw new \InvalidArgumentException(sprintf(
+                'The class "%s" does not implement Symfony\Cmf\Bundle\MediaBundle\FileInterface',
+                $class
+            ));
+        }
         $this->class = $class;
     }
 
@@ -131,7 +143,9 @@ class UploadFileHelperDoctrine implements UploadFileHelperInterface
      *
      * @param UploadedFile $file
      *
-     * @return bool
+     * @return boolean true either returns true or throws an exception
+     *
+     * @throws UploadException if the upload failed for some reason.
      */
     protected function validateFile(UploadedFile $file)
     {
@@ -139,48 +153,50 @@ class UploadFileHelperDoctrine implements UploadFileHelperInterface
             return true;
         }
 
-        switch ($file->getError()) {
-            case UPLOAD_ERR_INI_SIZE:
-                $message = "The uploaded file exceeds the upload_max_filesize directive in php.ini";
-                break;
-            case UPLOAD_ERR_FORM_SIZE:
-                $message = "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form";
-                break;
-            case UPLOAD_ERR_PARTIAL:
-                $message = "The uploaded file was only partially uploaded";
-                break;
-            case UPLOAD_ERR_NO_FILE:
-                $message = "No file was uploaded";
-                break;
-            case UPLOAD_ERR_NO_TMP_DIR:
-                $message = "Missing a temporary folder";
-                break;
-            case UPLOAD_ERR_CANT_WRITE:
-                $message = "Failed to write file to disk";
-                break;
-            case UPLOAD_ERR_EXTENSION:
-                $message = "File upload stopped by extension";
-                break;
-            case UPLOAD_ERR_OK:
-                $message = "The file likely did not pass the is_uploaded_file() check";
-                break;
-            default:
-                $message = sprintf('Unknown upload error : \"%s\"', $file->getError());
-                break;
-        }
+        throw new UploadException($this->getErrorMessage($file));
+    }
 
-        throw new UploadException($message);
+    /**
+     * Returns an informative upload error message.
+     *
+     * Copied from UploadedFile because its only public since 2.4
+     *
+     * @param UploadedFile $file The file with the error.
+     *
+     * @return string The error message regarding the specified error code
+     */
+    private function getErrorMessage(UploadedFile $file)
+    {
+        $errorCode = $file->getError();
+        static $errors = array(
+            UPLOAD_ERR_INI_SIZE   => 'The file "%s" exceeds your upload_max_filesize ini directive (limit is %d kb).',
+            UPLOAD_ERR_FORM_SIZE  => 'The file "%s" exceeds the upload limit defined in your form.',
+            UPLOAD_ERR_PARTIAL    => 'The file "%s" was only partially uploaded.',
+            UPLOAD_ERR_NO_FILE    => 'No file was uploaded.',
+            UPLOAD_ERR_CANT_WRITE => 'The file "%s" could not be written on disk.',
+            UPLOAD_ERR_NO_TMP_DIR => 'File could not be uploaded: missing temporary directory.',
+            UPLOAD_ERR_EXTENSION  => 'File upload was stopped by a PHP extension.',
+        );
+
+        $maxFilesize = $errorCode === UPLOAD_ERR_INI_SIZE ? $file->getMaxFilesize() / 1024 : 0;
+        $message = isset($errors[$errorCode]) ? $errors[$errorCode] : 'The file "%s" was not uploaded due to an unknown error.';
+
+        return sprintf($message, $file->getClientOriginalName(), $maxFilesize);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function handleUploadedFile(UploadedFile $uploadedFile)
+    public function handleUploadedFile(UploadedFile $uploadedFile, $class = null)
     {
         $this->validateFile($uploadedFile);
 
+        $class = $class ?: $this->class;
         /** @var $file FileInterface */
-        $file = new $this->class();
+        $file = new $class();
+        if (!$file instanceof FileInterface) {
+            throw new UploadException(sprintf('Invalid class %s specified', $class));
+        }
         $file->setName($uploadedFile->getClientOriginalName());
         $file->copyContentFromFile($uploadedFile);
 
@@ -198,7 +214,6 @@ class UploadFileHelperDoctrine implements UploadFileHelperInterface
      */
     public function getUploadResponse(Request $request, array $uploadedFiles = array())
     {
-        /** @var \Symfony\Cmf\Bundle\MediaBundle\Editor\EditorHelperInterface $editorHelper */
         $editorHelper = $this->getEditorHelper($request->get('editor', 'default'));
 
         if (! $editorHelper) {

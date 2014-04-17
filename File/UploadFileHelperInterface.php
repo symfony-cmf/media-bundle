@@ -38,22 +38,26 @@ interface UploadFileHelperInterface
     /**
      * Get helper
      *
-     * @param $name leave null to get the default helper
+     * @param string $name leave null to get the default helper
      *
      * @return UploadEditorHelperInterface|null
      */
     public function getEditorHelper($name = null);
 
     /**
-     * Handle the UploadedFile and create a FileInterface object specified by
-     * the configured class.
+     * Handle the UploadedFile and create a FileInterface object.
+     *
+     * If $class is specified, an instance of that class should be created if
+     * possible. If $class is null, the implementation chooses a suitable
+     * class, e.g. through configuration.
      *
      * @param Request      $request
      * @param UploadedFile $uploadedFile
+     * @param string       $class        Optional class name for the file class to generate.
      *
      * @return FileInterface
      */
-    public function handleUploadedFile(UploadedFile $uploadedFile);
+    public function handleUploadedFile(UploadedFile $uploadedFile, $class = null);
 
     /**
      * Process upload and get a response

@@ -12,28 +12,27 @@
 
 namespace Symfony\Cmf\Bundle\MediaBundle\Form\DataTransformer;
 
+use Symfony\Cmf\Bundle\MediaBundle\File\UploadFileHelperInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
 use Symfony\Component\Form\DataTransformerInterface;
+use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ModelToFileTransformer implements DataTransformerInterface
 {
-    private $dataClass;
+    private $helper;
+    private $class;
 
     /**
-     * @param string $class
+     * @param UploadFileHelperInterface $helper
+     * @param string                    $class  Optional class to overwrite generated file class.
      */
-    public function __construct($class)
+    public function __construct(UploadFileHelperInterface $helper, $class = null)
     {
-        if (!is_subclass_of($class, 'Symfony\Cmf\Bundle\MediaBundle\FileInterface')) {
-            throw new \InvalidArgumentException(sprintf(
-                'The class "%s" does not implement Symfony\Cmf\Bundle\MediaBundle\FileInterface',
-                $class
-            ));
-        }
-
-        $this->dataClass = $class;
+        $this->helper = $helper;
+        $this->class = $class;
     }
 
     /**
@@ -45,12 +44,11 @@ class ModelToFileTransformer implements DataTransformerInterface
             return $uploadedFile;
         }
 
-        /** @var $file FileInterface */
-        $file = new $this->dataClass;
-        $file->copyContentFromFile($uploadedFile);
-        $file->setName($uploadedFile->getClientOriginalName());
-
-        return $file;
+        try {
+            return $this->helper->handleUploadedFile($uploadedFile, $this->class);
+        } catch(UploadException $e) {
+            throw new TransformationFailedException($e->getMessage(), $e->getCode(), $e);
+        }
     }
 
     /**
