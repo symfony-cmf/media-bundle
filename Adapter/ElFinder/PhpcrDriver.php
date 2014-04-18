@@ -17,6 +17,7 @@ use Doctrine\ODM\PHPCR\Document\Generic;
 use Doctrine\ODM\PHPCR\Document\Resource;
 use Doctrine\ODM\PHPCR\DocumentManager;
 use FM\ElFinderPHP\Driver\ElFinderVolumeDriver;
+use Imagine\Filter\ FilterInterface;
 use PHPCR\Util\PathHelper;
 use Symfony\Cmf\Bundle\MediaBundle\DirectoryInterface;
 use Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\Directory;
@@ -58,6 +59,7 @@ class PhpcrDriver extends ElFinderVolumeDriver
      * @param string                $managerName
      * @param MediaManagerInterface $mediaManager
      * @param CmfMediaHelper        $mediaHelper
+     * @param bool|FilterInterface  $imagineFilter
      */
     public function __construct(
         ManagerRegistry $registry,
@@ -352,7 +354,7 @@ class PhpcrDriver extends ElFinderVolumeDriver
      * Open file and return file pointer
      *
      * @param  string         $path  file path
-     * @param  bool           $write open file for writing
+     * @param  string         $mode  mode to use when opening file
      * @return resource|false
      * @author Dmitry (dio) Levashov
      **/
