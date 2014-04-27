@@ -9,7 +9,6 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Symfony\Cmf\Bundle\MediaBundle\File;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -34,11 +33,11 @@ class UploadFileHelperDoctrine implements UploadFileHelperInterface
     protected $allowNonUploadedFiles = false;
 
     /**
-     * @param ManagerRegistry        $registry
-     * @param string                 $managerName
-     * @param string                 $class         fully qualified class name of file
-     * @param string                 $rootPath      path where the filesystem is located
-     * @param MediaManagerInterface  $mediaManager
+     * @param ManagerRegistry       $registry
+     * @param string                $managerName
+     * @param string                $class        fully qualified class name of file
+     * @param string                $rootPath     path where the filesystem is located
+     * @param MediaManagerInterface $mediaManager
      */
     public function __construct(
         ManagerRegistry $registry,

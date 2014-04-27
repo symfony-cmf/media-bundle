@@ -9,8 +9,7 @@
  * file that was distributed with this source code.
  */
 
-
-namespace Symfony\Cmf\Bundle\MediaBundle\Tests\Unit\Doctrine\Phpcr;
+namespace Symfony\Cmf\Bundle\MediaBundle\Tests\Unit\Doctrine;
 
 use Imagine\Gd\Imagine;
 use org\bovigo\vfs\vfsStream;

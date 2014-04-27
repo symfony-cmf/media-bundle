@@ -9,7 +9,6 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Symfony\Cmf\Bundle\MediaBundle\Adapter\LiipImagine;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -37,7 +36,7 @@ class CmfMediaDoctrineLoader extends AbstractDoctrineLoader
      * @param ManagerRegistry       $registry
      * @param string                $managerName
      * @param MediaManagerInterface $mediaManager
-     * @param string                $class       fully qualified class name of image
+     * @param string                $class        fully qualified class name of image
      */
     public function __construct(
         ImagineInterface $imagine,
@@ -80,7 +79,7 @@ class CmfMediaDoctrineLoader extends AbstractDoctrineLoader
         if ($image instanceof BinaryInterface) {
             return $image->getContentAsStream();
         }
-        if($image instanceof FileSystemInterface) {
+        if ($image instanceof FileSystemInterface) {
             return fopen($image->getFileSystemPath(), 'rb');
         }
 

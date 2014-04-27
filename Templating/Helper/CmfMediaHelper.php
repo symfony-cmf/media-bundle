@@ -9,7 +9,6 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Symfony\Cmf\Bundle\MediaBundle\Templating\Helper;
 
 use Liip\ImagineBundle\Templating\Helper\ImagineHelper;
@@ -28,9 +27,9 @@ class CmfMediaHelper extends Helper
     /**
      * Constructor.
      *
-     * @param MediaManagerInterface  $mediaManager
-     * @param UrlGeneratorInterface  $router        A Router instance
-     * @param ImagineHelper          $imagineHelper Imagine helper to use if available
+     * @param MediaManagerInterface $mediaManager
+     * @param UrlGeneratorInterface $router        A Router instance
+     * @param ImagineHelper         $imagineHelper Imagine helper to use if available
      */
     public function __construct(MediaManagerInterface $mediaManager, UrlGeneratorInterface $router, ImagineHelper $imagineHelper = null)
     {
@@ -57,9 +56,9 @@ class CmfMediaHelper extends Helper
     /**
      * Generates a display URL from the given image.
      *
-     * @param ImageInterface  $file
-     * @param array           $options
-     * @param Boolean|string  $referenceType The type of reference (one of the constants in UrlGeneratorInterface)
+     * @param ImageInterface $file
+     * @param array          $options
+     * @param Boolean|string $referenceType The type of reference (one of the constants in UrlGeneratorInterface)
      *
      * @return string The generated URL
      */

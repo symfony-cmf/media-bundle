@@ -9,7 +9,6 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Symfony\Cmf\Bundle\MediaBundle\File;
 
 use Symfony\Cmf\Bundle\MediaBundle\Editor\BrowserEditorHelperInterface;

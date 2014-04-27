@@ -9,7 +9,6 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Symfony\Cmf\Bundle\MediaBundle\Serializer;
 
 use JMS\Serializer\JsonSerializationVisitor;
@@ -30,7 +29,7 @@ class Handler
 
     /**
      * @param MediaManagerInterface $mediaManager
-     * @param RouterInterface $router
+     * @param RouterInterface       $router
      */
     public function __construct(MediaManagerInterface $mediaManager, RouterInterface $router)
     {
@@ -41,8 +40,8 @@ class Handler
     /**
      * Handles the serialization of an Image object
      *
-     * @param JsonSerializationVisitor $visitor
-     * @param ImageInterface $image
+     * @param  JsonSerializationVisitor $visitor
+     * @param  ImageInterface           $image
      * @return array
      */
     public function serializeImageToArray(JsonSerializationVisitor $visitor, ImageInterface $image)

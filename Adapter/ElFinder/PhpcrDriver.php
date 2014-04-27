@@ -9,7 +9,6 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Symfony\Cmf\Bundle\MediaBundle\Adapter\ElFinder;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -353,8 +352,8 @@ class PhpcrDriver extends ElFinderVolumeDriver
     /**
      * Open file and return file pointer
      *
-     * @param  string         $path  file path
-     * @param  string         $mode  mode to use when opening file
+     * @param  string         $path file path
+     * @param  string         $mode mode to use when opening file
      * @return resource|false
      * @author Dmitry (dio) Levashov
      **/

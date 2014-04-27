@@ -9,7 +9,6 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Symfony\Cmf\Bundle\MediaBundle\Editor;
 
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
@@ -25,7 +24,7 @@ interface UploadEditorHelperInterface
     /**
      * Set file defaults from request
      *
-     * @param Request $request
+     * @param Request       $request
      * @param FileInterface $file
      */
     public function setFileDefaults(Request $request, FileInterface $file);
@@ -33,7 +32,7 @@ interface UploadEditorHelperInterface
     /**
      * Get a response for the upload action of the editor
      *
-     * @param Request $request
+     * @param Request         $request
      * @param FileInterface[] $files
      *
      * @return Response

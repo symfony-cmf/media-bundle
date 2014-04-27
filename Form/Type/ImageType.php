@@ -9,10 +9,8 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Symfony\Cmf\Bundle\MediaBundle\Form\Type;
 
-use Symfony\Cmf\Bundle\MediaBundle\File\UploadFileHelperDoctrine;
 use Symfony\Cmf\Bundle\MediaBundle\File\UploadFileHelperInterface;
 use Symfony\Cmf\Bundle\MediaBundle\Form\DataTransformer\ModelToFileTransformer;
 use Symfony\Component\Form\AbstractType;

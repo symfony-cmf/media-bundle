@@ -9,7 +9,6 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Symfony\Cmf\Bundle\MediaBundle\Twig\Extension;
 
 use Symfony\Cmf\Bundle\MediaBundle\Templating\Helper\CmfMediaHelper;

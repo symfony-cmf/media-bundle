@@ -9,7 +9,6 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Symfony\Cmf\Bundle\MediaBundle\Tests\WebTest\TestApp;
 
 use Symfony\Cmf\Component\Testing\Functional\BaseTestCase;

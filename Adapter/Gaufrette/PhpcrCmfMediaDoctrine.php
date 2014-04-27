@@ -9,8 +9,7 @@
  * file that was distributed with this source code.
  */
 
-
-namespace Symfony\Cmf\Bundle\MediaBundle\Gaufrette\Adapter;
+namespace Symfony\Cmf\Bundle\MediaBundle\Adapter\Gaufrette;
 
 use PHPCR\Util\PathHelper;
 

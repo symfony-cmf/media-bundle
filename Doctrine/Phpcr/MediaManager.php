@@ -9,7 +9,6 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -18,7 +17,6 @@ use Doctrine\ODM\PHPCR\DocumentManager;
 use PHPCR\Util\PathHelper;
 use Symfony\Cmf\Bundle\MediaBundle\MediaInterface;
 use Symfony\Cmf\Bundle\MediaBundle\MediaManagerInterface;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class MediaManager implements MediaManagerInterface
 {

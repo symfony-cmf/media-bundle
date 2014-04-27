@@ -9,7 +9,6 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Document;
 
 use Doctrine\ODM\PHPCR\Mapping\Annotations as PHPCRODM;
@@ -76,4 +75,4 @@ class Content extends BaseContent
     {
         return $this->image;
     }
-} 
+}

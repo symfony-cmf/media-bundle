@@ -9,7 +9,6 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Symfony\Cmf\Bundle\MediaBundle\File;
 
 use Symfony\Cmf\Bundle\MediaBundle\Editor\UploadEditorHelperInterface;
@@ -64,7 +63,7 @@ interface UploadFileHelperInterface
      *
      * @param Request        $request
      * @param UploadedFile[] $uploadedFiles optionally get the uploaded file(s)
-     *      from the Request yourself
+     *                                      from the Request yourself
      *
      * @return Response
      */

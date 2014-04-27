@@ -9,7 +9,6 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Symfony\Cmf\Bundle\MediaBundle\Editor;
 
 /**
@@ -19,7 +18,7 @@ namespace Symfony\Cmf\Bundle\MediaBundle\Editor;
 interface BrowserEditorHelperInterface
 {
     /**
-     * Get the media browser url of the editor
+     * Get the media browser url of the editor.
      *
      * @return string|false
      */

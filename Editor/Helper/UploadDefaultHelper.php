@@ -9,7 +9,6 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Symfony\Cmf\Bundle\MediaBundle\Editor\Helper;
 
 use Symfony\Cmf\Bundle\MediaBundle\Editor\UploadEditorHelperInterface;
@@ -27,10 +26,16 @@ class UploadDefaultHelper implements UploadEditorHelperInterface
     protected $propertyMapping;
 
     /**
+     * Instantiate.
+     *
+     * The $propertyMapping is an array that tells what request parameters go
+     * into which document properties. You could map for example "caption" to
+     * the "description" field with `array('caption' => 'description')`.
+     *
      * @param MediaManagerInterface $mediaManager
      * @param RouterInterface       $router
      * @param array                 $propertyMapping maps request parameters to
-     * Media properties, fe. "caption" from the requests maps to "description"
+     *                                               Media document properties.
      */
     public function __construct(MediaManagerInterface $mediaManager, RouterInterface $router, array $propertyMapping = array())
     {

@@ -9,12 +9,9 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Symfony\Cmf\Bundle\MediaBundle\Tests\WebTest\TestApp;
 
 use Symfony\Cmf\Component\Testing\Functional\BaseTestCase;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class ImageTest extends BaseTestCase

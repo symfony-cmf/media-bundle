@@ -9,10 +9,7 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Symfony\Cmf\Bundle\MediaBundle;
-
-use Symfony\Cmf\Bundle\MediaBundle\MediaInterface;
 
 /**
  * Interface containing media helper methods, these are probably persistence
@@ -67,7 +64,7 @@ interface MediaManagerInterface
      * @return string
      *
      * @throws \OutOfBoundsException if the path is out of the root path where
-     *                              the filesystem is located
+     *                               the filesystem is located
      */
     public function mapPathToId($path, $rootPath = null);
 
@@ -81,7 +78,7 @@ interface MediaManagerInterface
      * @return string
      *
      * @throws \OutOfBoundsException if the path is out of the root path where
-     *                              the filesystem is located
+     *                               the filesystem is located
      */
     public function mapUrlSafePathToId($path, $rootPath = null);
 }

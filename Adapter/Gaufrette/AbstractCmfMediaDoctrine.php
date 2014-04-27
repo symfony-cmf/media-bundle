@@ -9,8 +9,7 @@
  * file that was distributed with this source code.
  */
 
-
-namespace Symfony\Cmf\Bundle\MediaBundle\Gaufrette\Adapter;
+namespace Symfony\Cmf\Bundle\MediaBundle\Adapter\Gaufrette;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Gaufrette\Adapter;
@@ -372,7 +371,7 @@ abstract class AbstractCmfMediaDoctrine implements
      * Find a file object for the given key.
      *
      * @param string|int $key Identifier.
-     * @param boolean $dir directly try to find a directory
+     * @param boolean    $dir directly try to find a directory
      *
      * @return FileInterface
      */
@@ -416,7 +415,7 @@ abstract class AbstractCmfMediaDoctrine implements
      * Get all files and directories,
      * extend for a specific and more efficient implementation
      *
-     * @param string $prefix
+     * @param  string          $prefix
      * @return FileInterface[]
      */
     protected function findAll($prefix = '')
@@ -493,8 +492,8 @@ abstract class AbstractCmfMediaDoctrine implements
      * @return string A path
      *
      * @throws OutOfBoundsException If the computed path is out of the rootPath
-     * @throws RuntimeException If directory does not exists and cannot be
-     *                          created
+     * @throws RuntimeException     If directory does not exists and cannot be
+     *                              created
      */
     protected function computePath($key)
     {
@@ -545,8 +544,8 @@ abstract class AbstractCmfMediaDoctrine implements
     /**
      * Set default values for a new file or directory
      *
-     * @param string        $path   Path of the file
-     * @param FileInterface $file
+     * @param string             $path   Path of the file
+     * @param FileInterface      $file
      * @param DirectoryInterface $parent Parent directory of the file
      */
     protected function setFileDefaults($path, FileInterface $file, DirectoryInterface $parent = null)
@@ -567,9 +566,9 @@ abstract class AbstractCmfMediaDoctrine implements
     /**
      * Ensures the specified directory exists, creates it if it does not
      *
-     * @param string  $dirPath  Path of the directory to test
-     * @param boolean $create   Whether to create the directory if it does
-     *                          not exist
+     * @param string  $dirPath Path of the directory to test
+     * @param boolean $create  Whether to create the directory if it does
+     *                         not exist
      *
      * @throws RuntimeException if the directory does not exists and could not
      *                          be created
