@@ -11,10 +11,11 @@
 
 namespace Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Document;
 
-use Doctrine\ODM\PHPCR\Mapping\Annotations as PHPCRODM;
 use Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\Image;
 use Symfony\Cmf\Bundle\MediaBundle\ImageInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+
+use Doctrine\ODM\PHPCR\Mapping\Annotations as PHPCRODM;
 
 /**
  * @PHPCRODM\Document(referenceable=true)
@@ -105,12 +106,12 @@ class Content
         return $this->id;
     }
 
-    public function setParentDocument($parent)
+    public function setParent($parent)
     {
         $this->parent = $parent;
     }
 
-    public function getParentDocument()
+    public function getParent()
     {
         return $this->parent;
     }
