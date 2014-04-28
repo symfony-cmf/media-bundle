@@ -9,12 +9,13 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Symfony\Cmf\Bundle\MediaBundle\Doctrine;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Imagine\Image\ImagineInterface;
+use Imagine\Image\ImageInterface;
+use Imagine\Exception\InvalidArgumentException;
 use Symfony\Cmf\Bundle\MediaBundle\BinaryInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileSystemInterface;
 use Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\Image;
@@ -79,7 +80,7 @@ class DoctrineImageDimensionsSubscriber implements EventSubscriber
         }
 
         if ($this->imagine) {
-            /** @var $image \Imagine\Image\ImageInterface */
+            /** @var $image ImageInterface */
             $image = false;
 
             // use imagine to determine the dimensions
@@ -87,7 +88,7 @@ class DoctrineImageDimensionsSubscriber implements EventSubscriber
                 $stream = $object->getContentAsStream();
                 try {
                     $image = $this->imagine->read($stream);
-                } catch(\Imagine\Exception\InvalidArgumentException $e) {
+                } catch (InvalidArgumentException $e) {
                     // ignore this exception, we will set the dimensions to 0
                 }
             } elseif ($object instanceof FileSystemInterface) {

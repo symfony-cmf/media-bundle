@@ -9,11 +9,9 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr;
 
 use Doctrine\ODM\PHPCR\DocumentRepository;
-use PHPCR\Query\QueryInterface;
 use Symfony\Cmf\Bundle\MediaBundle\Model\ImageRepositoryInterface;
 
 class ImageRepository extends DocumentRepository implements ImageRepositoryInterface

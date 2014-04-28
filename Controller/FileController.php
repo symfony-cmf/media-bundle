@@ -9,7 +9,6 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Symfony\Cmf\Bundle\MediaBundle\Controller;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -45,13 +44,13 @@ class FileController
      * @param ManagerRegistry           $registry
      * @param string                    $managerName
      * @param string                    $class            fully qualified class
-     *      name of file
+     *                                                    name of file
      * @param string                    $rootPath         path where the
-     *      filesystem is located
+     *                                                    filesystem is located
      * @param MediaManagerInterface     $mediaManager
      * @param UploadFileHelperInterface $uploadFileHelper
      * @param string                    $requiredRole     the role name for the
-     *      security check
+     *                                                    security check
      * @param SecurityContextInterface  $securityContext
      */
     public function __construct(
@@ -170,7 +169,7 @@ class FileController
     /**
      * Action to upload a file
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return Response
      */
     public function uploadAction(Request $request)
@@ -184,7 +183,7 @@ class FileController
      * Decide whether the user is allowed to upload a file.
      *
      * @throws AccessDeniedException if the current user is not allowed to
-     *      upload.
+     *                               upload.
      */
     protected function checkSecurityUpload(Request $request)
     {

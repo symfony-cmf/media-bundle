@@ -9,13 +9,11 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ODM\PHPCR\Document\Folder;
 use Symfony\Cmf\Bundle\MediaBundle\DirectoryInterface;
-use Symfony\Cmf\Bundle\MediaBundle\HierarchyInterface;
 
 class Directory extends Folder implements DirectoryInterface
 {

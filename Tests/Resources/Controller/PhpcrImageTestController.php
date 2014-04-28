@@ -9,7 +9,6 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Controller;
 
 use Doctrine\ODM\PHPCR\Document\Generic;

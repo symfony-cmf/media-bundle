@@ -9,7 +9,6 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Symfony\Cmf\Bundle\MediaBundle\Editor\Helper;
 
 use Symfony\Cmf\Bundle\MediaBundle\Editor\BrowserEditorHelperInterface;
@@ -24,10 +23,10 @@ class BrowserDefaultHelper implements BrowserEditorHelperInterface
 
     /**
      * @param RouterInterface $router
-     * @param string          $name          The name of the route
-     * @param mixed           $parameters    An array of parameters
-     * @param Boolean|string  $referenceType The type of reference to be
-     *      generated (one of the RouterInterface constants)
+     * @param string          $name          The name of the media browser route.
+     * @param mixed           $parameters    An array of parameters for the route.
+     * @param Boolean|string  $referenceType The type of reference to be generated
+     *                                       (one of the RouterInterface constants).
      */
     public function __construct(
         RouterInterface $router,
