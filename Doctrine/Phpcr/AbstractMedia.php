@@ -30,7 +30,7 @@ abstract class AbstractMedia extends ModelAbstractMedia implements HierarchyInte
     /**
      * {@inheritdoc}
      */
-    public function setParent($parent)
+    public function setParentDocument($parent)
     {
         $this->parent = $parent;
 
@@ -42,9 +42,25 @@ abstract class AbstractMedia extends ModelAbstractMedia implements HierarchyInte
     /**
      * {@inheritdoc}
      */
-    public function getParent()
+    public function getParentDocument()
     {
         return $this->parent;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setParent($parent)
+    {
+        $this->setParentDocument($parent);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParent()
+    {
+        return $this->getParentDocument();
     }
 
     /**
