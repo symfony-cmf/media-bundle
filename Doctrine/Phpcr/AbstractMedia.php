@@ -60,7 +60,7 @@ abstract class AbstractMedia extends ModelAbstractMedia implements HierarchyInte
      */
     public function getParent()
     {
-        return $this->parent;
+        return $this->getParentDocument();
     }
 
     /**
