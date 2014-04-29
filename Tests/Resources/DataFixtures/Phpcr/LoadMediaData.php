@@ -11,25 +11,20 @@
 
 namespace Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\DataFixtures\Phpcr;
 
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use PHPCR\Util\NodeHelper;
 use Doctrine\ODM\PHPCR\Document\Generic;
 use Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\File;
 use Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\Image;
 use Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Document\Content;
 
-class LoadMediaData implements FixtureInterface, DependentFixtureInterface
+class LoadMediaData implements FixtureInterface
 {
-    public function getDependencies()
-    {
-        return array(
-            'Symfony\Cmf\Component\Testing\DataFixtures\PHPCR\LoadBaseData',
-        );
-    }
-
     public function load(ObjectManager $manager)
     {
+        NodeHelper::createPath($manager->getPhpcrSession(), '/test');
+
         $testDataDir = realpath(__DIR__ . '/../../app/Resources/data');
 
         $root = $manager->find(null, '/test');

@@ -11,21 +11,41 @@
 
 namespace Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Document;
 
-use Doctrine\ODM\PHPCR\Mapping\Annotations as PHPCRODM;
 use Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\Image;
 use Symfony\Cmf\Bundle\MediaBundle\ImageInterface;
-use Symfony\Cmf\Component\Testing\Document\Content as BaseContent;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+
+use Doctrine\ODM\PHPCR\Mapping\Annotations as PHPCRODM;
 
 /**
  * @PHPCRODM\Document(referenceable=true)
  */
-class Content extends BaseContent
+class Content
 {
     /**
      * @PHPCRODM\Child(cascade="persist")
      */
     protected $image;
+
+    /**
+     * @PHPCRODM\Id(strategy="parent")
+     */
+    protected $id;
+
+    /**
+     * @PHPCRODM\ParentDocument
+     */
+    protected $parent;
+
+    /**
+     * @PHPCRODM\NodeName
+     */
+    protected $name;
+
+    /**
+     * @PHPCRODM\String
+     */
+    protected $title;
 
     /**
      * Set the image for this block.
@@ -74,5 +94,45 @@ class Content extends BaseContent
     public function getImage()
     {
         return $this->image;
+    }
+
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function setParent($parent)
+    {
+        $this->parent = $parent;
+    }
+
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    public function setTitle($title)
+    {
+        $this->title = $title;
     }
 }
