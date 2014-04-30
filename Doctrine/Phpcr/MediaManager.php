@@ -18,6 +18,11 @@ use PHPCR\Util\PathHelper;
 use Symfony\Cmf\Bundle\MediaBundle\MediaInterface;
 use Symfony\Cmf\Bundle\MediaBundle\MediaManagerInterface;
 
+/**
+ * A media manager suitable for doctrine phpcr-odm.
+ *
+ * @author Roel Sint
+ */
 class MediaManager implements MediaManagerInterface
 {
     protected $managerRegistry;

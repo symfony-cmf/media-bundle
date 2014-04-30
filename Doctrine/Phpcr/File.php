@@ -24,22 +24,22 @@ use Symfony\Cmf\Bundle\MediaBundle\FileSystemInterface;
 class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
 {
     /**
-     * @var string $description
+     * @var string
      */
     protected $description;
 
     /**
-     * @var string $copyright
+     * @var string Copyright text
      */
     protected $copyright;
 
     /**
-     * @var string $authorName
+     * @var string
      */
     protected $authorName;
 
     /**
-     * @var array $metadata
+     * @var array
      */
     protected $metadata;
 
@@ -57,6 +57,8 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
     public function setName($name)
     {
         $this->nodename = $name;
+
+        return $this;
     }
 
     /**
@@ -69,6 +71,8 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
         if ($parent instanceof Directory) {
             $parent->addChild($this);
         }
+
+        return $this;
     }
 
     /**
@@ -76,7 +80,7 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
      */
     public function setParent($parent)
     {
-        $this->setParentDocument($parent);
+        return $this->setParentDocument($parent);
     }
 
     /**
@@ -85,6 +89,8 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
     public function setDescription($description)
     {
         $this->description = $description;
+
+        return $this;
     }
 
     /**
@@ -101,6 +107,8 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
     public function setCopyright($copyright)
     {
         $this->copyright = $copyright;
+
+        return $this;
     }
 
     /**
@@ -117,6 +125,8 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
     public function setAuthorName($authorName)
     {
         $this->authorName = $authorName;
+
+        return $this;
     }
 
     /**
@@ -133,6 +143,8 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
     public function setMetadata(array $metadata)
     {
         $this->metadata = $metadata;
+
+        return $this;
     }
 
     /**
@@ -157,6 +169,8 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
     public function setMetadataValue($name, $value)
     {
         $this->metadata[$name] = $value;
+
+        return $this;
     }
 
     /**
@@ -165,6 +179,8 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
     public function unsetMetadataValue($name)
     {
         unset($this->metadata[$name]);
+
+        return $this;
     }
 
     /**
@@ -197,6 +213,8 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
         }
 
         $this->setContentFromStream($stream);
+
+        return $this;
     }
 
     /**
@@ -219,6 +237,8 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
                  $type
             ));
         }
+
+        return $this;
     }
 
     /**
@@ -245,6 +265,8 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
         }
 
         $this->getContent()->setData($stream);
+
+        return $this;
     }
 
     /**
@@ -268,6 +290,8 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
     public function setContentType($contentType)
     {
         $this->getContent()->setMimeType($contentType);
+
+        return $this;
     }
 
     /**

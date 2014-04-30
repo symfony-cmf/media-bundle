@@ -46,6 +46,8 @@ class Directory extends Folder implements DirectoryInterface
     public function setName($name)
     {
         $this->nodename = $name;
+
+        return $this;
     }
 
     /**
@@ -58,6 +60,8 @@ class Directory extends Folder implements DirectoryInterface
         if ($parent instanceof Directory) {
             $parent->addChild($this);
         }
+
+        return $this;
     }
 
     /**
@@ -65,7 +69,7 @@ class Directory extends Folder implements DirectoryInterface
      */
     public function setParent($parent)
     {
-        $this->setParentDocument($parent);
+        return $this->setParentDocument($parent);
     }
 
     /**

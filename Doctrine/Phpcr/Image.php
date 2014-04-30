@@ -34,6 +34,8 @@ class Image extends File implements ImageInterface
     public function setWidth($width)
     {
         $this->width = $width;
+
+        return $this;
     }
 
     /**
@@ -50,6 +52,8 @@ class Image extends File implements ImageInterface
     public function setHeight($height)
     {
         $this->height = $height;
+
+        return $this;
     }
 
     /**

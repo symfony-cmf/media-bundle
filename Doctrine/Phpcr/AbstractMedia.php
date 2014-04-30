@@ -37,6 +37,8 @@ abstract class AbstractMedia extends ModelAbstractMedia implements HierarchyInte
         if ($parent instanceof Directory) {
             $parent->addChild($this);
         }
+
+        return $this;
     }
 
     /**
@@ -52,7 +54,7 @@ abstract class AbstractMedia extends ModelAbstractMedia implements HierarchyInte
      */
     public function setParent($parent)
     {
-        $this->setParentDocument($parent);
+        return $this->setParentDocument($parent);
     }
 
     /**
