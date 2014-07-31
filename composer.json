@@ -19,11 +19,8 @@
     "require-dev": {
         "symfony-cmf/testing": "1.1.*",
         "jms/serializer-bundle": "0.12.*",
-        "liip/imagine-bundle": "~0.12",
+        "liip/imagine-bundle": "~1.0.4",
         "mikey179/vfsStream": "~1.2"
-    },
-    "conflicts": {
-        "liip/imagine-bundle": ">=1.0"
     },
     "suggest": {
         "symfony-cmf/core-bundle": "Simplifies configuration with other CMF bundles, use PHP >=5.3.9 with PHPCR",

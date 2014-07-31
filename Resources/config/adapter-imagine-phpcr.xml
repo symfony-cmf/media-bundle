@@ -5,13 +5,13 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="cmf_media.liip_imagine.doctrine_phpcr.data.loader.class">Symfony\Cmf\Bundle\MediaBundle\Adapter\LiipImagine\CmfMediaDoctrineLoader</parameter>
+        <parameter key="cmf_media.liip_imagine.doctrine_phpcr.binary.loader.class">Symfony\Cmf\Bundle\MediaBundle\Adapter\LiipImagine\CmfMediaDoctrineLoader</parameter>
     </parameters>
 
     <services>
 
-        <service id="cmf_media.liip_imagine.doctrine_phpcr.data.loader" class="%cmf_media.liip_imagine.doctrine_phpcr.data.loader.class%">
-            <tag name="liip_imagine.data.loader" loader="cmf_media_doctrine_phpcr" />
+        <service id="cmf_media.liip_imagine.doctrine_phpcr.binary.loader" class="%cmf_media.liip_imagine.doctrine_phpcr.binary.loader.class%">
+            <tag name="liip_imagine.binary.loader" loader="cmf_media_doctrine_phpcr" />
             <argument type="service" id="liip_imagine" />
             <argument type="service" id="doctrine_phpcr" />
             <argument>%cmf_media.persistence.phpcr.manager_name%</argument>

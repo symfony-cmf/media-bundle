@@ -28,6 +28,13 @@ class ImageTest extends BaseTestCase
 
     public function testPage()
     {
+        // Clear cache
+        $cacheManager = $this->getContainer()->get('liip_imagine.cache.manager');
+        $cacheManager->remove('test/media/cmf-logo.png');
+
+        $this->assertFalse($cacheManager->isStored('test/media/cmf-logo.png', 'image_upload_thumbnail'));
+
+        // get crawler
         $client = $this->createClient();
         $crawler = $client->request('get', $this->getContainer()->get('router')->generate('phpcr_image_test'));
         $resp = $client->getResponse();
@@ -48,10 +55,14 @@ class ImageTest extends BaseTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode(), 'default image test');
 
         // imagine_filter
-        $this->getContainer()->get('liip_imagine.cache.clearer')->clear('image_upload_thumb');
         $imagineImageLink = $crawler->filter('.images li img.imagine')->first()->attr('src');
         $client->request('get', $imagineImageLink);
-        $this->assertTrue($client->getResponse()->isSuccessful(), 'imagine image test');
+
+        $this->assertTrue($client->getResponse()->isRedirection(), 'imagine image test');
+        $this->assertEquals(301, $client->getResponse()->getStatusCode(), 'imagine image test');
+        $this->assertEquals('http://localhost/media/cache/image_upload_thumbnail/test/media/cmf-logo.png', $client->getResponse()->getTargetUrl());
+
+        $this->assertTrue($cacheManager->isStored('test/media/cmf-logo.png', 'image_upload_thumbnail'));
     }
 
     public function testUpload()
