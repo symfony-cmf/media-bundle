@@ -34,7 +34,8 @@ class CmfMediaBundle extends Bundle
                         realpath(__DIR__ . '/Resources/config/doctrine-phpcr') => 'Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr',
                     ),
                     array('cmf_media.persistence.phpcr.manager_name'),
-                    'cmf_media.backend_type_phpcr'
+                    'cmf_media.backend_type_phpcr',
+                    array('CmfMediaBundle' => 'Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr')
                 )
             );
         }
