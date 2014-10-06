@@ -157,9 +157,9 @@ class PhpcrDriver extends ElFinderVolumeDriver
                 continue;
             }
 
-            if (($comp != '..')
+            if (($comp !== '..')
                 || (!$initial_slashes && !$new_comps)
-                || ($new_comps && (end($new_comps) == '..')))
+                || ($new_comps && (end($new_comps) === '..')))
             {
                 array_push($new_comps, $comp);
             } elseif ($new_comps) {
@@ -184,7 +184,7 @@ class PhpcrDriver extends ElFinderVolumeDriver
      **/
     protected function _relpath($path)
     {
-        return $path == $this->root ? '' : substr($path, strlen($this->root)+1);
+        return $path === $this->root ? '' : substr($path, strlen($this->root)+1);
     }
 
     /**
@@ -196,7 +196,7 @@ class PhpcrDriver extends ElFinderVolumeDriver
      **/
     protected function _abspath($path)
     {
-        return $path == "/" ? $this->root : $this->root."/".$path;
+        return $path === "/" ? $this->root : $this->root."/".$path;
     }
 
     /**
@@ -221,7 +221,7 @@ class PhpcrDriver extends ElFinderVolumeDriver
      **/
     protected function _inpath($path, $parent)
     {
-        return $path == $parent || strpos($path, $parent."/") === 0;
+        return $path === $parent || strpos($path, $parent."/") === 0;
     }
 
     /**
