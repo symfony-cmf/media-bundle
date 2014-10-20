@@ -13,7 +13,6 @@ env:
 matrix:
   allow_failures:
     - php: 5.3
-    - env: SYMFONY_VERSION=dev-master
     - php: hhvm
   include:
     - php: 5.5
@@ -21,7 +20,7 @@ matrix:
     - php: 5.5
       env: SYMFONY_VERSION=2.4.*
     - php: 5.5
-      env: SYMFONY_VERSION=dev-master
+      env: SYMFONY_VERSION=2.6.*
 
 before_script:
   - composer self-update
