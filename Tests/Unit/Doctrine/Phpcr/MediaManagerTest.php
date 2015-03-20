@@ -144,14 +144,23 @@ class MediaManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('/test/media/mymedia', $mediaManager->mapPathToId($path, $rootPath));
     }
 
-    /**
-     * @expectedException \OutOfBoundsException
-     */
-    public function testMapPathToIdException()
+    public function mapPathToIdExceptionProvider()
     {
-        $mediaManager = $this->getMediaManager();
+        return array(
+            array('/test/media/mymedia', '/out/of/bound', 'OutOfBoundsException'),
+            array('/test/', null, 'Symfony\Component\Routing\Exception\ResourceNotFoundException'),
+        );
+    }
 
-        $mediaManager->mapPathToId('/test/media/mymedia', '/out/of/bound');
+    /**
+     * @dataProvider mapPathToIdExceptionProvider
+     */
+    public function testMapPathToIdException($path, $rootPath, $exception)
+    {
+        $this->setExpectedException($exception);
+
+        $mediaManager = $this->getMediaManager();
+        $mediaManager->mapPathToId($path, $rootPath);
     }
 
     public function mapUrlSafePathToIdProvider()
@@ -172,13 +181,22 @@ class MediaManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('/test/media/mymedia', $mediaManager->mapPathToId($path, $rootPath));
     }
 
-    /**
-     * @expectedException \OutOfBoundsException
-     */
-    public function testMapUrlSafePathToIdException()
+    public function mapUrlSafePathToIdExceptionProvider()
     {
-        $mediaManager = $this->getMediaManager();
+        return array(
+            array('test/media/mymedia', '/out/of/bound', 'OutOfBoundsException'),
+            array('/test/', null, 'Symfony\Component\Routing\Exception\ResourceNotFoundException'),
+        );
+    }
 
-        $mediaManager->mapUrlSafePathToId('test/media/mymedia', '/out/of/bound');
+    /**
+     * @dataProvider mapPathToIdExceptionProvider
+     */
+    public function testMapUrlSafePathToIdException($path, $rootPath, $exception)
+    {
+        $this->setExpectedException($exception);
+
+        $mediaManager = $this->getMediaManager();
+        $mediaManager->mapUrlSafePathToId($path, $rootPath);
     }
 }

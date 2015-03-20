@@ -10,6 +10,7 @@
  */
 
 namespace Symfony\Cmf\Bundle\MediaBundle;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * Interface containing media helper methods, these are probably persistence
@@ -77,8 +78,9 @@ interface MediaManagerInterface
      *
      * @return string
      *
-     * @throws \OutOfBoundsException if the path is out of the root path where
-     *                               the filesystem is located
+     * @throws ResourceNotFoundException if the path is invalid
+     * @throws \OutOfBoundsException     if the path is out of the root path where
+     *                                   the filesystem is located
      */
     public function mapUrlSafePathToId($path, $rootPath = null);
 }
