@@ -14,6 +14,7 @@ namespace Symfony\Cmf\Bundle\MediaBundle\Controller;
 use Symfony\Cmf\Bundle\MediaBundle\ImageInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * Controller to handle basic image actions that have a route
@@ -29,8 +30,12 @@ class ImageController extends FileController
     {
         try {
             $id = $this->mediaManager->mapUrlSafePathToId($path);
-        } catch (\OutOfBoundsException $e) {
-            throw new NotFoundHttpException($e->getMessage());
+        } catch (\Exception $e) {
+            if ($e instanceof ResourceNotFoundException || $e instanceof \OutOfBoundsException) {
+                throw new NotFoundHttpException($e->getMessage(), $e);
+            }
+
+            throw $e;
         }
 
         $contentObject = $this->getObjectManager()->find($this->class, $id);

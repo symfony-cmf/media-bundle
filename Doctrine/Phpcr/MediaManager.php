@@ -14,9 +14,11 @@ namespace Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ODM\PHPCR\DocumentManager;
+use PHPCR\RepositoryException;
 use PHPCR\Util\PathHelper;
 use Symfony\Cmf\Bundle\MediaBundle\MediaInterface;
 use Symfony\Cmf\Bundle\MediaBundle\MediaManagerInterface;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * A media manager suitable for doctrine phpcr-odm.
@@ -133,8 +135,12 @@ class MediaManager implements MediaManagerInterface
      */
     public function mapPathToId($path, $rootPath = null)
     {
-        // The path is being the id
-        $id = PathHelper::absolutizePath($path, '/');
+        try {
+            // The path is being the id
+            $id = PathHelper::absolutizePath($path, '/');
+        } catch (RepositoryException $e) {
+            throw new ResourceNotFoundException(sprintf('The PHPCR path "%s" is not valid', $path), 0, $e);
+        }
 
         if (is_string($rootPath) && 0 !== strpos($id, $rootPath)) {
             throw new \OutOfBoundsException(sprintf(
