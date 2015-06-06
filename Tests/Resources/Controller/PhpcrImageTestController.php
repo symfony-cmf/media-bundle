@@ -108,7 +108,9 @@ class PhpcrImageTestController extends Controller
                 $uploadedFile = $request->files->get('image');
 
                 $image = $uploadImageHelper->handleUploadedFile($uploadedFile);
-
+                
+                $image->setMetadataValue('a', 'b');
+                
                 // persist
                 $dm = $this->get('doctrine_phpcr')->getManager('default');
                 $dm->persist($image);
