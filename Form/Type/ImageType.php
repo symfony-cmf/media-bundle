@@ -17,6 +17,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class ImageType extends AbstractType
@@ -62,6 +63,11 @@ class ImageType extends AbstractType
     }
 
     public function setDefaultOptions(OptionsResolverInterface $options)
+    {
+        $this->configureOptions($resolver);
+    }
+
+    public function configureOptions(OptionsResolver $options)
     {
         $options->setDefaults(array(
             'data_class' => $this->dataClass,
