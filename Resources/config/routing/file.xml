@@ -4,12 +4,12 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
-    <route id="cmf_media_download" path="/media/download/{path}" method="GET">
+    <route id="cmf_media_download" path="/media/download/{path}" methods="GET">
         <default key="_controller">cmf_media.file_controller:downloadAction</default>
         <requirement key="path">.*</requirement>
     </route>
 
-    <route id="cmf_media_file_upload" path="/media/file/upload/{editor}" method="POST">
+    <route id="cmf_media_file_upload" path="/media/file/upload/{editor}" methods="POST">
         <default key="_controller">cmf_media.file_controller:uploadAction</default>
         <default key="editor">default</default>
         <default key="_format">json</default>
