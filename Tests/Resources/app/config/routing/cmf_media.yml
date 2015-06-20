@@ -1,35 +1,35 @@
 test_index:
-    pattern: /
+    path: /
     defaults:
         _controller: Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Controller\TestController::indexAction
 
 phpcr_file_test:
-    pattern: /phpcr/file-test
+    path: /phpcr/file-test
     defaults:
         _controller: Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Controller\PhpcrFileTestController::indexAction
 
 phpcr_file_test_upload:
-    pattern: /phpcr/file-test/upload
+    path: /phpcr/file-test/upload
     defaults:
         _controller: Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Controller\PhpcrFileTestController::uploadAction
 
 phpcr_image_test:
-    pattern: /phpcr/image-test
+    path: /phpcr/image-test
     defaults:
         _controller: Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Controller\PhpcrImageTestController::indexAction
 
 phpcr_image_test_upload:
-    pattern: /phpcr/image-test/upload
+    path: /phpcr/image-test/upload
     defaults:
         _controller: Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Controller\PhpcrImageTestController::uploadAction
 
 phpcr_image_test_content_new:
-    pattern: /phpcr/image-test/content/new
+    path: /phpcr/image-test/content/new
     defaults:
         _controller: Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Controller\PhpcrImageTestController::newAction
 
 phpcr_image_test_content_edit:
-    pattern: /phpcr/image-test/content/edit/{path}
+    path: /phpcr/image-test/content/edit/{path}
     defaults:
         _controller: Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Controller\PhpcrImageTestController::editAction
     requirements:
