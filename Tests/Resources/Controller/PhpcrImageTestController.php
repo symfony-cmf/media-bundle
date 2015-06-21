@@ -98,22 +98,19 @@ class PhpcrImageTestController extends Controller
     {
         $form = $this->getUploadForm();
 
-        if ($request->isMethod('POST')) {
-            $form->bind($request);
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            /** @var UploadFileHelperInterface $uploadFileHelper */
+            $uploadImageHelper = $this->get('cmf_media.upload_image_helper');
 
-            if ($form->isValid()) {
-                /** @var UploadFileHelperInterface $uploadFileHelper */
-                $uploadImageHelper = $this->get('cmf_media.upload_image_helper');
+            $uploadedFile = $request->files->get('image');
 
-                $uploadedFile = $request->files->get('image');
+            $image = $uploadImageHelper->handleUploadedFile($uploadedFile);
 
-                $image = $uploadImageHelper->handleUploadedFile($uploadedFile);
-
-                // persist
-                $dm = $this->get('doctrine_phpcr')->getManager('default');
-                $dm->persist($image);
-                $dm->flush();
-            }
+            // persist
+            $dm = $this->get('doctrine_phpcr')->getManager('default');
+            $dm->persist($image);
+            $dm->flush();
         }
 
         return $this->redirect($this->generateUrl('phpcr_image_test'));

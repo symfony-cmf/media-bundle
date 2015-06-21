@@ -45,22 +45,20 @@ class PhpcrFileTestController extends Controller
     {
         $form = $this->getUploadForm();
 
-        if ($request->isMethod('POST')) {
-            $form->bind($request);
+        $form->handleRequest($request);
 
-            if ($form->isValid()) {
-                /** @var UploadFileHelperInterface $uploadFileHelper */
-                $uploadFileHelper = $this->get('cmf_media.upload_file_helper');
+        if ($form->isValid()) {
+            /** @var UploadFileHelperInterface $uploadFileHelper */
+            $uploadFileHelper = $this->get('cmf_media.upload_file_helper');
 
-                $uploadedFile = $request->files->get('file');
+            $uploadedFile = $request->files->get('file');
 
-                $file = $uploadFileHelper->handleUploadedFile($uploadedFile);
+            $file = $uploadFileHelper->handleUploadedFile($uploadedFile);
 
-                // persist
-                $dm = $this->get('doctrine_phpcr')->getManager('default');
-                $dm->persist($file);
-                $dm->flush();
-            }
+            // persist
+            $dm = $this->get('doctrine_phpcr')->getManager('default');
+            $dm->persist($file);
+            $dm->flush();
         }
 
         return $this->redirect($this->generateUrl('phpcr_file_test'));
