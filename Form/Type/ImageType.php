@@ -64,7 +64,7 @@ class ImageType extends AbstractType
 
     public function setDefaultOptions(OptionsResolverInterface $options)
     {
-        $this->configureOptions($resolver);
+        $this->configureOptions($options);
     }
 
     public function configureOptions(OptionsResolver $options)
