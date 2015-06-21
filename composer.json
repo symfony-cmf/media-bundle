@@ -18,6 +18,7 @@
     },
     "require-dev": {
         "symfony-cmf/testing": "~1.2,>=1.2.6",
+        "doctrine/phpcr-odm": ">=1.1.0"
         "jms/serializer-bundle": "~0.12",
         "liip/imagine-bundle": "~1.0.4",
         "mikey179/vfsStream": "~1.2"
