@@ -89,19 +89,23 @@ class FileTest extends \PHPUnit_Framework_TestCase
 
     public function copyContentFromFileProvider()
     {
+        $data = array();
         $testContent = 'Test file content.';
 
-        vfsStream::setup('home');
-        $fileSystemFile = vfsStream::url('home/test.txt');
-        file_put_contents($fileSystemFile, $testContent);
+        if (PHP_VERSION_ID >= 50400) {
+            // SplFileObject causes a segmentation fault in PHPunit in PHP 5.3.x
+            vfsStream::setup('home');
+            $fileSystemFile = vfsStream::url('home/test.txt');
+            file_put_contents($fileSystemFile, $testContent);
+
+            $data[] = array(new \SplFileObject($fileSystemFile), $testContent, 'text/plain', 18);
+        }
 
         $binaryFile = new File();
         $binaryFile->setContentFromString($testContent);
+        $data[] = array($binaryFile, $testContent, 'application/octet-stream', 18);
 
-        return array(
-            array(new \SplFileObject($fileSystemFile), $testContent, 'text/plain', 18),
-            array($binaryFile, $testContent, 'application/octet-stream', 18),
-        );
+        return $data;
     }
 
     /**
