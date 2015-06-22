@@ -17,7 +17,7 @@
         "symfony/framework-bundle": "~2.3"
     },
     "require-dev": {
-        "symfony/symfony": "~2.3,>=2.3.17",
+        "twig/twig": "~1.12,>=1.12.0",
         "symfony-cmf/testing": "~1.2,>=1.2.6",
         "doctrine/annotations": ">=1.1.2",
         "jms/serializer-bundle": "~0.12",
