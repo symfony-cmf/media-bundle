@@ -7,7 +7,7 @@ cmf_media:
     persistence:
         phpcr:
             enabled: true
-            media_basepath: /test/media
+            media_basepath: /test
 
 # The LiipImagineBundle can be used if you want to convert on demand an image
 # to a specific format. (ie a controller render the file)

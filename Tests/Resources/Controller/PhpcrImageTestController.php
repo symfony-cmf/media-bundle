@@ -14,6 +14,7 @@ namespace Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Controller;
 use Doctrine\ODM\PHPCR\Document\Generic;
 use PHPCR\Util\PathHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\Image;
 use Symfony\Cmf\Bundle\MediaBundle\File\UploadFileHelperInterface;
 use Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Document\Content;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,7 +39,7 @@ class PhpcrImageTestController extends Controller
         return $this->createFormBuilder($contentObject)
             ->add('name')
             ->add('title')
-            ->add('image', 'cmf_media_image', array_merge(array('required' => false), $imageOptions))
+            ->add('file', 'cmf_media_image', array_merge(array('required' => false, 'label' => 'Image'), $imageOptions))
             ->getForm()
         ;
     }
@@ -54,6 +55,17 @@ class PhpcrImageTestController extends Controller
         return PathHelper::absolutizePath($path, '/');
     }
 
+    protected function getImageContentObject($contentObjects) {
+        if (is_null($contentObjects)) return null;
+        /** @var Content $contentObject */
+        foreach($contentObjects as $contentObject) {
+            if ($contentObject->getFile() instanceof Image) {
+                return $contentObject;
+            }
+        }
+        return null;
+    }
+
     public function indexAction(Request $request)
     {
         $dm = $this->get('doctrine_phpcr')->getManager('default');
@@ -64,7 +76,7 @@ class PhpcrImageTestController extends Controller
 
         // get content with image object
         $contentClass  = 'Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Document\Content';
-        $contentObject = $dm->getRepository($contentClass)->findOneBy(array());
+        $contentObject = $this->getImageContentObject($dm->getRepository($contentClass)->findAll());
 
         $uploadForm = $this->getUploadForm();
         $editorUploadForm = $this->getUploadForm();
