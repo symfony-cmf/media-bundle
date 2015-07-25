@@ -17,7 +17,7 @@
         "symfony/framework-bundle": "~2.3"
     },
     "require-dev": {
-        "twig/twig": "~1.12,>=1.12.0",
+        "twig/twig": "~1.12,>=1.12.0@stable",
         "symfony-cmf/testing": "~1.2,>=1.2.7",
         "doctrine/phpcr-odm": "~1.3",
         "doctrine/annotations": ">=1.1.2",
