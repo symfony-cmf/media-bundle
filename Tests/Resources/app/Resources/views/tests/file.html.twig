@@ -19,6 +19,24 @@
         <input type="submit" value="submit" />
     </form>
 
+    <h4>Content object with file embedded (new)</h4>
+    <p>This will use the <code>cmf_media_file</code> form type.</p>
+    <form class="cmf_media_file new" action="{{ path('phpcr_file_test_content_new') }}" method="post" {{ form_enctype(content_form_new) }}>
+        {{ form_widget(content_form_new) }}
+
+        <input type="submit" value="submit" />
+    </form>
+
+    {% if content_form_edit_action %}
+        <h4>Content object with file embedded (edit)</h4>
+        <p>This will use the <code>cmf_media_file</code> form type that will show a link to the uploaded file.</p>
+        <form class="cmf_media_file edit default" action="{{ content_form_edit_action }}" method="post" {{ form_enctype(content_form_edit) }}>
+            {{ form_widget(content_form_edit) }}
+
+            <input type="submit" value="submit" />
+        </form>
+    {% endif %}
+
     <h2>Download file(s)</h2>
     {% if files is empty %}
         <p>No files found, upload a file first.</p>

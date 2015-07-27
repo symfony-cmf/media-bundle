@@ -13,6 +13,18 @@ phpcr_file_test_upload:
     defaults:
         _controller: Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Controller\PhpcrFileTestController::uploadAction
 
+phpcr_file_test_content_new:
+    path: /phpcr/file-test/content/new
+    defaults:
+        _controller: Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Controller\PhpcrFileTestController::newAction
+
+phpcr_file_test_content_edit:
+    path: /phpcr/file-test/content/edit/{path}
+    defaults:
+        _controller: Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Controller\PhpcrFileTestController::editAction
+    requirements:
+        path: .*
+
 phpcr_image_test:
     path: /phpcr/image-test
     defaults:

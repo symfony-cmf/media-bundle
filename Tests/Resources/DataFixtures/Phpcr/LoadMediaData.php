@@ -62,7 +62,7 @@ class LoadMediaData implements FixtureInterface
         $image2->setFileContentFromFilesystem($testDataDir .'/cmf-logo.png');
         $manager->persist($image2);
 
-        // Content
+        // Content with image
         $content = new Content();
         $content->setParent($contentRoot);
         $content->setName('content-with-image');
@@ -71,8 +71,20 @@ class LoadMediaData implements FixtureInterface
         $contentImage = new Image();
         $contentImage->setFileContentFromFilesystem($testDataDir .'/cmf-logo.png');
 
-        $content->setImage($contentImage);
+        $content->setFile($contentImage);
         $manager->persist($content);
+
+        // Content with file
+        $content2 = new Content();
+        $content2->setParent($contentRoot);
+        $content2->setName('content-with-file');
+        $content2->setTitle('Content document with file attached');
+
+        $contentFile = new File();
+        $contentFile->setFileContentFromFilesystem($testDataDir .'/testfile.txt');
+
+        $content2->setFile($contentFile);
+        $manager->persist($content2);
 
         $manager->flush();
     }
