@@ -45,7 +45,11 @@ class DoctrineImageDimensionsTest extends \PHPUnit_Framework_TestCase
         // create image
         vfsStream::setup('home');
         $fileSystemFile = vfsStream::url('home/test.png');
-        file_put_contents($fileSystemFile, $content);
+        if (0 === strlen($content)) {
+            touch($fileSystemFile);
+        } else {
+            file_put_contents($fileSystemFile, $content);
+        }
 
         // determine expected values
         $fileSize = filesize($fileSystemFile);
