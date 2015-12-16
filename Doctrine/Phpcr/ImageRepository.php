@@ -19,7 +19,7 @@ class ImageRepository extends DocumentRepository implements ImageRepositoryInter
     protected $rootPath = '/';
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setRootPath($rootPath)
     {
@@ -29,7 +29,7 @@ class ImageRepository extends DocumentRepository implements ImageRepositoryInter
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function searchImages($term, $limit = 0, $offset = 0)
     {

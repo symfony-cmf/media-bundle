@@ -21,14 +21,14 @@ use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
- * This is the class that loads and manages your bundle configuration
+ * This is the class that loads and manages your bundle configuration.
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  */
 class CmfMediaExtension extends Extension implements PrependExtensionInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function prepend(ContainerBuilder $container)
     {
@@ -50,9 +50,9 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
                                 // enable imaging inside CreateBundle, general
                                 // phpcr persistence still needs to be enabled
                                 // explicitly or by CoreBundle
-                                'enabled'     => true,
+                                'enabled' => true,
                                 'model_class' => $config['persistence']['phpcr']['image_class'],
-                                'basepath'    => $config['persistence']['phpcr']['media_basepath'],
+                                'basepath' => $config['persistence']['phpcr']['media_basepath'],
                             ),
                         ),
                     ),
@@ -63,7 +63,7 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function load(array $configs, ContainerBuilder $container)
     {
@@ -98,17 +98,17 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
             $this->loadPhpcr($config['persistence']['phpcr'], $loader, $container, $useImagine, $useJmsSerializer, $useElFinder);
         }
 
-        $container->setParameter($this->getAlias() . '.upload_file_role', $config['upload_file_role']);
+        $container->setParameter($this->getAlias().'.upload_file_role', $config['upload_file_role']);
 
         if (isset($config['upload_file_helper_service_id'])) {
-            $container->setAlias($this->getAlias() . '.upload_file_helper', $config['upload_file_helper_service_id']);
+            $container->setAlias($this->getAlias().'.upload_file_helper', $config['upload_file_helper_service_id']);
         }
         if (isset($config['upload_image_helper_service_id'])) {
-            $container->setAlias($this->getAlias() . '.upload_image_helper', $config['upload_image_helper_service_id']);
+            $container->setAlias($this->getAlias().'.upload_image_helper', $config['upload_image_helper_service_id']);
         }
 
         if ($useElFinder) {
-            $container->setParameter($this->getAlias() . '.default_browser', 'elfinder');
+            $container->setParameter($this->getAlias().'.default_browser', 'elfinder');
         }
 
         // load general liip imagine configuration
@@ -117,8 +117,8 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
 
     public function loadPhpcr($config, XmlFileLoader $loader, ContainerBuilder $container, $useImagine, $useJmsSerializer, $useElFinder)
     {
-        $container->setParameter($this->getAlias() . '.backend_type_phpcr', true);
-        $prefix = $this->getAlias() . '.persistence.phpcr';
+        $container->setParameter($this->getAlias().'.backend_type_phpcr', true);
+        $prefix = $this->getAlias().'.persistence.phpcr';
 
         $keys = array(
             'media_class' => 'media.class',
@@ -132,7 +132,7 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
         foreach ($keys as $sourceKey => $targetKey) {
             if (isset($config[$sourceKey])) {
                 $container->setParameter(
-                    $prefix . '.' . $targetKey,
+                    $prefix.'.'.$targetKey,
                     $config[$sourceKey]
                 );
             }
@@ -142,8 +142,8 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
         $loader->load('persistence-phpcr.xml');
 
         // aliases
-        $container->setAlias($this->getAlias() . '.upload_file_helper', $prefix.'.upload_file_helper');
-        $container->setAlias($this->getAlias() . '.upload_image_helper', $prefix.'.upload_image_helper');
+        $container->setAlias($this->getAlias().'.upload_file_helper', $prefix.'.upload_file_helper');
+        $container->setAlias($this->getAlias().'.upload_image_helper', $prefix.'.upload_image_helper');
 
         if (!$config['event_listeners']['stream_rewind']) {
             $container->removeDefinition('cmf_media.persistence.phpcr.subscriber.stream_rewind');
@@ -151,7 +151,7 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
         if (!$config['event_listeners']['image_dimensions']) {
             $container->removeDefinition('cmf_media.persistence.phpcr.subscriber.image_dimensions');
         } elseif ($useImagine) {
-            $definition = $container->getDefinition($this->getAlias() . '.persistence.phpcr.subscriber.image_dimensions');
+            $definition = $container->getDefinition($this->getAlias().'.persistence.phpcr.subscriber.image_dimensions');
             $definition->addArgument(new Reference('liip_imagine'));
         } elseif (!function_exists('imagecreatefromstring')) {
             throw new InvalidConfigurationException('persistence.phpcr.subscriber.image_dimensions must be set to false if Imagine is not enabled and the GD PHP extension is not available.');
@@ -165,9 +165,8 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
             }
 
             // TODO: this should not be phcpr specific but the MediaManagerInterface service should be an alias instead
-            $definition = $container->getDefinition($this->getAlias() . '.templating.helper');
+            $definition = $container->getDefinition($this->getAlias().'.templating.helper');
             $definition->addArgument(new Reference('liip_imagine.templating.helper'));
-
         } elseif (true === $config['event_listeners']['imagine_cache']) {
             throw new InvalidConfigurationException('persistence.phpcr.event_listeners.imagine_cache may not be forced enabled if Imagine is not enabled.');
         }
@@ -185,11 +184,11 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
 
     public function loadLiipImagine($enabled, $config, XmlFileLoader $loader, ContainerBuilder $container, $useElFinder)
     {
-        if (! $enabled) {
-            $container->setParameter($this->getAlias() . '.use_imagine', false);
-            $container->setParameter($this->getAlias() . '.imagine.filter.upload_thumbnail', false);
-            $container->setParameter($this->getAlias() . '.imagine.filter.elfinder_thumbnail', false);
-            $container->setParameter($this->getAlias() . '.imagine.all_filters', array());
+        if (!$enabled) {
+            $container->setParameter($this->getAlias().'.use_imagine', false);
+            $container->setParameter($this->getAlias().'.imagine.filter.upload_thumbnail', false);
+            $container->setParameter($this->getAlias().'.imagine.filter.elfinder_thumbnail', false);
+            $container->setParameter($this->getAlias().'.imagine.all_filters', array());
 
             return;
         }
@@ -204,10 +203,10 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
             throw new InvalidConfigurationException("Imagine filter name for $key may not be null");
         }
 
-        $container->setParameter($this->getAlias() . '.use_imagine', true);
-        $container->setParameter($this->getAlias() . '.imagine.filter.upload_thumbnail', $config['imagine_filters']['upload_thumbnail']);
-        $container->setParameter($this->getAlias() . '.imagine.filter.elfinder_thumbnail', $config['imagine_filters']['elfinder_thumbnail']);
-        $container->setParameter($this->getAlias() . '.imagine.all_filters', $filters);
+        $container->setParameter($this->getAlias().'.use_imagine', true);
+        $container->setParameter($this->getAlias().'.imagine.filter.upload_thumbnail', $config['imagine_filters']['upload_thumbnail']);
+        $container->setParameter($this->getAlias().'.imagine.filter.elfinder_thumbnail', $config['imagine_filters']['elfinder_thumbnail']);
+        $container->setParameter($this->getAlias().'.imagine.all_filters', $filters);
     }
 
     /**

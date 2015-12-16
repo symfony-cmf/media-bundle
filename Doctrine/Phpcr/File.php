@@ -84,7 +84,7 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setDescription($description)
     {
@@ -94,7 +94,7 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getDescription()
     {
@@ -102,7 +102,7 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setCopyright($copyright)
     {
@@ -112,7 +112,7 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getCopyright()
     {
@@ -120,7 +120,7 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setAuthorName($authorName)
     {
@@ -130,7 +130,7 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getAuthorName()
     {
@@ -138,7 +138,7 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setMetadata(array $metadata)
     {
@@ -148,7 +148,7 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getMetadata()
     {
@@ -156,7 +156,7 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getMetadataValue($name, $default = null)
     {
@@ -164,7 +164,7 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setMetadataValue($name, $value)
     {
@@ -189,7 +189,7 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
     public function getContentAsString()
     {
         $stream = $this->getContentAsStream();
-        if (! is_resource($stream)) {
+        if (!is_resource($stream)) {
             return '';
         }
 
@@ -248,7 +248,7 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
     {
         $stream = $this->getContent()->getData();
         if (!is_resource($stream)) {
-            return null;
+            return;
         }
         rewind($stream);
 
@@ -327,7 +327,7 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
     }
 
     /**
-     * Getter for updatedBy
+     * Getter for updatedBy.
      *
      * @return string name of the (jcr) user who updated the file
      */

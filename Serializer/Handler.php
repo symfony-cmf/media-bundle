@@ -34,14 +34,15 @@ class Handler
     public function __construct(MediaManagerInterface $mediaManager, RouterInterface $router)
     {
         $this->mediaManager = $mediaManager;
-        $this->router       = $router;
+        $this->router = $router;
     }
 
     /**
-     * Handles the serialization of an Image object
+     * Handles the serialization of an Image object.
      *
-     * @param  JsonSerializationVisitor $visitor
-     * @param  ImageInterface           $image
+     * @param JsonSerializationVisitor $visitor
+     * @param ImageInterface           $image
+     *
      * @return array
      */
     public function serializeImageToArray(JsonSerializationVisitor $visitor, ImageInterface $image)
@@ -50,11 +51,10 @@ class Handler
         $url = $this->router->generate('cmf_media_image_display', array('path' => $urlSafePath), true);
 
         return array(
-            'id'   => $image->getId(),
+            'id' => $image->getId(),
             'name' => $image->getName(),
-            'url'  => $url,
-            'alt'  => $image->getDescription()
+            'url' => $url,
+            'alt' => $image->getDescription(),
         );
     }
-
 }

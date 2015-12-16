@@ -17,32 +17,32 @@ use Symfony\Cmf\Bundle\MediaBundle\MetadataInterface;
 abstract class AbstractMedia implements MediaInterface, MetadataInterface
 {
     /**
-     * @var string $id
+     * @var string
      */
     protected $id;
 
     /**
-     * @var string $name
+     * @var string
      */
     protected $name;
 
     /**
-     * @var string $description
+     * @var string
      */
     protected $description;
 
     /**
-     * @var string $copyright
+     * @var string
      */
     protected $copyright;
 
     /**
-     * @var string $authorName
+     * @var string
      */
     protected $authorName;
 
     /**
-     * @var array $metadata
+     * @var array
      */
     protected $metadata;
 
@@ -52,7 +52,7 @@ abstract class AbstractMedia implements MediaInterface, MetadataInterface
     protected $createdAt;
 
     /**
-     * String representation
+     * String representation.
      *
      * @return string
      */
@@ -94,7 +94,7 @@ abstract class AbstractMedia implements MediaInterface, MetadataInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setDescription($description)
     {
@@ -102,7 +102,7 @@ abstract class AbstractMedia implements MediaInterface, MetadataInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getDescription()
     {
@@ -110,7 +110,7 @@ abstract class AbstractMedia implements MediaInterface, MetadataInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setCopyright($copyright)
     {
@@ -118,7 +118,7 @@ abstract class AbstractMedia implements MediaInterface, MetadataInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getCopyright()
     {
@@ -126,7 +126,7 @@ abstract class AbstractMedia implements MediaInterface, MetadataInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setAuthorName($authorName)
     {
@@ -134,7 +134,7 @@ abstract class AbstractMedia implements MediaInterface, MetadataInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getAuthorName()
     {
@@ -142,7 +142,7 @@ abstract class AbstractMedia implements MediaInterface, MetadataInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setMetadata(array $metadata)
     {
@@ -150,7 +150,7 @@ abstract class AbstractMedia implements MediaInterface, MetadataInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getMetadata()
     {
@@ -158,7 +158,7 @@ abstract class AbstractMedia implements MediaInterface, MetadataInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getMetadataValue($name, $default = null)
     {
@@ -166,7 +166,7 @@ abstract class AbstractMedia implements MediaInterface, MetadataInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setMetadataValue($name, $value)
     {

@@ -33,7 +33,7 @@ interface MetadataInterface extends MediaInterface
     public function setDescription($description);
 
     /**
-     * The copyright text, e.g. a license name
+     * The copyright text, e.g. a license name.
      *
      * @return string
      */
@@ -45,7 +45,7 @@ interface MetadataInterface extends MediaInterface
     public function setCopyright($copyright);
 
     /**
-     * The name of the author of the media represented by this object
+     * The name of the author of the media represented by this object.
      *
      * @return string
      */
@@ -57,14 +57,14 @@ interface MetadataInterface extends MediaInterface
     public function setAuthorName($author);
 
     /**
-     * Get all metadata
+     * Get all metadata.
      *
      * @return array
      */
     public function getMetadata();
 
     /**
-     * Set all metadata
+     * Set all metadata.
      *
      * @param array $metadata
      *
@@ -81,7 +81,7 @@ interface MetadataInterface extends MediaInterface
     public function getMetadataValue($name, $default = null);
 
     /**
-     * The metadata value
+     * The metadata value.
      *
      * @param string $name
      * @param string $value
@@ -89,7 +89,7 @@ interface MetadataInterface extends MediaInterface
     public function setMetadataValue($name, $value);
 
     /**
-     * Remove a named data from the metadata
+     * Remove a named data from the metadata.
      *
      * @param string $name
      */

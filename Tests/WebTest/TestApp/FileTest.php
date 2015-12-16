@@ -12,7 +12,6 @@
 namespace Symfony\Cmf\Bundle\MediaBundle\Tests\WebTest\TestApp;
 
 use Symfony\Cmf\Component\Testing\Functional\BaseTestCase;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class FileTest extends BaseTestCase
 {
@@ -23,7 +22,7 @@ class FileTest extends BaseTestCase
         $this->db('PHPCR')->loadFixtures(array(
             'Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\DataFixtures\Phpcr\LoadMediaData',
         ));
-        $this->testDataDir = $this->getContainer()->get('kernel')->getRootDir() . '/Resources/data';
+        $this->testDataDir = $this->getContainer()->get('kernel')->getRootDir().'/Resources/data';
     }
 
     public function testPage()
@@ -45,7 +44,7 @@ class FileTest extends BaseTestCase
 
         $buttonCrawlerNode = $crawler->filter('form.standard')->selectButton('submit');
         $form = $buttonCrawlerNode->form();
-        $form['file']->upload($this->testDataDir . '/testfile.txt');
+        $form['file']->upload($this->testDataDir.'/testfile.txt');
 
         $client->submit($form);
         $crawler = $client->followRedirect();
@@ -59,14 +58,14 @@ class FileTest extends BaseTestCase
     {
         $client = $this->createClient(array(), array(
             'PHP_AUTH_USER' => 'admin',
-            'PHP_AUTH_PW'   => 'adminpass',
+            'PHP_AUTH_PW' => 'adminpass',
         ));
         $crawler = $client->request('get', $this->getContainer()->get('router')->generate('phpcr_file_test'));
         $cntDownloadLinks = $crawler->filter('.downloads li a')->count();
 
         $buttonCrawlerNode = $crawler->filter('form.editor.default')->selectButton('submit');
         $form = $buttonCrawlerNode->form();
-        $form['file']->upload($this->testDataDir . '/testfile.txt');
+        $form['file']->upload($this->testDataDir.'/testfile.txt');
 
         $client->submit($form);
         $crawler = $client->followRedirect();

@@ -38,7 +38,7 @@ class Media extends AbstractMedia
     /**
      * Getter for updatedBy
      * The createdBy is assigned by the content repository
-     * This is the name of the (jcr) user that updated the node
+     * This is the name of the (jcr) user that updated the node.
      *
      * @return string name of the (jcr) user who updated the file
      */

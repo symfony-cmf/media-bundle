@@ -55,15 +55,19 @@ class PhpcrImageTestController extends Controller
         return PathHelper::absolutizePath($path, '/');
     }
 
-    protected function getImageContentObject($contentObjects) {
-        if (is_null($contentObjects)) return null;
+    protected function getImageContentObject($contentObjects)
+    {
+        if (is_null($contentObjects)) {
+            return;
+        }
         /** @var Content $contentObject */
-        foreach($contentObjects as $contentObject) {
+        foreach ($contentObjects as $contentObject) {
             if ($contentObject->getFile() instanceof Image) {
                 return $contentObject;
             }
         }
-        return null;
+
+        return;
     }
 
     public function indexAction(Request $request)
@@ -72,10 +76,10 @@ class PhpcrImageTestController extends Controller
 
         // get image(s)
         $imageClass = 'Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\Image';
-        $images     = $dm->getRepository($imageClass)->findAll();
+        $images = $dm->getRepository($imageClass)->findAll();
 
         // get content with image object
-        $contentClass  = 'Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Document\Content';
+        $contentClass = 'Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Document\Content';
         $contentObject = $this->getImageContentObject($dm->getRepository($contentClass)->findAll());
 
         $uploadForm = $this->getUploadForm();
@@ -96,13 +100,13 @@ class PhpcrImageTestController extends Controller
         }
 
         return $this->render('::tests/image.html.twig', array(
-            'upload_form'              => $uploadForm->createView(),
-            'editor_form'              => $editorUploadForm->createView(),
-            'content_form_new'         => $newContentForm->createView(),
-            'content_form'             => $contentForm->createView(),
-            'content_form_imagine'     => $contentFormImagine->createView(),
+            'upload_form' => $uploadForm->createView(),
+            'editor_form' => $editorUploadForm->createView(),
+            'content_form_new' => $newContentForm->createView(),
+            'content_form' => $contentForm->createView(),
+            'content_form_imagine' => $contentFormImagine->createView(),
             'content_form_edit_action' => $contentFormEditAction,
-            'images'                   => $images,
+            'images' => $images,
         ));
     }
 
@@ -112,7 +116,7 @@ class PhpcrImageTestController extends Controller
 
         $form->handleRequest($request);
         if ($form->isValid()) {
-            /** @var UploadFileHelperInterface $uploadFileHelper */
+            /* @var UploadFileHelperInterface $uploadFileHelper */
             $uploadImageHelper = $this->get('cmf_media.upload_image_helper');
 
             $uploadedFile = $request->files->get('image');

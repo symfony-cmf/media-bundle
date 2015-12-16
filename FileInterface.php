@@ -20,14 +20,14 @@ namespace Symfony\Cmf\Bundle\MediaBundle;
 interface FileInterface extends HierarchyInterface, MetadataInterface
 {
     /**
-     * Returns the content
+     * Returns the content.
      *
      * @return string
      */
     public function getContentAsString();
 
     /**
-     * Set the content
+     * Set the content.
      *
      * @param string $content
      */
@@ -45,24 +45,23 @@ interface FileInterface extends HierarchyInterface, MetadataInterface
     public function copyContentFromFile($file);
 
     /**
-     * The mime type of this media element
+     * The mime type of this media element.
      *
      * @return string
      */
     public function getContentType();
 
     /**
-     * Returns the extension of the file
+     * Returns the extension of the file.
      *
      * @return string
      */
     public function getExtension();
 
     /**
-     * Get the file size in bytes
+     * Get the file size in bytes.
      *
-     * @return integer
+     * @return int
      */
     public function getSize();
-
 }

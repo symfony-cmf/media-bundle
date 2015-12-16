@@ -36,7 +36,7 @@ class PhpcrDriver extends ElFinderVolumeDriver
     /**
      * Driver id
      * Must be started from letter and contains [a-z0-9]
-     * Used as part of volume id
+     * Used as part of volume id.
      *
      * @var string
      **/
@@ -67,29 +67,31 @@ class PhpcrDriver extends ElFinderVolumeDriver
         CmfMediaHelper $mediaHelper,
         $imagineFilter = false)
     {
-        $this->dm            = $registry->getManager($managerName);
-        $this->mediaManager  = $mediaManager;
-        $this->mediaHelper   = $mediaHelper;
+        $this->dm = $registry->getManager($managerName);
+        $this->mediaManager = $mediaManager;
+        $this->mediaHelper = $mediaHelper;
         $this->imagineFilter = $imagineFilter;
 
         $opts = array(
-            'workspace'     => '',
-            'manager'       => '',
+            'workspace' => '',
+            'manager' => '',
             // TODO: remove when implemented/ errors are fixed
-            'disabled'      => array(
+            'disabled' => array(
                 'archive',
                 'extract',
                 'resize',
-            )
+            ),
         );
         $this->options = array_merge($this->options, $opts);
     }
 
     /**
-     * Return parent directory path
+     * Return parent directory path.
      *
-     * @param  string $path file path
+     * @param string $path file path
+     *
      * @return string
+     *
      * @author Dmitry (dio) Levashov
      **/
     protected function _dirname($path)
@@ -98,10 +100,12 @@ class PhpcrDriver extends ElFinderVolumeDriver
     }
 
     /**
-     * Return file name
+     * Return file name.
      *
-     * @param  string $path file path
+     * @param string $path file path
+     *
      * @return string
+     *
      * @author Dmitry (dio) Levashov
      **/
     protected function _basename($path)
@@ -110,23 +114,27 @@ class PhpcrDriver extends ElFinderVolumeDriver
     }
 
     /**
-     * Join dir name and file name and retur full path
+     * Join dir name and file name and retur full path.
      *
-     * @param  string $dir
-     * @param  string $name
+     * @param string $dir
+     * @param string $name
+     *
      * @return string
+     *
      * @author Dmitry (dio) Levashov
      **/
     protected function _joinPath($dir, $name)
     {
-        return $dir."/".$name;
+        return $dir.'/'.$name;
     }
 
     /**
-     * Return normalized path, this works the same as os.path.normpath() in Python
+     * Return normalized path, this works the same as os.path.normpath() in Python.
      *
-     * @param  string $path path
+     * @param string $path path
+     *
      * @return string
+     *
      * @author Troex Nevelin
      **/
     protected function _normpath($path)
@@ -143,8 +151,7 @@ class PhpcrDriver extends ElFinderVolumeDriver
 
         if (($initial_slashes)
             && (strpos($path, '//') === 0)
-            && (strpos($path, '///') === false))
-        {
+            && (strpos($path, '///') === false)) {
             $initial_slashes = 2;
         }
 
@@ -159,8 +166,7 @@ class PhpcrDriver extends ElFinderVolumeDriver
 
             if (($comp !== '..')
                 || (!$initial_slashes && !$new_comps)
-                || ($new_comps && (end($new_comps) === '..')))
-            {
+                || ($new_comps && (end($new_comps) === '..'))) {
                 array_push($new_comps, $comp);
             } elseif ($new_comps) {
                 array_pop($new_comps);
@@ -169,41 +175,47 @@ class PhpcrDriver extends ElFinderVolumeDriver
         $comps = $new_comps;
         $path = implode('/', $comps);
         if ($initial_slashes) {
-            $path = str_repeat('/', $initial_slashes) . $path;
+            $path = str_repeat('/', $initial_slashes).$path;
         }
 
         return $path ? $path : '.';
     }
 
     /**
-     * Return file path related to root dir
+     * Return file path related to root dir.
      *
-     * @param  string $path file path
+     * @param string $path file path
+     *
      * @return string
+     *
      * @author Dmitry (dio) Levashov
      **/
     protected function _relpath($path)
     {
-        return $path === $this->root ? '' : substr($path, strlen($this->root)+1);
+        return $path === $this->root ? '' : substr($path, strlen($this->root) + 1);
     }
 
     /**
-     * Convert path related to root dir into real path
+     * Convert path related to root dir into real path.
      *
-     * @param  string $path file path
+     * @param string $path file path
+     *
      * @return string
+     *
      * @author Dmitry (dio) Levashov
      **/
     protected function _abspath($path)
     {
-        return $path === "/" ? $this->root : $this->root."/".$path;
+        return $path === '/' ? $this->root : $this->root.'/'.$path;
     }
 
     /**
-     * Return fake path started from root dir
+     * Return fake path started from root dir.
      *
-     * @param  string $path file path
+     * @param string $path file path
+     *
      * @return string
+     *
      * @author Dmitry (dio) Levashov
      **/
     protected function _path($path)
@@ -212,16 +224,18 @@ class PhpcrDriver extends ElFinderVolumeDriver
     }
 
     /**
-     * Return true if $path is children of $parent
+     * Return true if $path is children of $parent.
      *
-     * @param  string $path   path to check
-     * @param  string $parent parent path
+     * @param string $path   path to check
+     * @param string $parent parent path
+     *
      * @return bool
+     *
      * @author Dmitry (dio) Levashov
      **/
     protected function _inpath($path, $parent)
     {
-        return $path === $parent || strpos($path, $parent."/") === 0;
+        return $path === $parent || strpos($path, $parent.'/') === 0;
     }
 
     /**
@@ -236,12 +250,14 @@ class PhpcrDriver extends ElFinderVolumeDriver
      * - (bool) hidden   is object hidden. optionally
      * - (string) alias  for symlinks - link target path relative to root path. optionally
      * - (string) target for symlinks - link target path. optionally
-     * - (string) url    for displaying a preview, handle double click. required
+     * - (string) url    for displaying a preview, handle double click. required.
      *
      * If file does not exists - returns empty array or false.
      *
-     * @param  string      $path file path
+     * @param string $path file path
+     *
      * @return array|false
+     *
      * @author Dmitry (dio) Levashov
      **/
     protected function _stat($path)
@@ -273,32 +289,34 @@ class PhpcrDriver extends ElFinderVolumeDriver
         if ($doc instanceof ImageInterface) {
             $url = $this->mediaHelper->displayUrl($doc);
             if ($this->imagineFilter) {
-                $tmbUrl = $this->mediaHelper->displayUrl($doc, array( 'imagine_filter' => $this->imagineFilter ));
+                $tmbUrl = $this->mediaHelper->displayUrl($doc, array('imagine_filter' => $this->imagineFilter));
             }
         } elseif ($doc instanceof FileInterface) {
             $url = $this->mediaHelper->downloadUrl($doc);
         }
 
         $stat = array(
-            'size'   => $dir ? 0 : $doc->getSize(),
-            'ts'     => $ts,
-            'mime'   => $dir ? 'directory' : $doc->getContentType(),
-            'read'   => true,
-            'write'  => true,
+            'size' => $dir ? 0 : $doc->getSize(),
+            'ts' => $ts,
+            'mime' => $dir ? 'directory' : $doc->getContentType(),
+            'read' => true,
+            'write' => true,
             'locked' => false,
             'hidden' => false,
-            'url'    => $url,
-            'tmb'    => $tmbUrl,
+            'url' => $url,
+            'tmb' => $tmbUrl,
         );
 
         return $stat;
     }
 
     /**
-     * Return true if path is dir and has at least one childs directory
+     * Return true if path is dir and has at least one childs directory.
      *
-     * @param  string $path dir path
+     * @param string $path dir path
+     *
      * @return bool
+     *
      * @author Dmitry (dio) Levashov
      **/
     protected function _subdirs($path)
@@ -315,9 +333,11 @@ class PhpcrDriver extends ElFinderVolumeDriver
      * Return object width and height
      * Ususaly used for images, but can be realize for video etc...
      *
-     * @param  string $path file path
-     * @param  string $mime file mime type
+     * @param string $path file path
+     * @param string $mime file mime type
+     *
      * @return string
+     *
      * @author Dmitry (dio) Levashov
      **/
     protected function _dimensions($path, $mime)
@@ -332,10 +352,12 @@ class PhpcrDriver extends ElFinderVolumeDriver
     }
 
     /**
-     * Return files list in directory
+     * Return files list in directory.
      *
-     * @param  string $path dir path
+     * @param string $path dir path
+     *
      * @return array
+     *
      * @author Dmitry (dio) Levashov
      **/
     protected function _scandir($path)
@@ -350,14 +372,16 @@ class PhpcrDriver extends ElFinderVolumeDriver
     }
 
     /**
-     * Open file and return file pointer
+     * Open file and return file pointer.
      *
-     * @param  string         $path file path
-     * @param  string         $mode mode to use when opening file
+     * @param string $path file path
+     * @param string $mode mode to use when opening file
+     *
      * @return resource|false
+     *
      * @author Dmitry (dio) Levashov
      **/
-    protected function _fopen($path, $mode = "rb")
+    protected function _fopen($path, $mode = 'rb')
     {
         $doc = $this->dm->find(null, $path);
         if ($doc instanceof File) {
@@ -368,11 +392,13 @@ class PhpcrDriver extends ElFinderVolumeDriver
     }
 
     /**
-     * Close opened file
+     * Close opened file.
      *
-     * @param  resource $fp   file pointer
-     * @param  string   $path file path
+     * @param resource $fp   file pointer
+     * @param string   $path file path
+     *
      * @return bool
+     *
      * @author Dmitry (dio) Levashov
      **/
     protected function _fclose($fp, $path = '')
@@ -381,11 +407,13 @@ class PhpcrDriver extends ElFinderVolumeDriver
     }
 
     /**
-     * Create dir and return created dir path or false on failed
+     * Create dir and return created dir path or false on failed.
      *
-     * @param  string      $path parent dir path
-     * @param  string      $name new directory name
+     * @param string $path parent dir path
+     * @param string $name new directory name
+     *
      * @return string|bool
+     *
      * @author Dmitry (dio) Levashov
      **/
     protected function _mkdir($path, $name)
@@ -405,11 +433,13 @@ class PhpcrDriver extends ElFinderVolumeDriver
     }
 
     /**
-     * Create file and return it's path or false on failed
+     * Create file and return it's path or false on failed.
      *
-     * @param  string      $path parent dir path
-     * @param  string      $name new file name
+     * @param string $path parent dir path
+     * @param string $name new file name
+     *
      * @return string|bool
+     *
      * @author Dmitry (dio) Levashov
      **/
     protected function _mkfile($path, $name)
@@ -436,12 +466,14 @@ class PhpcrDriver extends ElFinderVolumeDriver
     }
 
     /**
-     * Create symlink
+     * Create symlink.
      *
-     * @param  string $source    file to link to
-     * @param  string $targetDir folder to create link in
-     * @param  string $name      symlink name
+     * @param string $source    file to link to
+     * @param string $targetDir folder to create link in
+     * @param string $name      symlink name
+     *
      * @return bool
+     *
      * @author Dmitry (dio) Levashov
      **/
     protected function _symlink($source, $targetDir, $name)
@@ -450,12 +482,14 @@ class PhpcrDriver extends ElFinderVolumeDriver
     }
 
     /**
-     * Copy file into another file (only inside one volume)
+     * Copy file into another file (only inside one volume).
      *
-     * @param  string $source    source file path
-     * @param  string $targetDir target dir path
-     * @param  string $name      file name
+     * @param string $source    source file path
+     * @param string $targetDir target dir path
+     * @param string $name      file name
+     *
      * @return bool
+     *
      * @author Dmitry (dio) Levashov
      **/
     protected function _copy($source, $targetDir, $name)
@@ -473,15 +507,17 @@ class PhpcrDriver extends ElFinderVolumeDriver
      * Move file into another parent dir or rename file.
      * Return new file path or false.
      *
-     * @param  string      $source    source file path
-     * @param  string      $targetDir target dir path
-     * @param  string      $name      file name
+     * @param string $source    source file path
+     * @param string $targetDir target dir path
+     * @param string $name      file name
+     *
      * @return string|bool
+     *
      * @author Dmitry (dio) Levashov
      **/
     protected function _move($source, $targetDir, $name)
     {
-        $filename  = $this->_joinPath($targetDir, $name);
+        $filename = $this->_joinPath($targetDir, $name);
         $sourceDir = $this->_dirname($source);
 
         try {
@@ -498,10 +534,12 @@ class PhpcrDriver extends ElFinderVolumeDriver
     }
 
     /**
-     * Remove file
+     * Remove file.
      *
-     * @param  string $path file path
+     * @param string $path file path
+     *
      * @return bool
+     *
      * @author Dmitry (dio) Levashov
      **/
     protected function _unlink($path)
@@ -521,10 +559,12 @@ class PhpcrDriver extends ElFinderVolumeDriver
     }
 
     /**
-     * Remove dir
+     * Remove dir.
      *
-     * @param  string $path dir path
+     * @param string $path dir path
+     *
      * @return bool
+     *
      * @author Dmitry (dio) Levashov
      **/
     protected function _rmdir($path)
@@ -536,11 +576,13 @@ class PhpcrDriver extends ElFinderVolumeDriver
      * Create new file and write into it from file pointer.
      * Return new file path or false on error.
      *
-     * @param  resource    $fp   file pointer
-     * @param  string      $dir  target dir path
-     * @param  string      $name file name
-     * @param  array       $stat file stat (required by some virtual fs)
+     * @param resource $fp   file pointer
+     * @param string   $dir  target dir path
+     * @param string   $name file name
+     * @param array    $stat file stat (required by some virtual fs)
+     *
      * @return bool|string
+     *
      * @author Dmitry (dio) Levashov
      **/
     protected function _save($fp, $dir, $name, $stat)
@@ -571,10 +613,12 @@ class PhpcrDriver extends ElFinderVolumeDriver
     }
 
     /**
-     * Get file contents
+     * Get file contents.
      *
-     * @param  string       $path file path
+     * @param string $path file path
+     *
      * @return string|false
+     *
      * @author Dmitry (dio) Levashov
      **/
     protected function _getContents($path)
@@ -590,11 +634,13 @@ class PhpcrDriver extends ElFinderVolumeDriver
     }
 
     /**
-     * Write a string to a file
+     * Write a string to a file.
      *
-     * @param  string $path    file path
-     * @param  string $content new file content
+     * @param string $path    file path
+     * @param string $content new file content
+     *
      * @return bool
+     *
      * @author Dmitry (dio) Levashov
      **/
     protected function _filePutContents($path, $content)
@@ -615,11 +661,13 @@ class PhpcrDriver extends ElFinderVolumeDriver
     }
 
     /**
-     * Extract files from archive
+     * Extract files from archive.
      *
-     * @param  string $path file path
-     * @param  array  $arc  archiver options
+     * @param string $path file path
+     * @param array  $arc  archiver options
+     *
      * @return bool
+     *
      * @author Dmitry (dio) Levashov,
      * @author Alexey Sukhotin
      **/
@@ -629,13 +677,15 @@ class PhpcrDriver extends ElFinderVolumeDriver
     }
 
     /**
-     * Create archive and return its path
+     * Create archive and return its path.
      *
-     * @param  string      $dir   target dir
-     * @param  array       $files files names list
-     * @param  string      $name  archive name
-     * @param  array       $arc   archiver options
+     * @param string $dir   target dir
+     * @param array  $files files names list
+     * @param string $name  archive name
+     * @param array  $arc   archiver options
+     *
      * @return string|bool
+     *
      * @author Dmitry (dio) Levashov,
      * @author Alexey Sukhotin
      **/
@@ -645,9 +695,8 @@ class PhpcrDriver extends ElFinderVolumeDriver
     }
 
     /**
-     * Detect available archivers
+     * Detect available archivers.
      *
-     * @return void
      * @author Dmitry (dio) Levashov,
      * @author Alexey Sukhotin
      **/

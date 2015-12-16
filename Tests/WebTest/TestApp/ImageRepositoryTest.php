@@ -32,12 +32,12 @@ class ImageRepositoryTest extends BaseTestCase
     }
 
     /**
-     * Test the ImageRepository search
+     * Test the ImageRepository search.
      *
-     * @param string  $rootPath
-     * @param integer $resultsCount
-     * @param string  $term
-     * @param string  $name
+     * @param string $rootPath
+     * @param int    $resultsCount
+     * @param string $term
+     * @param string $name
      *
      * @dataProvider imageSearchProvider
      */

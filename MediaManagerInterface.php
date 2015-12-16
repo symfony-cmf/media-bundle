@@ -20,7 +20,7 @@ interface MediaManagerInterface
     /**
      * Get path, like:
      * - /path/to/file/filename.ext
-     * - /fileId
+     * - /fileId.
      *
      * It is similar to a filesystem path only always uses "/" to separate
      * parents, and therefore allows to get the parent from the path.
@@ -32,7 +32,7 @@ interface MediaManagerInterface
     public function getPath(MediaInterface $media);
 
     /**
-     * Get an url safe path
+     * Get an url safe path.
      *
      * @param MediaInterface $media
      *
@@ -47,8 +47,6 @@ interface MediaManagerInterface
      *
      * @param MediaInterface $media
      * @param string         $parentPath optionally add the parent path
-     *
-     * @return void
      *
      * @throws \RuntimeException if the defaults could not be set
      */

@@ -16,12 +16,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Controller to handle basic image actions that have a route
+ * Controller to handle basic image actions that have a route.
  */
 class ImageController extends FileController
 {
     /**
-     * Action to display an image object that has a route
+     * Action to display an image object that has a route.
      *
      * @param string $path
      */
@@ -35,7 +35,7 @@ class ImageController extends FileController
 
         $contentObject = $this->getObjectManager()->find($this->class, $id);
 
-        if (! $contentObject || ! $contentObject instanceof ImageInterface) {
+        if (!$contentObject || !$contentObject instanceof ImageInterface) {
             throw new NotFoundHttpException(sprintf(
                 'Object with identifier %s cannot be resolved to a valid instance of Symfony\Cmf\Bundle\MediaBundle\ImageInterface',
                 $path

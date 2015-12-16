@@ -20,14 +20,14 @@ namespace Symfony\Cmf\Bundle\MediaBundle;
 interface MediaInterface
 {
     /**
-     * Get the unique identifier of this media element
+     * Get the unique identifier of this media element.
      *
      * @return string
      */
     public function getId();
 
     /**
-     * The name of this media, e.g. for managing media documents
+     * The name of this media, e.g. for managing media documents.
      *
      * For example an image file name.
      *
@@ -37,23 +37,20 @@ interface MediaInterface
 
     /**
      * @param $name
-     *
-     * @return void
      */
     public function setName($name);
 
     /**
-     * Get creation date
+     * Get creation date.
      *
      * @return \Datetime
      */
     public function getCreatedAt();
 
     /**
-     * Get last update date
+     * Get last update date.
      *
      * @return \Datetime
      */
     public function getUpdatedAt();
-
 }

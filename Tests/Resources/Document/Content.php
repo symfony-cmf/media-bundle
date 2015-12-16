@@ -14,7 +14,6 @@ namespace Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Document;
 use Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\File;
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-
 use Doctrine\ODM\PHPCR\Mapping\Annotations as PHPCRODM;
 
 /**
@@ -79,7 +78,7 @@ class Content
             // TODO: https://github.com/doctrine/phpcr-odm/pull/262
             $this->file->copyContentFromFile($file);
         } elseif ($file instanceof FileInterface) {
-			$file->setName('file'); // Ensure node name matches document mapping
+            $file->setName('file'); // Ensure node name matches document mapping
             $this->file = $file;
         } else {
             $this->file = new File();
@@ -88,7 +87,7 @@ class Content
     }
 
     /**
-     * Get file
+     * Get file.
      *
      * @return File
      */

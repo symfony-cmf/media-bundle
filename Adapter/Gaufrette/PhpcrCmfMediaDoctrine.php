@@ -16,7 +16,7 @@ use PHPCR\Util\PathHelper;
 class PhpcrCmfMediaDoctrine extends AbstractCmfMediaDoctrine
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function getParentPath($path)
     {
@@ -24,7 +24,7 @@ class PhpcrCmfMediaDoctrine extends AbstractCmfMediaDoctrine
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function getBaseName($path)
     {

@@ -27,7 +27,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 
 /**
- * Controller to handle file downloads, uploads and other things that have a route
+ * Controller to handle file downloads, uploads and other things that have a route.
  */
 class FileController
 {
@@ -63,14 +63,14 @@ class FileController
         $requiredUploadRole,
         SecurityContextInterface $securityContext = null
     ) {
-        $this->managerRegistry    = $registry;
-        $this->managerName        = $managerName;
-        $this->class              = $class === '' ? null : $class;
-        $this->rootPath           = $rootPath;
-        $this->mediaManager       = $mediaManager;
-        $this->uploadFileHelper   = $uploadFileHelper;
+        $this->managerRegistry = $registry;
+        $this->managerName = $managerName;
+        $this->class = $class === '' ? null : $class;
+        $this->rootPath = $rootPath;
+        $this->mediaManager = $mediaManager;
+        $this->uploadFileHelper = $uploadFileHelper;
         $this->requiredUploadRole = $requiredUploadRole;
-        $this->securityContext    = $securityContext;
+        $this->securityContext = $securityContext;
     }
 
     /**
@@ -108,7 +108,7 @@ class FileController
 
     /**
      * Get the object manager from the registry, based on the current
-     * managerName
+     * managerName.
      *
      * @return ObjectManager
      */
@@ -118,7 +118,7 @@ class FileController
     }
 
     /**
-     * Action to download a file object that has a route
+     * Action to download a file object that has a route.
      *
      * @param string $path
      */
@@ -132,7 +132,7 @@ class FileController
 
         $contentDocument = $this->getObjectManager()->find($this->class, $id);
 
-        if (! $contentDocument || ! $contentDocument instanceof FileInterface) {
+        if (!$contentDocument || !$contentDocument instanceof FileInterface) {
             throw new NotFoundHttpException(sprintf(
                 'Object with identifier %s cannot be resolved to a valid instance of Symfony\Cmf\Bundle\MediaBundle\FileInterface',
                 $path
@@ -167,9 +167,10 @@ class FileController
     }
 
     /**
-     * Action to upload a file
+     * Action to upload a file.
      *
-     * @param  Request  $request
+     * @param Request $request
+     *
      * @return Response
      */
     public function uploadAction(Request $request)
