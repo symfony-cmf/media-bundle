@@ -25,7 +25,7 @@ class LoadMediaData implements FixtureInterface
     {
         NodeHelper::createPath($manager->getPhpcrSession(), '/test');
 
-        $testDataDir = realpath(__DIR__ . '/../../app/Resources/data');
+        $testDataDir = realpath(__DIR__.'/../../app/Resources/data');
 
         $root = $manager->find(null, '/test');
 
@@ -53,13 +53,13 @@ class LoadMediaData implements FixtureInterface
         $image = new Image();
         $image->setParent($mediaRoot);
         $image->setName('cmf-logo.png');
-        $image->setFileContentFromFilesystem($testDataDir .'/cmf-logo.png');
+        $image->setFileContentFromFilesystem($testDataDir.'/cmf-logo.png');
         $manager->persist($image);
 
         $image2 = new Image();
         $image2->setParent($contentRoot);
         $image2->setName('cmf-logo-2.png');
-        $image2->setFileContentFromFilesystem($testDataDir .'/cmf-logo.png');
+        $image2->setFileContentFromFilesystem($testDataDir.'/cmf-logo.png');
         $manager->persist($image2);
 
         // Content with image
@@ -69,7 +69,7 @@ class LoadMediaData implements FixtureInterface
         $content->setTitle('Content document with image embedded');
 
         $contentImage = new Image();
-        $contentImage->setFileContentFromFilesystem($testDataDir .'/cmf-logo.png');
+        $contentImage->setFileContentFromFilesystem($testDataDir.'/cmf-logo.png');
 
         $content->setFile($contentImage);
         $manager->persist($content);
@@ -81,7 +81,7 @@ class LoadMediaData implements FixtureInterface
         $content2->setTitle('Content document with file attached');
 
         $contentFile = new File();
-        $contentFile->setFileContentFromFilesystem($testDataDir .'/testfile.txt');
+        $contentFile->setFileContentFromFilesystem($testDataDir.'/testfile.txt');
 
         $content2->setFile($contentFile);
         $manager->persist($content2);

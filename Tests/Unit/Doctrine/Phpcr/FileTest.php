@@ -41,7 +41,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
     {
         vfsStream::setup('home');
         $fileSystemFile = vfsStream::url('home/test.txt');
-        file_put_contents($fileSystemFile, "Test file content.");
+        file_put_contents($fileSystemFile, 'Test file content.');
 
         $file = new File();
         $file->setFileContentFromFilesystem($fileSystemFile);
@@ -79,7 +79,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
      */
     public function testContentAsString($content, $expectedContent)
     {
-        $file =  new File();
+        $file = new File();
 
         $file->setContentFromString($content);
 
@@ -113,7 +113,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
      */
     public function testCopyContentFromFile($fileInput, $expectedContent, $expectedContentType, $expectedSize)
     {
-        $file =  new File();
+        $file = new File();
 
         $file->copyContentFromFile($fileInput);
 
@@ -133,7 +133,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
      */
     public function testCopyContentFromFileException()
     {
-        $file =  new File();
+        $file = new File();
 
         $file->copyContentFromFile('');
     }

@@ -13,7 +13,6 @@ namespace Symfony\Cmf\Bundle\MediaBundle\Doctrine;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
-
 use Symfony\Cmf\Bundle\MediaBundle\BinaryInterface;
 
 /**
@@ -27,7 +26,7 @@ use Symfony\Cmf\Bundle\MediaBundle\BinaryInterface;
 class DoctrineStreamRewindSubscriber implements EventSubscriber
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getSubscribedEvents()
     {
@@ -67,7 +66,7 @@ class DoctrineStreamRewindSubscriber implements EventSubscriber
         }
 
         $stream = $object->getContentAsStream();
-        if (! is_resource($stream)) {
+        if (!is_resource($stream)) {
             return;
         }
 

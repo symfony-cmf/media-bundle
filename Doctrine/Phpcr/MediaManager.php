@@ -37,8 +37,8 @@ class MediaManager implements MediaManagerInterface
     public function __construct(ManagerRegistry $registry, $managerName, $rootPath = '/')
     {
         $this->managerRegistry = $registry;
-        $this->managerName     = $managerName;
-        $this->rootPath        = $rootPath;
+        $this->managerName = $managerName;
+        $this->rootPath = $rootPath;
     }
 
     /**
@@ -65,7 +65,7 @@ class MediaManager implements MediaManagerInterface
 
     /**
      * Get the object manager from the registry, based on the current
-     * managerName
+     * managerName.
      *
      * @return DocumentManager
      */
@@ -110,7 +110,7 @@ class MediaManager implements MediaManagerInterface
         }
 
         $rootPath = is_null($parentPath) ? $this->rootPath : $parentPath;
-        $path = ($rootPath === '/' ? $rootPath : $rootPath . '/') . $media->getName();
+        $path = ($rootPath === '/' ? $rootPath : $rootPath.'/').$media->getName();
 
         /** @var DocumentManager $dm */
         $dm = $this->getObjectManager();
@@ -119,7 +119,7 @@ class MediaManager implements MediaManagerInterface
         if ($dm->find($class, $path)) {
             // path already exists
             $ext = pathinfo($media->getName(), PATHINFO_EXTENSION);
-            $media->setName($media->getName() . '_' . time() . '_' . rand() . ($ext ? '.' . $ext : ''));
+            $media->setName($media->getName().'_'.time().'_'.rand().($ext ? '.'.$ext : ''));
         }
 
         if (!$media->getParent()) {

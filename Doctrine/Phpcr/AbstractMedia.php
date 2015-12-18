@@ -67,7 +67,7 @@ abstract class AbstractMedia extends ModelAbstractMedia implements HierarchyInte
 
     /**
      * The createdBy is assigned by the content repository
-     * This is the name of the (jcr) user that created the node
+     * This is the name of the (jcr) user that created the node.
      *
      * @return string name of the (jcr) user who created the file
      */

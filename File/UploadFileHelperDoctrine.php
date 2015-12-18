@@ -47,14 +47,14 @@ class UploadFileHelperDoctrine implements UploadFileHelperInterface
         MediaManagerInterface $mediaManager)
     {
         $this->managerRegistry = $registry;
-        $this->managerName     = $managerName;
+        $this->managerName = $managerName;
         $this->setClass($class);
-        $this->rootPath        = $rootPath;
-        $this->mediaManager    = $mediaManager;
+        $this->rootPath = $rootPath;
+        $this->mediaManager = $mediaManager;
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setAllowNonUploadedFiles($boolean)
     {
@@ -108,7 +108,7 @@ class UploadFileHelperDoctrine implements UploadFileHelperInterface
 
     /**
      * Get the object manager from the registry, based on the current
-     * managerName
+     * managerName.
      *
      * @return ObjectManager
      */
@@ -118,7 +118,7 @@ class UploadFileHelperDoctrine implements UploadFileHelperInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function addEditorHelper($name, UploadEditorHelperInterface $helper)
     {
@@ -126,7 +126,7 @@ class UploadFileHelperDoctrine implements UploadFileHelperInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getEditorHelper($name = null)
     {
@@ -138,11 +138,11 @@ class UploadFileHelperDoctrine implements UploadFileHelperInterface
     }
 
     /**
-     * Validate the uploaded file
+     * Validate the uploaded file.
      *
      * @param UploadedFile $file
      *
-     * @return boolean true either returns true or throws an exception
+     * @return bool true either returns true or throws an exception
      *
      * @throws UploadException if the upload failed for some reason.
      */
@@ -168,13 +168,13 @@ class UploadFileHelperDoctrine implements UploadFileHelperInterface
     {
         $errorCode = $file->getError();
         static $errors = array(
-            UPLOAD_ERR_INI_SIZE   => 'The file "%s" exceeds your upload_max_filesize ini directive (limit is %d kb).',
-            UPLOAD_ERR_FORM_SIZE  => 'The file "%s" exceeds the upload limit defined in your form.',
-            UPLOAD_ERR_PARTIAL    => 'The file "%s" was only partially uploaded.',
-            UPLOAD_ERR_NO_FILE    => 'No file was uploaded.',
+            UPLOAD_ERR_INI_SIZE => 'The file "%s" exceeds your upload_max_filesize ini directive (limit is %d kb).',
+            UPLOAD_ERR_FORM_SIZE => 'The file "%s" exceeds the upload limit defined in your form.',
+            UPLOAD_ERR_PARTIAL => 'The file "%s" was only partially uploaded.',
+            UPLOAD_ERR_NO_FILE => 'No file was uploaded.',
             UPLOAD_ERR_CANT_WRITE => 'The file "%s" could not be written on disk.',
             UPLOAD_ERR_NO_TMP_DIR => 'File could not be uploaded: missing temporary directory.',
-            UPLOAD_ERR_EXTENSION  => 'File upload was stopped by a PHP extension.',
+            UPLOAD_ERR_EXTENSION => 'File upload was stopped by a PHP extension.',
         );
 
         $maxFilesize = $errorCode === UPLOAD_ERR_INI_SIZE ? $file->getMaxFilesize() / 1024 : 0;
@@ -184,7 +184,7 @@ class UploadFileHelperDoctrine implements UploadFileHelperInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function handleUploadedFile(UploadedFile $uploadedFile, $class = null)
     {
@@ -209,13 +209,13 @@ class UploadFileHelperDoctrine implements UploadFileHelperInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getUploadResponse(Request $request, array $uploadedFiles = array())
     {
         $editorHelper = $this->getEditorHelper($request->get('editor', 'default'));
 
-        if (! $editorHelper) {
+        if (!$editorHelper) {
             throw new HttpException(409, sprintf(
                 'Editor type "%s" not found, cannot process upload.',
                 $request->get('editor', 'default')

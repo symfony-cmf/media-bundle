@@ -33,16 +33,16 @@ class CmfMediaHelper extends Helper
      */
     public function __construct(MediaManagerInterface $mediaManager, UrlGeneratorInterface $router, ImagineHelper $imagineHelper = null)
     {
-        $this->mediaManager  = $mediaManager;
-        $this->generator     = $router;
+        $this->mediaManager = $mediaManager;
+        $this->generator = $router;
         $this->imagineHelper = $imagineHelper;
     }
 
     /**
      * Generates a download URL from the given file.
      *
-     * @param FileInterface  $file
-     * @param Boolean|string $referenceType The type of reference (one of the constants in UrlGeneratorInterface)
+     * @param FileInterface $file
+     * @param bool|string   $referenceType The type of reference (one of the constants in UrlGeneratorInterface)
      *
      * @return string The generated URL
      */
@@ -58,7 +58,7 @@ class CmfMediaHelper extends Helper
      *
      * @param ImageInterface $file
      * @param array          $options
-     * @param Boolean|string $referenceType The type of reference (one of the constants in UrlGeneratorInterface)
+     * @param bool|string    $referenceType The type of reference (one of the constants in UrlGeneratorInterface)
      *
      * @return string The generated URL
      */

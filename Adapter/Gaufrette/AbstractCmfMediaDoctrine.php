@@ -25,7 +25,7 @@ use Symfony\Cmf\Bundle\MediaBundle\MediaManagerInterface;
 use Symfony\Cmf\Bundle\MediaBundle\MetadataInterface;
 
 /**
- * Cmf doctrine media adapter
+ * Cmf doctrine media adapter.
  *
  * Gaufrette uses a key to identify a file or directory. This adapter uses a
  * filesystem path, like /path/to/file/filename.ext, as key.
@@ -55,21 +55,21 @@ abstract class AbstractCmfMediaDoctrine implements
     protected $keys;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param ManagerRegistry       $registry
      * @param string                $managerName
      * @param string                $class        fully qualified class name of file
      * @param MediaManagerInterface $mediaManager
      * @param string                $rootPath     path where the filesystem is located
-     * @param boolean               $create       whether to create the directory if
+     * @param bool                  $create       whether to create the directory if
      *                                            it does not exist (default FALSE)
      * @param string                $dirClass     fully qualified class name for dirs
      *                                            (default NULL: dir is same as file)
      * @param string                $identifier   property used to identify a file and
      *                                            lookup (default NULL: let Doctrine
      *                                            determine the identifier)
-     * @param boolean               $autoFlush    whether to immediately flush write
+     * @param bool                  $autoFlush    whether to immediately flush write
      *                                            and delete actions (default: true)
      */
     public function __construct(
@@ -84,14 +84,14 @@ abstract class AbstractCmfMediaDoctrine implements
         $autoFlush = true)
     {
         $this->managerRegistry = $registry;
-        $this->managerName     = $managerName;
-        $this->class           = $class;
-        $this->mediaManager    = $mediaManager;
-        $this->rootPath        = Util\Path::normalize($rootPath);
-        $this->create          = $create;
-        $this->dirClass        = $dirClass;
-        $this->identifier      = $identifier;
-        $this->autoFlush       = $autoFlush;
+        $this->managerName = $managerName;
+        $this->class = $class;
+        $this->mediaManager = $mediaManager;
+        $this->rootPath = Util\Path::normalize($rootPath);
+        $this->create = $create;
+        $this->dirClass = $dirClass;
+        $this->identifier = $identifier;
+        $this->autoFlush = $autoFlush;
 
         if (!is_subclass_of($class, 'Symfony\Cmf\Bundle\MediaBundle\FileInterface')) {
             throw new \InvalidArgumentException(sprintf(
@@ -127,7 +127,7 @@ abstract class AbstractCmfMediaDoctrine implements
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function read($key)
     {
@@ -137,13 +137,13 @@ abstract class AbstractCmfMediaDoctrine implements
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function write($key, $content)
     {
         if ($this->exists($key)) {
             $file = $this->find($key);
-            if (! $file instanceof FileInterface) {
+            if (!$file instanceof FileInterface) {
                 return false;
             }
         } else {
@@ -151,7 +151,7 @@ abstract class AbstractCmfMediaDoctrine implements
 
             $this->ensureDirectoryExists($this->getParentPath($filePath), $this->create);
 
-            $file   = new $this->class;
+            $file = new $this->class();
             $parent = $this->find($this->getParentPath($key));
 
             $this->setFileDefaults($filePath, $file, $parent);
@@ -168,7 +168,7 @@ abstract class AbstractCmfMediaDoctrine implements
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function exists($key)
     {
@@ -176,7 +176,7 @@ abstract class AbstractCmfMediaDoctrine implements
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function keys()
     {
@@ -195,7 +195,7 @@ abstract class AbstractCmfMediaDoctrine implements
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function mtime($key)
     {
@@ -205,7 +205,7 @@ abstract class AbstractCmfMediaDoctrine implements
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function delete($key)
     {
@@ -224,7 +224,7 @@ abstract class AbstractCmfMediaDoctrine implements
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function rename($sourceKey, $targetKey)
     {
@@ -248,7 +248,7 @@ abstract class AbstractCmfMediaDoctrine implements
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function isDirectory($key)
     {
@@ -266,7 +266,7 @@ abstract class AbstractCmfMediaDoctrine implements
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function checksum($key)
     {
@@ -276,12 +276,12 @@ abstract class AbstractCmfMediaDoctrine implements
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function listKeys($prefix = '')
     {
         $dirKeys = $fileKeys = array();
-        $files   = $this->findAll($prefix);
+        $files = $this->findAll($prefix);
 
         foreach ($files as $file) {
             $key = $this->computeKey($this->getFilePath($file));
@@ -300,7 +300,7 @@ abstract class AbstractCmfMediaDoctrine implements
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @throws \RuntimeException If file cannot be found or cannot be written
      *                           to
@@ -309,11 +309,11 @@ abstract class AbstractCmfMediaDoctrine implements
     {
         $file = $this->find($key);
 
-        if (! $file) {
+        if (!$file) {
             throw new \RuntimeException(sprintf('The file "%s" does not exist.', $key));
         }
 
-        if (! $file instanceof MetadataInterface) {
+        if (!$file instanceof MetadataInterface) {
             $type = is_object($file) ? get_class($file) : gettype($file);
             throw new \InvalidArgumentException(sprintf(
                 'The class "%s" does not implement Symfony\Cmf\Bundle\MediaBundle\MetadataInterface',
@@ -325,7 +325,7 @@ abstract class AbstractCmfMediaDoctrine implements
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getMetadata($key)
     {
@@ -347,7 +347,7 @@ abstract class AbstractCmfMediaDoctrine implements
 
     /**
      * Get the object manager from the registry, based on the current
-     * managerName
+     * managerName.
      *
      * @return \Doctrine\Common\Persistence\ObjectManager
      */
@@ -358,7 +358,7 @@ abstract class AbstractCmfMediaDoctrine implements
 
     /**
      * Whether to flush Doctrine directly after a persist,
-     * disable for batch actions
+     * disable for batch actions.
      *
      * @param $bool boolean
      */
@@ -371,14 +371,14 @@ abstract class AbstractCmfMediaDoctrine implements
      * Find a file object for the given key.
      *
      * @param string|int $key Identifier.
-     * @param boolean    $dir directly try to find a directory
+     * @param bool       $dir directly try to find a directory
      *
      * @return FileInterface
      */
     protected function find($key, $dir = false)
     {
         if (!isset($key)) {
-            return null;
+            return;
         }
 
         $id = $this->mapKeyToId($key);
@@ -413,15 +413,16 @@ abstract class AbstractCmfMediaDoctrine implements
 
     /**
      * Get all files and directories,
-     * extend for a specific and more efficient implementation
+     * extend for a specific and more efficient implementation.
      *
-     * @param  string          $prefix
+     * @param string $prefix
+     *
      * @return FileInterface[]
      */
     protected function findAll($prefix = '')
     {
         $filesAndDirs = array();
-        $prefix = $this->normalizePath($this->rootPath . '/' . trim($prefix));
+        $prefix = $this->normalizePath($this->rootPath.'/'.trim($prefix));
 
         $files = $this->getObjectManager()->getRepository($this->class)->findAll();
         foreach ($files as $file) {
@@ -456,7 +457,7 @@ abstract class AbstractCmfMediaDoctrine implements
     }
 
     /**
-     * Map the key to an id to retrieve the file
+     * Map the key to an id to retrieve the file.
      *
      * Gaufrette uses a key to identify a file or directory. This adapter uses
      * a filesystem path, like /path/to/file/filename.ext, as key.
@@ -471,7 +472,7 @@ abstract class AbstractCmfMediaDoctrine implements
     }
 
     /**
-     * Computes the key from the specified path
+     * Computes the key from the specified path.
      *
      * @param string $path
      *
@@ -485,7 +486,7 @@ abstract class AbstractCmfMediaDoctrine implements
     }
 
     /**
-     * Computes the path from the specified key
+     * Computes the path from the specified key.
      *
      * @param string $key The key which for to compute the path
      *
@@ -499,11 +500,11 @@ abstract class AbstractCmfMediaDoctrine implements
     {
         $this->ensureDirectoryExists($this->rootPath, $this->create);
 
-        return $this->normalizePath($this->rootPath . '/' . $key);
+        return $this->normalizePath($this->rootPath.'/'.$key);
     }
 
     /**
-     * Normalizes the given path
+     * Normalizes the given path.
      *
      * @param string $path
      *
@@ -533,7 +534,7 @@ abstract class AbstractCmfMediaDoctrine implements
     abstract protected function getParentPath($path);
 
     /**
-     * Get the name from the path
+     * Get the name from the path.
      *
      * @param string $path a valid absolute path, like /content/jobs/data
      *
@@ -542,7 +543,7 @@ abstract class AbstractCmfMediaDoctrine implements
     abstract protected function getBaseName($path);
 
     /**
-     * Set default values for a new file or directory
+     * Set default values for a new file or directory.
      *
      * @param string             $path   Path of the file
      * @param FileInterface      $file
@@ -551,7 +552,7 @@ abstract class AbstractCmfMediaDoctrine implements
     protected function setFileDefaults($path, FileInterface $file, DirectoryInterface $parent = null)
     {
         $setIdentifier = $this->identifier ? 'set'.ucfirst($this->identifier) : false;
-        $name          = $this->getBaseName($path);
+        $name = $this->getBaseName($path);
 
         if ($setIdentifier) {
             $file->{$setIdentifier}($name);
@@ -564,11 +565,11 @@ abstract class AbstractCmfMediaDoctrine implements
     }
 
     /**
-     * Ensures the specified directory exists, creates it if it does not
+     * Ensures the specified directory exists, creates it if it does not.
      *
-     * @param string  $dirPath Path of the directory to test
-     * @param boolean $create  Whether to create the directory if it does
-     *                         not exist
+     * @param string $dirPath Path of the directory to test
+     * @param bool   $create  Whether to create the directory if it does
+     *                        not exist
      *
      * @throws RuntimeException if the directory does not exists and could not
      *                          be created
@@ -585,7 +586,7 @@ abstract class AbstractCmfMediaDoctrine implements
     }
 
     /**
-     * Creates the specified directory and its parents, like mkdir -p
+     * Creates the specified directory and its parents, like mkdir -p.
      *
      * @param string $dirPath Path of the directory to create
      *
@@ -612,7 +613,7 @@ abstract class AbstractCmfMediaDoctrine implements
 
         $dirClass = $this->dirClass ? $this->dirClass : $this->class;
 
-        $dir = new $dirClass;
+        $dir = new $dirClass();
         $this->setFileDefaults($dirPath, $dir, $parent);
 
         $this->getObjectManager()->persist($dir);

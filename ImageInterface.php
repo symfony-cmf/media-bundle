@@ -22,16 +22,16 @@ namespace Symfony\Cmf\Bundle\MediaBundle;
 interface ImageInterface extends FileInterface
 {
     /**
-     * Get image width in pixels
+     * Get image width in pixels.
      *
-     * @return integer
+     * @return int
      */
     public function getWidth();
 
     /**
-     * Get image height in pixels
+     * Get image height in pixels.
      *
-     * @return integer
+     * @return int
      */
     public function getHeight();
 }

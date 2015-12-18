@@ -24,7 +24,7 @@ class BrowserFileHelper
     }
 
     /**
-     * Add an editor helper
+     * Add an editor helper.
      *
      * @param string                       $name
      * @param BrowserEditorHelperInterface $helper
@@ -35,7 +35,7 @@ class BrowserFileHelper
     }
 
     /**
-     * Get helper
+     * Get helper.
      *
      * @param $name    leave null to get the default helper
      * @param $browser leave null to get the default helper
@@ -63,6 +63,6 @@ class BrowserFileHelper
             return $this->editorHelpers['default'][$this->defaultBrowser];
         }
 
-        return null;
+        return;
     }
 }

@@ -128,7 +128,7 @@ class UploadFileHelperTest extends \PHPUnit_Framework_TestCase
 
         vfsStream::setup('home');
         $testFile = vfsStream::url('home/test.txt');
-        file_put_contents($testFile, "Test file content.");
+        file_put_contents($testFile, 'Test file content.');
 
         $class = 'Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\File';
         $uploadFileHelper = $this->getUploadFileHelper();
@@ -163,7 +163,7 @@ class UploadFileHelperTest extends \PHPUnit_Framework_TestCase
     {
         vfsStream::setup('home');
         $testFile = vfsStream::url('home/test.txt');
-        file_put_contents($testFile, "Test file content.");
+        file_put_contents($testFile, 'Test file content.');
 
         $uploadFileHelper = $this->getUploadFileHelper();
         $uploadedFile = new UploadedFile($testFile, 'test.txt', null, null, null, true);
@@ -180,7 +180,7 @@ class UploadFileHelperTest extends \PHPUnit_Framework_TestCase
     {
         vfsStream::setup('home');
         $testFile = vfsStream::url('home/test.txt');
-        file_put_contents($testFile, "Test file content.");
+        file_put_contents($testFile, 'Test file content.');
 
         $request = new Request();
         $request->files->set('file', new UploadedFile($testFile, 'test.txt', null, null, null, true));

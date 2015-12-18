@@ -20,7 +20,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
  * Form type which transforms an uploaded file to an object implementing the
- * Symfony\Cmf\Bundle\MediaBundle\FileInterface
+ * Symfony\Cmf\Bundle\MediaBundle\FileInterface.
  *
  * It renders as a file upload button with a link for downloading the existing
  * file, if any.

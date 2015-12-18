@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 interface UploadEditorHelperInterface
 {
     /**
-     * Set file defaults from request
+     * Set file defaults from request.
      *
      * @param Request       $request
      * @param FileInterface $file
@@ -30,7 +30,7 @@ interface UploadEditorHelperInterface
     public function setFileDefaults(Request $request, FileInterface $file);
 
     /**
-     * Get a response for the upload action of the editor
+     * Get a response for the upload action of the editor.
      *
      * @param Request         $request
      * @param FileInterface[] $files

@@ -24,16 +24,16 @@ interface HierarchyInterface extends MediaInterface
     /**
      * Get the parent node.
      *
-     * @return Object|null
+     * @return object|null
      */
     public function getParent();
 
     /**
      * Set the parent node.
      *
-     * @param Object $parent
+     * @param object $parent
      *
-     * @return boolean
+     * @return bool
      */
     public function setParent($parent);
 }

@@ -18,7 +18,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Form type which transforms an uploaded file to an object implementing the
- * Symfony\Cmf\Bundle\MediaBundle\ImageInterface
+ * Symfony\Cmf\Bundle\MediaBundle\ImageInterface.
  *
  * It renders as a file upload button and provides a preview of the uploaded
  * image, if any.

@@ -58,14 +58,14 @@ class PhpcrFileTestController extends Controller
     public function indexAction(Request $request)
     {
         $fileClass = 'Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\File';
-        $dm        = $this->get('doctrine_phpcr')->getManager('default');
-        $files     = $dm->getRepository($fileClass)->findAll();
+        $dm = $this->get('doctrine_phpcr')->getManager('default');
+        $files = $dm->getRepository($fileClass)->findAll();
 
         $uploadForm = $this->getUploadForm();
         $editorUploadForm = $this->getUploadForm();
 
         // get a content object
-        $contentClass  = 'Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Document\Content';
+        $contentClass = 'Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Document\Content';
         $contentObject = $dm->getRepository($contentClass)->findOneBy(array());
 
         // Form - content object with file embedded
@@ -82,12 +82,12 @@ class PhpcrFileTestController extends Controller
         }
 
         return $this->render('::tests/file.html.twig', array(
-            'upload_form'              => $uploadForm->createView(),
-            'editor_form'              => $editorUploadForm->createView(),
-            'content_form_new'         => $newContentForm->createView(),
-            'content_form_edit'        => $editContentForm->createView(),
+            'upload_form' => $uploadForm->createView(),
+            'editor_form' => $editorUploadForm->createView(),
+            'content_form_new' => $newContentForm->createView(),
+            'content_form_edit' => $editContentForm->createView(),
             'content_form_edit_action' => $editContentFormAction,
-            'files'                    => $files,
+            'files' => $files,
         ));
     }
 

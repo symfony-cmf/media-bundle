@@ -25,7 +25,7 @@ class BrowserDefaultHelper implements BrowserEditorHelperInterface
      * @param RouterInterface $router
      * @param string          $name          The name of the media browser route.
      * @param mixed           $parameters    An array of parameters for the route.
-     * @param Boolean|string  $referenceType The type of reference to be generated
+     * @param bool|string     $referenceType The type of reference to be generated
      *                                       (one of the RouterInterface constants).
      */
     public function __construct(
@@ -34,9 +34,9 @@ class BrowserDefaultHelper implements BrowserEditorHelperInterface
         array $parameters = array(),
         $referenceType = RouterInterface::ABSOLUTE_PATH)
     {
-        $this->router        = $router;
-        $this->name          = $name;
-        $this->parameters    = $parameters;
+        $this->router = $router;
+        $this->name = $name;
+        $this->parameters = $parameters;
         $this->referenceType = $referenceType;
     }
 

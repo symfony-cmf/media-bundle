@@ -21,7 +21,7 @@ use Symfony\Cmf\Bundle\MediaBundle\MediaManagerInterface;
 use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
 
 /**
- * Cmf doctrine media loader
+ * Cmf doctrine media loader.
  *
  * The path to a file is: /path/to/file/filename.ext
  */

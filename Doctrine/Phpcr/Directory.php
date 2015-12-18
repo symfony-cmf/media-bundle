@@ -57,7 +57,7 @@ class Directory extends Folder implements DirectoryInterface
     {
         $this->parent = $parent;
 
-        if ($parent instanceof Directory) {
+        if ($parent instanceof self) {
             $parent->addChild($this);
         }
 
@@ -90,7 +90,7 @@ class Directory extends Folder implements DirectoryInterface
 
     /**
      * The createdBy is assigned by the content repository
-     * This is the name of the (jcr) user that updated the node
+     * This is the name of the (jcr) user that updated the node.
      *
      * @return string name of the (jcr) user who updated the file
      */

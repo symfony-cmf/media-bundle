@@ -26,9 +26,9 @@ class DoctrineImageDimensionsTest extends \PHPUnit_Framework_TestCase
     {
         // image example from http://php.net/manual/en/function.imagecreatefromstring.php
         $pngImage = 'iVBORw0KGgoAAAANSUhEUgAAABwAAAASCAMAAAB/2U7WAAAABl'
-            . 'BMVEUAAAD///+l2Z/dAAAASUlEQVR4XqWQUQoAIAxC2/0vXZDr'
-            . 'EX4IJTRkb7lobNUStXsB0jIXIAMSsQnWlsV+wULF4Avk9fLq2r'
-            . '8a5HSE35Q3eO2XP1A1wQkZSgETvDtKdQAAAABJRU5ErkJggg==';
+            .'BMVEUAAAD///+l2Z/dAAAASUlEQVR4XqWQUQoAIAxC2/0vXZDr'
+            .'EX4IJTRkb7lobNUStXsB0jIXIAMSsQnWlsV+wULF4Avk9fLq2r'
+            .'8a5HSE35Q3eO2XP1A1wQkZSgETvDtKdQAAAABJRU5ErkJggg==';
         $pngImage = base64_decode($pngImage);
 
         return array(
@@ -52,15 +52,15 @@ class DoctrineImageDimensionsTest extends \PHPUnit_Framework_TestCase
 
         if ($fileSize) {
             $size = getimagesize($fileSystemFile);
-            $expectedWidth       = $size[0];
-            $expectedHeight      = $size[1];
+            $expectedWidth = $size[0];
+            $expectedHeight = $size[1];
             $expectedContentType = $size['mime'];
-            $expectedSize        = $fileSize;
+            $expectedSize = $fileSize;
         } else {
-            $expectedWidth       = 0;
-            $expectedHeight      = 0;
+            $expectedWidth = 0;
+            $expectedHeight = 0;
             $expectedContentType = 'inode/x-empty';
-            $expectedSize        = 0;
+            $expectedSize = 0;
         }
 
         // test with and without imagine
