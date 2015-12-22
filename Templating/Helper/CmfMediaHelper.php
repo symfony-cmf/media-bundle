@@ -69,7 +69,8 @@ class CmfMediaHelper extends Helper
         if ($this->imagineHelper && isset($options['imagine_filter']) && is_string($options['imagine_filter'])) {
             return $this->imagineHelper->filter(
                 $urlSafePath,
-                $options['imagine_filter']
+                $options['imagine_filter'],
+                isset($options['imagine_runtime_config']) ? $options['imagine_runtime_config'] : array()
             );
         }
 
