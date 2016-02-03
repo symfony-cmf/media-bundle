@@ -172,7 +172,7 @@ abstract class AbstractCmfMediaDoctrine implements
      */
     public function exists($key)
     {
-        return (boolean) $this->find($key) !== null;
+        return (bool) $this->find($key) !== null;
     }
 
     /**

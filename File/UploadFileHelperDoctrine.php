@@ -43,7 +43,7 @@ class UploadFileHelperDoctrine implements UploadFileHelperInterface
         ManagerRegistry $registry,
         $managerName,
         $class,
-        $rootPath = '/',
+        $rootPath,
         MediaManagerInterface $mediaManager)
     {
         $this->managerRegistry = $registry;
