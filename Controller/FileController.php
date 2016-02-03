@@ -57,7 +57,7 @@ class FileController
         ManagerRegistry $registry,
         $managerName,
         $class,
-        $rootPath = '/',
+        $rootPath,
         MediaManagerInterface $mediaManager,
         UploadFileHelperInterface $uploadFileHelper,
         $requiredUploadRole,
