@@ -40,8 +40,9 @@
   - description (string)
   - copyright (string)
   - authorName (string)
-  - metadata (string)
-  - metadataKeys (string)
+  - metadata (string) multiple
+  - metadataKeys (string) multiple
+  - metadataNulls (string) multiple
 
 [cmf:image] > cmf:media mixin
   - width (long) mandatory
