@@ -80,7 +80,8 @@
             <argument type="service" id="cmf_media.persistence.phpcr.manager" />
             <argument type="service" id="cmf_media.upload_file_helper" />
             <argument>%cmf_media.upload_file_role%</argument>
-            <argument type="service" id="security.context" on-invalid="ignore" />
+            <argument type="service" id="security.authorization_checker" on-invalid="ignore" />
+            <argument type="service" id="security.token_storage" on-invalid="ignore" />
         </service>
 
         <service id="cmf_media.image_controller" class="%cmf_media.image_controller.class%">
@@ -91,7 +92,8 @@
             <argument type="service" id="cmf_media.persistence.phpcr.manager" />
             <argument type="service" id="cmf_media.upload_image_helper" />
             <argument>%cmf_media.upload_file_role%</argument>
-            <argument type="service" id="security.context" on-invalid="ignore" />
+            <argument type="service" id="security.authorization_checker" on-invalid="ignore" />
+            <argument type="service" id="security.token_storage" on-invalid="ignore" />
         </service>
 
         <service id="cmf_media.templating.helper" class="%cmf_media.templating.helper.class%" public="false">

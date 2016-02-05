@@ -27,7 +27,7 @@ class FileTest extends BaseTestCase
 
     public function testPage()
     {
-        $client = $this->createClient();
+        $client = $this->getClient();
         $crawler = $client->request('get', $this->getContainer()->get('router')->generate('phpcr_file_test'));
         $resp = $client->getResponse();
 
@@ -38,7 +38,7 @@ class FileTest extends BaseTestCase
 
     public function testUpload()
     {
-        $client = $this->createClient();
+        $client = $this->getClient();
         $crawler = $client->request('get', $this->getContainer()->get('router')->generate('phpcr_file_test'));
         $cntDownloadLinks = $crawler->filter('.downloads li a')->count();
 
@@ -77,7 +77,7 @@ class FileTest extends BaseTestCase
 
     public function testDownload()
     {
-        $client = $this->createClient();
+        $client = $this->getClient();
         $crawler = $client->request('get', $this->getContainer()->get('router')->generate('phpcr_file_test'));
 
         // find first download link
