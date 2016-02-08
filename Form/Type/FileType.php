@@ -62,9 +62,14 @@ class FileType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'cmf_media_file';
+    }
+
+    public function getName()
+    {
+        return $this->getBlockPrefix();
     }
 
     /**

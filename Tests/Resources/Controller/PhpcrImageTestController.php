@@ -22,10 +22,12 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class PhpcrImageTestController extends Controller
 {
-    protected function getUploadForm($type = null)
+    protected function getUploadForm()
     {
+        $type = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix') ? 'Symfony\Component\Form\Extension\Core\Type\FileType' : 'file';
+
         return $this->container->get('form.factory')->createNamedBuilder(null, 'form')
-            ->add('image', 'file')
+            ->add('image', $type)
             ->getForm()
         ;
     }
@@ -35,11 +37,12 @@ class PhpcrImageTestController extends Controller
         if (is_null($contentObject)) {
             $contentObject = new Content();
         }
+        $type = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix') ? 'Symfony\Cmf\Bundle\MediaBundle\Form\Type\ImageType' : 'cmf_media_image';
 
         return $this->createFormBuilder($contentObject)
             ->add('name')
             ->add('title')
-            ->add('file', 'cmf_media_image', array_merge(array('required' => false, 'label' => 'Image'), $imageOptions))
+            ->add('file', $type, array_merge(array('required' => false, 'label' => 'Image'), $imageOptions))
             ->getForm()
         ;
     }
@@ -66,8 +69,6 @@ class PhpcrImageTestController extends Controller
                 return $contentObject;
             }
         }
-
-        return;
     }
 
     public function indexAction(Request $request)
@@ -125,6 +126,8 @@ class PhpcrImageTestController extends Controller
             $image = $uploadImageHelper->handleUploadedFile($uploadedFile);
             $image->setMetadataValue('a', 'b');
 
+//            $image->setMetadataValue('a', 'b');
+
             // persist
             $dm = $this->get('doctrine_phpcr')->getManager('default');
             $dm->persist($image);
@@ -143,7 +146,7 @@ class PhpcrImageTestController extends Controller
             $root = $dm->find(null, '/test');
             $contentRoot = new Generic();
             $contentRoot->setNodename('content');
-            $contentRoot->setParent($root);
+            $contentRoot->setParentDocument($root);
             $dm->persist($contentRoot);
         }
 

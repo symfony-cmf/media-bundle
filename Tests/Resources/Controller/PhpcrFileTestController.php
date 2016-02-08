@@ -23,8 +23,10 @@ class PhpcrFileTestController extends Controller
 {
     public function getUploadForm()
     {
+        $type = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix') ? 'Symfony\Component\Form\Extension\Core\Type\FileType' : 'file';
+
         return $this->container->get('form.factory')->createNamedBuilder(null, 'form')
-            ->add('file', 'file')
+            ->add('file', $type)
             ->getForm()
         ;
     }
@@ -36,10 +38,12 @@ class PhpcrFileTestController extends Controller
             $contentObject = new Content();
         }
 
+        $type = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix') ? 'Symfony\Cmf\Bundle\MediaBundle\Form\Type\FileType' : 'cmf_media_file';
+
         return $this->createFormBuilder($contentObject)
             ->add('name')
             ->add('title')
-            ->add('file', 'cmf_media_file', array('required' => $is_new))
+            ->add('file', $type, array('required' => $is_new))
             ->getForm()
             ;
     }

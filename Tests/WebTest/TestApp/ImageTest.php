@@ -35,7 +35,7 @@ class ImageTest extends BaseTestCase
         $this->assertFalse($cacheManager->isStored('test/media/cmf-logo.png', 'image_upload_thumbnail'));
 
         // get crawler
-        $client = $this->createClient();
+        $client = $this->getClient();
         $crawler = $client->request('get', $this->getContainer()->get('router')->generate('phpcr_image_test'));
         $resp = $client->getResponse();
 
@@ -67,7 +67,7 @@ class ImageTest extends BaseTestCase
 
     public function testUpload()
     {
-        $client = $this->createClient();
+        $client = $this->getClient();
         $crawler = $client->request('get', $this->getContainer()->get('router')->generate('phpcr_image_test'));
         $cntImagesLinks = $crawler->filter('.images li img')->count();
 
