@@ -140,7 +140,7 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
 
         // load phpcr specific configuration
         $loader->load('persistence-phpcr.xml');
-        if (!class_exists('Symfony\Component\Security\Core\Authentication\Token\TokenInterface')) {
+        if (!interface_exists('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface')) {
             $container->getDefinition('cmf_media.file_controller')->replaceArgument(7, new Reference('security.context'));
             $container->getDefinition('cmf_media.image_controller')->replaceArgument(7, new Reference('security.context'));
         }

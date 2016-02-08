@@ -63,6 +63,14 @@ class ImageType extends FileType
      */
     public function getName()
     {
+        return $this->getBlockPrefix();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
         return 'cmf_media_image';
     }
 
