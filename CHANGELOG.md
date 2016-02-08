@@ -1,6 +1,13 @@
 Changelog
 =========
 
+1.3.0
+-----
+
+* **2016-02-5**: Fixed node type definition for metadata in the PHPCR File documents.
+  If you saw errors with metadata, you can update the node definitions. (in jackalope-
+  jackrabbit that requires exporting a database dump and creating a new repository.)
+
 1.2.0-RC1
 ---------
 
