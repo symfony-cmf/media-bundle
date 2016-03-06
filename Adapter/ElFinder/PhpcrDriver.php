@@ -706,10 +706,10 @@ class PhpcrDriver extends ElFinderVolumeDriver
     }
 
     /**
-     * Change file mode (chmod)
+     * Change file mode (chmod).
      *
-     * @param  string  $path  file path
-     * @param  string  $mode  octal string such as '0755'
+     * @param string $path file path
+     * @param string $mode octal string such as '0755'
      *
      * @author David Bartle,
      **/
