@@ -704,4 +704,17 @@ class PhpcrDriver extends ElFinderVolumeDriver
     {
         // TODO: Implement _checkArchivers() method.
     }
+
+    /**
+     * Change file mode (chmod)
+     *
+     * @param  string  $path  file path
+     * @param  string  $mode  octal string such as '0755'
+     *
+     * @author David Bartle,
+     **/
+    protected function _chmod($path, $mode)
+    {
+        // TODO: Implement _chmod() method.
+    }
 }
