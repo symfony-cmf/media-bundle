@@ -40,7 +40,7 @@ class PhpcrFileTestController extends Controller
         return $this->createFormBuilder($contentObject)
             ->add('name')
             ->add('title')
-            ->add('file',  LegacyFormHelper::getType('Symfony\Cmf\Bundle\MediaBundle\Form\Type\FileType'), array('required' => $is_new))
+            ->add('file', LegacyFormHelper::getType('Symfony\Cmf\Bundle\MediaBundle\Form\Type\FileType'), array('required' => $is_new))
             ->getForm()
             ;
     }
