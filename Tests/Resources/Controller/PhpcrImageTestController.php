@@ -25,8 +25,8 @@ class PhpcrImageTestController extends Controller
     protected function getUploadForm()
     {
         $type = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix') ? 'Symfony\Component\Form\Extension\Core\Type\FileType' : 'file';
-
-        return $this->container->get('form.factory')->createNamedBuilder(null, 'form')
+        $form = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix') ? 'Symfony\Component\Form\Extension\Core\Type\FormType' : 'form';
+        return $this->container->get('form.factory')->createNamedBuilder(null, $form)
             ->add('image', $type)
             ->getForm()
         ;
