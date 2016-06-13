@@ -36,7 +36,7 @@ class PhpcrFileTestController extends Controller
         if ($is_new) {
             $contentObject = new Content();
         }
-        
+
         return $this->createFormBuilder($contentObject)
             ->add('name')
             ->add('title')
