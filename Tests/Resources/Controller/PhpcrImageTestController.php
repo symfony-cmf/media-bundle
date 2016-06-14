@@ -17,6 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\Image;
 use Symfony\Cmf\Bundle\MediaBundle\File\UploadFileHelperInterface;
 use Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Document\Content;
+use Symfony\Cmf\Bundle\MediaBundle\Util\LegacyFormHelper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -24,10 +25,8 @@ class PhpcrImageTestController extends Controller
 {
     protected function getUploadForm()
     {
-        $type = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix') ? 'Symfony\Component\Form\Extension\Core\Type\FileType' : 'file';
-
-        return $this->container->get('form.factory')->createNamedBuilder(null, 'form')
-            ->add('image', $type)
+        return $this->container->get('form.factory')->createNamedBuilder(null, LegacyFormHelper::getType('Symfony\Component\Form\Extension\Core\Type\FormType'))
+            ->add('image', LegacyFormHelper::getType('Symfony\Component\Form\Extension\Core\Type\FileType'))
             ->getForm()
         ;
     }
@@ -37,12 +36,11 @@ class PhpcrImageTestController extends Controller
         if (is_null($contentObject)) {
             $contentObject = new Content();
         }
-        $type = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix') ? 'Symfony\Cmf\Bundle\MediaBundle\Form\Type\ImageType' : 'cmf_media_image';
 
         return $this->createFormBuilder($contentObject)
             ->add('name')
             ->add('title')
-            ->add('file', $type, array_merge(array('required' => false, 'label' => 'Image'), $imageOptions))
+            ->add('file', LegacyFormHelper::getType('Symfony\Cmf\Bundle\MediaBundle\Form\Type\ImageType'), array_merge(array('required' => false, 'label' => 'Image'), $imageOptions))
             ->getForm()
         ;
     }

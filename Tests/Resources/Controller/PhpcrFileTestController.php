@@ -16,6 +16,7 @@ use PHPCR\Util\PathHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Cmf\Bundle\MediaBundle\File\UploadFileHelperInterface;
 use Symfony\Cmf\Bundle\MediaBundle\Tests\Resources\Document\Content;
+use Symfony\Cmf\Bundle\MediaBundle\Util\LegacyFormHelper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -23,10 +24,8 @@ class PhpcrFileTestController extends Controller
 {
     public function getUploadForm()
     {
-        $type = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix') ? 'Symfony\Component\Form\Extension\Core\Type\FileType' : 'file';
-
-        return $this->container->get('form.factory')->createNamedBuilder(null, 'form')
-            ->add('file', $type)
+        return $this->container->get('form.factory')->createNamedBuilder(null, LegacyFormHelper::getType('Symfony\Component\Form\Extension\Core\Type\FormType'))
+            ->add('file', LegacyFormHelper::getType('Symfony\Component\Form\Extension\Core\Type\FileType'))
             ->getForm()
         ;
     }
@@ -38,12 +37,10 @@ class PhpcrFileTestController extends Controller
             $contentObject = new Content();
         }
 
-        $type = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix') ? 'Symfony\Cmf\Bundle\MediaBundle\Form\Type\FileType' : 'cmf_media_file';
-
         return $this->createFormBuilder($contentObject)
             ->add('name')
             ->add('title')
-            ->add('file', $type, array('required' => $is_new))
+            ->add('file', LegacyFormHelper::getType('Symfony\Cmf\Bundle\MediaBundle\Form\Type\FileType'), array('required' => $is_new))
             ->getForm()
             ;
     }

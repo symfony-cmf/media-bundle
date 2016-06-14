@@ -13,6 +13,7 @@ namespace Symfony\Cmf\Bundle\MediaBundle\Form\Type;
 
 use Symfony\Cmf\Bundle\MediaBundle\File\UploadFileHelperInterface;
 use Symfony\Cmf\Bundle\MediaBundle\Form\DataTransformer\ModelToFileTransformer;
+use Symfony\Cmf\Bundle\MediaBundle\Util\LegacyFormHelper;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -56,7 +57,7 @@ class FileType extends AbstractType
      */
     public function getParent()
     {
-        return 'file';
+        return LegacyFormHelper::getType('Symfony\Component\Form\Extension\Core\Type\FileType');
     }
 
     /**
