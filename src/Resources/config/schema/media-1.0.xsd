@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<xsd:schema xmlns="http://cmf.symfony.com/schema/dic/media"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://cmf.symfony.com/schema/dic/media"
+    elementFormDefault="qualified">
+
+    <xsd:element name="config" type="config" />
+
+    <xsd:complexType name="config">
+        <xsd:sequence>
+            <xsd:element name="persistence" type="persistence" minOccurs="0" />
+            <xsd:element name="imagine-filters" type="imagine-filters" minOccurs="0" />
+            <xsd:element name="extra-filter" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+        <xsd:attribute name="upload-file-role" type="xsd:string" />
+        <xsd:attribute name="upload-file-helper-service-id" type="xsd:string" />
+        <xsd:attribute name="upload-image-helper-service-id" type="xsd:string" />
+        <xsd:attribute name="use-jms-serializer" type="enable_auto" />
+        <xsd:attribute name="use-elfinder" type="enable_auto" />
+        <xsd:attribute name="use-imagine" type="enable_auto" />
+    </xsd:complexType>
+
+    <xsd:complexType name="persistence">
+        <xsd:sequence>
+            <xsd:element name="phpcr" type="phpcr" minOccurs="0" />
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="phpcr">
+        <xsd:sequence>
+            <xsd:element name="event-listeners" type="event-listeners" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+        <xsd:attribute name="enabled" type="xsd:boolean" />
+        <xsd:attribute name="media-basepath" type="xsd:string" />
+        <xsd:attribute name="manager-name" type="xsd:string" />
+        <xsd:attribute name="media-class" type="xsd:string" />
+        <xsd:attribute name="file-class" type="xsd:string" />
+        <xsd:attribute name="directory-class" type="xsd:string" />
+        <xsd:attribute name="image-class" type="xsd:string" />
+    </xsd:complexType>
+
+    <xsd:complexType name="event-listeners">
+        <xsd:attribute name="stream-rewind" type="xsd:boolean" />
+        <xsd:attribute name="image-dimensions" type="xsd:boolean" />
+        <xsd:attribute name="imagine-cache" type="enable_auto" />
+    </xsd:complexType>
+
+    <xsd:complexType name="imagine-filters">
+        <xsd:attribute name="upload-thumbnail" type="xsd:string" />
+        <xsd:attribute name="elfinder-thumbnail" type="xsd:string" />
+    </xsd:complexType>
+
+    <xsd:simpleType name="enable_auto">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="true" />
+            <xsd:enumeration value="false" />
+            <xsd:enumeration value="auto" />
+        </xsd:restriction>
+    </xsd:simpleType>
+</xsd:schema>

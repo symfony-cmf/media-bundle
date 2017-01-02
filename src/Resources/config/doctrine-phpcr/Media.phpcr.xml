@@ -1,0 +1,24 @@
+<doctrine-mapping
+    xmlns="http://doctrine-project.org/schemas/phpcr-odm/phpcr-mapping"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://doctrine-project.org/schemas/phpcr-odm/phpcr-mapping
+    https://github.com/doctrine/phpcr-odm/raw/master/doctrine-phpcr-odm-mapping.xsd"
+    >
+
+    <document
+        name="Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\Media"
+        node-type="cmf:mediaNode"
+        referenceable="true"
+        >
+
+        <mixins>
+            <mixin type="mix:lastModified" />
+        </mixins>
+
+        <field name="updatedBy" type="string" property="jcr:lastModifiedBy"/>
+
+        <field name="updatedAt" type="date" property="jcr:lastModified"/>
+
+    </document>
+
+</doctrine-mapping>

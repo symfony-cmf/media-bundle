@@ -1,0 +1,6 @@
+imports:
+    - { resource: cmf_media.yml }
+
+twig:
+    form_themes:
+        - 'CmfMediaBundle:Form:fields.html.twig'

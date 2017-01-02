@@ -1,0 +1,18 @@
+{% extends "::layout.html.twig" %}
+{% block content %}
+<h2>Tests</h2>
+<h3>Phpcr</h3>
+<ul>
+    <li><a href="{{ path('phpcr_file_test') }}">File test</a></li>
+    <li><a href="{{ path('phpcr_image_test') }}">Image test</a></li>
+</ul>
+<h2>About</h2>
+<p>This test application is built into the MediaBundle. You can easily run
+it locally as follows</p>
+<pre>
+$ composer install --dev
+$ ./vendor/symfony-cmf/testing/bin/travis/phpcr_odm_doctrine_dbal.sh
+$ ./vendor/symfony-cmf/testing/bin/server
+</pre>
+<p>You can then access your test application in your browser at http://localhost:8000.</p>
+{% endblock %}

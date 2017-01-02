@@ -1,0 +1,33 @@
+<doctrine-mapping
+    xmlns="http://doctrine-project.org/schemas/phpcr-odm/phpcr-mapping"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://doctrine-project.org/schemas/phpcr-odm/phpcr-mapping
+    https://github.com/doctrine/phpcr-odm/raw/master/doctrine-phpcr-odm-mapping.xsd"
+    >
+
+    <document
+        name="Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\AbstractMedia"
+        >
+
+        <mixins>
+            <mixin type="mix:created" />
+        </mixins>
+
+        <id name="id">
+            <generator strategy="PARENT"/>
+        </id>
+        <nodename name="name"/>
+        <parent-document name="parent"/>
+
+        <field name="description" type="string" nullable="true"/>
+        <field name="copyright" type="string" nullable="true"/>
+        <field name="authorName" type="string" nullable="true"/>
+        <field name="createdBy" type="string" property="jcr:createdBy"/>
+
+        <field name="createdAt" type="date" property="jcr:created"/>
+
+        <field name="metadata" type="string" assoc="" nullable="true"/>
+
+    </document>
+
+</doctrine-mapping>

@@ -1,0 +1,150 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="cmf_media.persistence.phpcr.manager_name">null</parameter>
+        <parameter key="cmf_media.persistence.phpcr.manager.class">Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\MediaManager</parameter>
+
+        <parameter key="cmf_media.file_controller.class">Symfony\Cmf\Bundle\MediaBundle\Controller\FileController</parameter>
+        <parameter key="cmf_media.image_controller.class">Symfony\Cmf\Bundle\MediaBundle\Controller\ImageController</parameter>
+
+        <parameter key="cmf_media.templating.helper.class">Symfony\Cmf\Bundle\MediaBundle\Templating\Helper\CmfMediaHelper</parameter>
+        <parameter key="cmf_media.twig.extension.class">Symfony\Cmf\Bundle\MediaBundle\Twig\Extension\CmfMediaExtension</parameter>
+
+        <parameter key="cmf_media.persistence.phpcr.upload_file_helper.class">Symfony\Cmf\Bundle\MediaBundle\File\UploadFileHelperDoctrine</parameter>
+        <parameter key="cmf_media.upload_editor_helper.default.class">Symfony\Cmf\Bundle\MediaBundle\Editor\Helper\UploadDefaultHelper</parameter>
+        <parameter key="cmf_media.upload_editor_helper.ckeditor.class">Symfony\Cmf\Bundle\MediaBundle\Editor\Helper\UploadCkeditorHelper</parameter>
+
+        <parameter key="cmf_media.form.file.class">Symfony\Cmf\Bundle\MediaBundle\Form\Type\FileType</parameter>
+        <parameter key="cmf_media.form.image.class">Symfony\Cmf\Bundle\MediaBundle\Form\Type\ImageType</parameter>
+
+        <parameter key="cmf_media.persistence.phpcr.subscriber.stream_rewind.class">Symfony\Cmf\Bundle\MediaBundle\Doctrine\DoctrineStreamRewindSubscriber</parameter>
+        <parameter key="cmf_media.persistence.phpcr.subscriber.image_dimensions.class">Symfony\Cmf\Bundle\MediaBundle\Doctrine\DoctrineImageDimensionsSubscriber</parameter>    </parameters>
+
+    <services>
+
+        <service id="cmf_media.initializer" class="Doctrine\Bundle\PHPCRBundle\Initializer\GenericInitializer">
+            <argument>CmfMediaBundle</argument>
+            <argument type="collection">
+                <argument>%cmf_media.persistence.phpcr.media_basepath%</argument>
+            </argument>
+            <argument><![CDATA[
+<cmf = 'http://cmf.symfony.com/phpcr/1.0'>
+
+[cmf:mediaNode] > nt:hierarchyNode, cmf:media
+
+[cmf:media] mixin
+  - description (string)
+  - copyright (string)
+  - authorName (string)
+  - metadata (string) multiple
+  - metadataKeys (string) multiple
+  - metadataNulls (string) multiple
+
+[cmf:image] > cmf:media mixin
+  - width (long) mandatory
+  - height (long) mandatory
+            ]]></argument>
+            <tag name="doctrine_phpcr.initializer" />
+        </service>
+
+        <service id="cmf_media.persistence.phpcr.manager" class="%cmf_media.persistence.phpcr.manager.class%" public="false">
+            <argument type="service" id="doctrine_phpcr" />
+            <argument>%cmf_media.persistence.phpcr.manager_name%</argument>
+            <argument>%cmf_media.persistence.phpcr.media_basepath%</argument>
+        </service>
+
+        <service id="cmf_media.persistence.phpcr.upload_file_helper" class="%cmf_media.persistence.phpcr.upload_file_helper.class%">
+            <argument type="service" id="doctrine_phpcr" />
+            <argument>%cmf_media.persistence.phpcr.manager_name%</argument>
+            <argument>%cmf_media.persistence.phpcr.file.class%</argument>
+            <argument>%cmf_media.persistence.phpcr.media_basepath%</argument>
+            <argument type="service" id="cmf_media.persistence.phpcr.manager" />
+        </service>
+
+        <service id="cmf_media.persistence.phpcr.upload_image_helper" class="%cmf_media.persistence.phpcr.upload_file_helper.class%">
+            <argument type="service" id="doctrine_phpcr" />
+            <argument>%cmf_media.persistence.phpcr.manager_name%</argument>
+            <argument>%cmf_media.persistence.phpcr.image.class%</argument>
+            <argument>%cmf_media.persistence.phpcr.media_basepath%</argument>
+            <argument type="service" id="cmf_media.persistence.phpcr.manager" />
+        </service>
+
+        <service id="cmf_media.file_controller" class="%cmf_media.file_controller.class%">
+            <argument type="service" id="doctrine_phpcr" />
+            <argument>%cmf_media.persistence.phpcr.manager_name%</argument>
+            <argument/>
+            <argument>%cmf_media.persistence.phpcr.media_basepath%</argument>
+            <argument type="service" id="cmf_media.persistence.phpcr.manager" />
+            <argument type="service" id="cmf_media.upload_file_helper" />
+            <argument>%cmf_media.upload_file_role%</argument>
+            <argument type="service" id="security.authorization_checker" on-invalid="ignore" />
+            <argument type="service" id="security.token_storage" on-invalid="ignore" />
+        </service>
+
+        <service id="cmf_media.image_controller" class="%cmf_media.image_controller.class%">
+            <argument type="service" id="doctrine_phpcr" />
+            <argument>%cmf_media.persistence.phpcr.manager_name%</argument>
+            <argument/>
+            <argument>%cmf_media.persistence.phpcr.media_basepath%</argument>
+            <argument type="service" id="cmf_media.persistence.phpcr.manager" />
+            <argument type="service" id="cmf_media.upload_image_helper" />
+            <argument>%cmf_media.upload_file_role%</argument>
+            <argument type="service" id="security.authorization_checker" on-invalid="ignore" />
+            <argument type="service" id="security.token_storage" on-invalid="ignore" />
+        </service>
+
+        <service id="cmf_media.templating.helper" class="%cmf_media.templating.helper.class%" public="false">
+            <tag name="templating.helper" alias="cmf_media" />
+            <argument type="service" id="cmf_media.persistence.phpcr.manager" />
+            <argument type="service" id="router" />
+        </service>
+
+        <service id="cmf_media.twig.extension" class="%cmf_media.twig.extension.class%" public="false">
+            <tag name="twig.extension" />
+            <argument type="service" id="cmf_media.templating.helper" />
+        </service>
+
+        <service id="cmf_media.upload_editor_helper.default" class="%cmf_media.upload_editor_helper.default.class%">
+            <tag name="cmf_media.upload_editor_helper" alias="default" />
+            <argument type="service" id="cmf_media.persistence.phpcr.manager" />
+            <argument type="service" id="router" />
+            <argument type="collection">
+                <argument key="description">description</argument>
+                <argument key="caption">description</argument>
+            </argument>
+        </service>
+
+        <service id="cmf_media.upload_editor_helper.ckeditor" class="%cmf_media.upload_editor_helper.ckeditor.class%">
+            <tag name="cmf_media.upload_editor_helper" alias="ckeditor" />
+            <argument type="service" id="cmf_media.persistence.phpcr.manager" />
+            <argument type="service" id="router" />
+        </service>
+
+        <service id="cmf_media.form.type.file" class="%cmf_media.form.file.class%">
+            <tag name="form.type" alias="cmf_media_file" />
+            <argument>%cmf_media.persistence.phpcr.file.class%</argument>
+            <argument type="service" id="cmf_media.upload_file_helper" />
+        </service>
+
+        <service id="cmf_media.form.type.image" class="%cmf_media.form.image.class%">
+            <tag name="form.type" alias="cmf_media_image" />
+            <argument>%cmf_media.persistence.phpcr.image.class%</argument>
+            <argument type="service" id="cmf_media.upload_file_helper" />
+            <argument>%cmf_media.use_imagine%</argument>
+            <argument>%cmf_media.imagine.filter.upload_thumbnail%</argument>
+        </service>
+
+        <service id="cmf_media.persistence.phpcr.subscriber.stream_rewind" class="%cmf_media.persistence.phpcr.subscriber.stream_rewind.class%">
+            <tag name="doctrine_phpcr.event_subscriber" priority="-50" />
+        </service>
+
+        <service id="cmf_media.persistence.phpcr.subscriber.image_dimensions" class="%cmf_media.persistence.phpcr.subscriber.image_dimensions.class%">
+            <tag name="doctrine_phpcr.event_subscriber" />
+        </service>
+
+    </services>
+</container>

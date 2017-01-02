@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<routes xmlns="http://symfony.com/schema/routing"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+
+    <route id="cmf_media_image_display" path="/media/image/{path}" methods="GET">
+        <default key="_controller">cmf_media.image_controller:displayAction</default>
+        <requirement key="path">.*</requirement>
+    </route>
+
+    <route id="cmf_media_image_upload" path="/media/image/upload/{editor}" methods="POST">
+        <default key="_controller">cmf_media.image_controller:uploadAction</default>
+        <default key="editor">default</default>
+        <default key="_format">json</default>
+    </route>
+
+</routes>

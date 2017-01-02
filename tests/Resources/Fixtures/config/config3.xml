@@ -1,0 +1,14 @@
+<config xmlns="http://cmf.symfony.com/schema/dic/media"
+    use-imagine="auto">
+
+    <persistence>
+        <phpcr />
+    </persistence>
+
+    <imagine-filters
+        upload-thumbnail="image_upload_thumbnail"
+        elfinder-thumbnail="elfinder_thumbnail"
+    />
+
+    <extra-filter>hello</extra-filter>
+</config>
