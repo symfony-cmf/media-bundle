@@ -11,6 +11,7 @@
 
         <testsuite name="phpcr">
             <directory>./tests/WebTest</directory>
+            <directory>./tests/Functional/Doctrine/Phpcr</directory>
         </testsuite>
     </testsuites>
 

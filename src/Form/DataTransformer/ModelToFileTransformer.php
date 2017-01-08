@@ -19,12 +19,19 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ModelToFileTransformer implements DataTransformerInterface
 {
+    /**
+     * @var UploadFileHelperInterface
+     */
     private $helper;
+
+    /**
+     * @var
+     */
     private $class;
 
     /**
      * @param UploadFileHelperInterface $helper
-     * @param string                    $class  optional class to overwrite generated file class
+     * @param string                    $class
      */
     public function __construct(UploadFileHelperInterface $helper, $class = null)
     {
