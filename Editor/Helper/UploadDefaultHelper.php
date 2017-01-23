@@ -35,7 +35,7 @@ class UploadDefaultHelper implements UploadEditorHelperInterface
      * @param MediaManagerInterface $mediaManager
      * @param RouterInterface       $router
      * @param array                 $propertyMapping maps request parameters to
-     *                                               Media document properties.
+     *                                               Media document properties
      */
     public function __construct(MediaManagerInterface $mediaManager, RouterInterface $router, array $propertyMapping = array())
     {
