@@ -201,7 +201,7 @@ class FileController
      * Decide whether the user is allowed to upload a file.
      *
      * @throws AccessDeniedException if the current user is not allowed to
-     *                               upload.
+     *                               upload
      */
     protected function checkSecurityUpload(Request $request)
     {

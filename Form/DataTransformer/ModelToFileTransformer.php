@@ -24,7 +24,7 @@ class ModelToFileTransformer implements DataTransformerInterface
 
     /**
      * @param UploadFileHelperInterface $helper
-     * @param string                    $class  Optional class to overwrite generated file class.
+     * @param string                    $class  optional class to overwrite generated file class
      */
     public function __construct(UploadFileHelperInterface $helper, $class = null)
     {
