@@ -343,4 +343,14 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
     {
         return $this->getContent()->getLastModifiedBy();
     }
+    
+    /**
+     * Get the parent node.
+     *
+     * @return object|null
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
 }
