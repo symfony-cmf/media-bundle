@@ -52,7 +52,7 @@ interface UploadFileHelperInterface
      *
      * @param Request      $request
      * @param UploadedFile $uploadedFile
-     * @param string       $class        Optional class name for the file class to generate.
+     * @param string       $class        optional class name for the file class to generate
      *
      * @return FileInterface
      */

@@ -83,6 +83,14 @@ class Directory extends Folder implements DirectoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getParent()
+    {
+        return $this->getParentDocument();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getCreatedAt()
     {
         return $this->created;

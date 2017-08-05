@@ -144,7 +144,7 @@ class UploadFileHelperDoctrine implements UploadFileHelperInterface
      *
      * @return bool true either returns true or throws an exception
      *
-     * @throws UploadException if the upload failed for some reason.
+     * @throws UploadException if the upload failed for some reason
      */
     protected function validateFile(UploadedFile $file)
     {
@@ -160,7 +160,7 @@ class UploadFileHelperDoctrine implements UploadFileHelperInterface
      *
      * Copied from UploadedFile because its only public since 2.4
      *
-     * @param UploadedFile $file The file with the error.
+     * @param UploadedFile $file the file with the error
      *
      * @return string The error message regarding the specified error code
      */

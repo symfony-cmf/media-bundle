@@ -36,11 +36,7 @@ use Symfony\Cmf\Bundle\MediaBundle\MetadataInterface;
  * If you set the autoFlush flag to false, you will get better performance but
  * must ensure that flush is called after all media operations are done.
  */
-abstract class AbstractCmfMediaDoctrine implements
-    Adapter,
-    ChecksumCalculator,
-    ListKeysAware,
-    MetadataSupporter
+abstract class AbstractCmfMediaDoctrine implements Adapter, ChecksumCalculator, ListKeysAware, MetadataSupporter
 {
     protected $managerRegistry;
     protected $managerName;
@@ -370,7 +366,7 @@ abstract class AbstractCmfMediaDoctrine implements
     /**
      * Find a file object for the given key.
      *
-     * @param string|int $key Identifier.
+     * @param string|int $key identifier
      * @param bool       $dir directly try to find a directory
      *
      * @return FileInterface
