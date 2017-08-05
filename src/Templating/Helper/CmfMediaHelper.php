@@ -41,8 +41,9 @@ class CmfMediaHelper extends Helper
     /**
      * Generates a download URL from the given file.
      *
-     * @param FileInterface $file
+     * @param FileInterface   $file
      * @param bool|int|string $referenceType The type of reference (one of the constants in UrlGeneratorInterface)
+     *
      * @return string The generated URL
      */
     public function downloadUrl(FileInterface $file, $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
@@ -55,9 +56,10 @@ class CmfMediaHelper extends Helper
     /**
      * Generates a display URL from the given image.
      *
-     * @param ImageInterface $file
-     * @param array $options
+     * @param ImageInterface  $file
+     * @param array           $options
      * @param bool|int|string $referenceType The type of reference (one of the constants in UrlGeneratorInterface)
+     *
      * @return string The generated URL
      */
     public function displayUrl(ImageInterface $file, array $options = [], $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)

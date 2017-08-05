@@ -291,6 +291,7 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
 
     /**
      * @param string $contentType
+     *
      * @return $this
      */
     public function setContentType($contentType)
