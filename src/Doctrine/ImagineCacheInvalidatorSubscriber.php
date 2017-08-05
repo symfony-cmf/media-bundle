@@ -56,9 +56,10 @@ class ImagineCacheInvalidatorSubscriber implements EventSubscriber
 
     /**
      * @param MediaManagerInterface $mediaManager
-     * @param CacheManager $manager the imagine cache manager
+     * @param CacheManager          $manager      the imagine cache manager
      *                                            this as otherwise we have a scope problem
      * @param $filters
+     *
      * @internal param array $filter list of filter names to invalidate
      */
     public function __construct(MediaManagerInterface $mediaManager, CacheManager $manager, $filters)

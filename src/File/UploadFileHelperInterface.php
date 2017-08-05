@@ -51,8 +51,10 @@ interface UploadFileHelperInterface
      * class, e.g. through configuration.
      *
      * @param UploadedFile $uploadedFile
-     * @param string $class optional class name for the file class to generate
+     * @param string       $class        optional class name for the file class to generate
+     *
      * @return FileInterface
+     *
      * @internal param Request $request
      */
     public function handleUploadedFile(UploadedFile $uploadedFile, $class = null);

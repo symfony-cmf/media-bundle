@@ -446,6 +446,7 @@ abstract class AbstractCmfMediaDoctrine implements Adapter, ChecksumCalculator, 
      * a filesystem path, like /path/to/file/filename.ext, as key.
      *
      * @param MediaInterface $file
+     *
      * @return string
      */
     protected function getFilePath(MediaInterface $file)
@@ -474,6 +475,7 @@ abstract class AbstractCmfMediaDoctrine implements Adapter, ChecksumCalculator, 
      * @param string $path
      *
      * return string
+     *
      * @return string
      */
     public function computeKey($path)

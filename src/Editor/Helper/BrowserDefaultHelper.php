@@ -23,8 +23,8 @@ class BrowserDefaultHelper implements BrowserEditorHelperInterface
 
     /**
      * @param RouterInterface $router
-     * @param string $name the name of the media browser route
-     * @param mixed $parameters an array of parameters for the route
+     * @param string          $name          the name of the media browser route
+     * @param mixed           $parameters    an array of parameters for the route
      * @param bool|int|string $referenceType the type of reference to be generated
      *                                       (one of the RouterInterface constants)
      */

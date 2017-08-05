@@ -52,17 +52,17 @@ class FileController
     protected $tokenStorage;
 
     /**
-     * @param ManagerRegistry                                        $registry
-     * @param string                                                 $managerName
-     * @param string                                                 $class                fully qualified class
-     *                                                                                     name of file
-     * @param string                                                 $rootPath             path where the
-     *                                                                                     filesystem is located
-     * @param MediaManagerInterface                                  $mediaManager
-     * @param UploadFileHelperInterface                              $uploadFileHelper
-     * @param string                                                 $requiredUploadRole   the role name for the security check
-     * @param AuthorizationCheckerInterface                          $authorizationChecker
-     * @param TokenStorageInterface                                  $tokenStorage
+     * @param ManagerRegistry               $registry
+     * @param string                        $managerName
+     * @param string                        $class                fully qualified class
+     *                                                            name of file
+     * @param string                        $rootPath             path where the
+     *                                                            filesystem is located
+     * @param MediaManagerInterface         $mediaManager
+     * @param UploadFileHelperInterface     $uploadFileHelper
+     * @param string                        $requiredUploadRole   the role name for the security check
+     * @param AuthorizationCheckerInterface $authorizationChecker
+     * @param TokenStorageInterface         $tokenStorage
      */
     public function __construct(
         ManagerRegistry $registry,
@@ -137,6 +137,7 @@ class FileController
      * Action to download a file object that has a route.
      *
      * @param string $path
+     *
      * @return BinaryFileResponse|Response
      */
     public function downloadAction($path)
