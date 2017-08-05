@@ -13,12 +13,12 @@ namespace Symfony\Cmf\Bundle\MediaBundle\Util;
 
 final class LegacyFormHelper
 {
-    private static $map = array(
+    private static $map = [
         'Symfony\Cmf\Bundle\MediaBundle\Form\Type\FileType' => 'cmf_media_file',
         'Symfony\Cmf\Bundle\MediaBundle\Form\Type\ImageType' => 'cmf_media_image',
         'Symfony\Component\Form\Extension\Core\Type\FileType' => 'file',
         'Symfony\Component\Form\Extension\Core\Type\FormType' => 'form',
-    );
+    ];
 
     public static function getType($class)
     {

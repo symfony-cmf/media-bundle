@@ -29,7 +29,7 @@ class UploadCkeditorHelper extends UploadDefaultHelper
         }
 
         $urlSafePath = $this->mediaManager->getUrlSafePath($files[0]);
-        $url = $this->router->generate('cmf_media_image_display', array('path' => $urlSafePath));
+        $url = $this->router->generate('cmf_media_image_display', ['path' => $urlSafePath]);
         $funcNum = $request->query->get('CKEditorFuncNum');
 
         $data = "<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction(".$funcNum.", '".$url."', 'success');</script>";

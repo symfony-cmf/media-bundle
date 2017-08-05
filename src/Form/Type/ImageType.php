@@ -88,6 +88,6 @@ class ImageType extends FileType
     public function configureOptions(OptionsResolver $options)
     {
         parent::configureOptions($options);
-        $options->setDefaults(array('imagine_filter' => $this->defaultFilter));
+        $options->setDefaults(['imagine_filter' => $this->defaultFilter]);
     }
 }

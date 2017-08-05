@@ -46,7 +46,7 @@ class Configuration implements ConfigurationInterface
                                         ->booleanNode('stream_rewind')->defaultTrue()->end()
                                         ->booleanNode('image_dimensions')->defaultTrue()->end()
                                         ->enumNode('imagine_cache')
-                                            ->values(array(true, false, 'auto'))
+                                            ->values([true, false, 'auto'])
                                             ->defaultValue('auto')
                                         ->end()
                                     ->end()
@@ -62,12 +62,12 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('upload_image_helper_service_id')->end()
 
                 ->enumNode('use_jms_serializer')
-                    ->values(array(true, false, 'auto'))
+                    ->values([true, false, 'auto'])
                     ->defaultValue('auto')
                 ->end()
 
                 ->enumNode('use_elfinder')
-                    ->values(array(true, false, 'auto'))
+                    ->values([true, false, 'auto'])
                     ->defaultValue('auto')
                 ->end()
 
@@ -85,7 +85,7 @@ class Configuration implements ConfigurationInterface
             ->fixXmlConfig('extra_filter')
             ->children()
                 ->enumNode('use_imagine')
-                    ->values(array(true, false, 'auto'))
+                    ->values([true, false, 'auto'])
                     ->defaultValue('auto')
                 ->end()
                 ->arrayNode('imagine_filters')

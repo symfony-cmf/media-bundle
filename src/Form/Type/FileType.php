@@ -17,7 +17,6 @@ use Symfony\Cmf\Bundle\MediaBundle\Util\LegacyFormHelper;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
  * Form type which transforms an uploaded file to an object implementing the
@@ -85,7 +84,7 @@ class FileType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $options)
+    public function setDefaultOptions(OptionsResolver $options)
     {
         $this->configureOptions($options);
     }
@@ -95,6 +94,6 @@ class FileType extends AbstractType
      */
     public function configureOptions(OptionsResolver $options)
     {
-        $options->setDefaults(array('data_class' => $this->dataClass));
+        $options->setDefaults(['data_class' => $this->dataClass]);
     }
 }

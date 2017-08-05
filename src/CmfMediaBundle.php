@@ -30,12 +30,12 @@ class CmfMediaBundle extends Bundle
         if (class_exists('Doctrine\Bundle\PHPCRBundle\DependencyInjection\Compiler\DoctrinePhpcrMappingsPass')) {
             $container->addCompilerPass(
                 DoctrinePhpcrMappingsPass::createXmlMappingDriver(
-                    array(
+                    [
                         realpath(__DIR__.'/Resources/config/doctrine-phpcr') => 'Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr',
-                    ),
-                    array('cmf_media.persistence.phpcr.manager_name'),
+                    ],
+                    ['cmf_media.persistence.phpcr.manager_name'],
                     'cmf_media.backend_type_phpcr',
-                    array('CmfMediaBundle' => 'Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr')
+                    ['CmfMediaBundle' => 'Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr']
                 )
             );
         }

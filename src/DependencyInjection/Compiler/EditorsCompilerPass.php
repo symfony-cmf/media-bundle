@@ -26,7 +26,7 @@ class EditorsCompilerPass implements CompilerPassInterface
                 $manager = $container->findDefinition('cmf_media.upload_file_helper');
 
                 foreach ($tags as $id => $tag) {
-                    $manager->addMethodCall('addEditorHelper', array($tag[0]['alias'], new Reference($id)));
+                    $manager->addMethodCall('addEditorHelper', [$tag[0]['alias'], new Reference($id)]);
                 }
             }
 
@@ -34,7 +34,7 @@ class EditorsCompilerPass implements CompilerPassInterface
                 $manager = $container->findDefinition('cmf_media.upload_image_helper');
 
                 foreach ($tags as $id => $tag) {
-                    $manager->addMethodCall('addEditorHelper', array($tag[0]['alias'], new Reference($id)));
+                    $manager->addMethodCall('addEditorHelper', [$tag[0]['alias'], new Reference($id)]);
                 }
             }
         }
@@ -46,7 +46,7 @@ class EditorsCompilerPass implements CompilerPassInterface
                 $manager = $container->findDefinition('cmf_media.browser_file_helper');
 
                 foreach ($tags as $id => $tag) {
-                    $manager->addMethodCall('addEditorHelper', array($tag[0]['editor'], $tag[0]['browser'], new Reference($id)));
+                    $manager->addMethodCall('addEditorHelper', [$tag[0]['editor'], $tag[0]['browser'], new Reference($id)]);
                 }
             }
         }

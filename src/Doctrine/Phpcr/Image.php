@@ -48,6 +48,7 @@ class Image extends File implements ImageInterface
 
     /**
      * @param int $height
+     * @return $this
      */
     public function setHeight($height)
     {

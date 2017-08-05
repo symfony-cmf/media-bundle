@@ -32,16 +32,16 @@ class CmfMediaExtension extends \Twig_Extension
      */
     public function getFunctions()
     {
-        return array(
+        return [
             new \Twig_SimpleFunction('cmf_media_download_url',
-                array($this->mediaHelper, 'downloadUrl'),
-                array('is_safe' => array('html'))
+                [$this->mediaHelper, 'downloadUrl'],
+                ['is_safe' => ['html']]
             ),
             new \Twig_SimpleFunction('cmf_media_display_url',
-                array($this->mediaHelper, 'displayUrl'),
-                array('is_safe' => array('html'))
+                [$this->mediaHelper, 'displayUrl'],
+                ['is_safe' => ['html']]
             ),
-        );
+        ];
     }
 
     public function getName()

@@ -50,11 +50,10 @@ interface UploadFileHelperInterface
      * possible. If $class is null, the implementation chooses a suitable
      * class, e.g. through configuration.
      *
-     * @param Request      $request
      * @param UploadedFile $uploadedFile
-     * @param string       $class        optional class name for the file class to generate
-     *
+     * @param string $class optional class name for the file class to generate
      * @return FileInterface
+     * @internal param Request $request
      */
     public function handleUploadedFile(UploadedFile $uploadedFile, $class = null);
 
@@ -67,5 +66,5 @@ interface UploadFileHelperInterface
      *
      * @return Response
      */
-    public function getUploadResponse(Request $request, array $uploadedFiles = array());
+    public function getUploadResponse(Request $request, array $uploadedFiles = []);
 }

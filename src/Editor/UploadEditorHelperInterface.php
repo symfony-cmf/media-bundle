@@ -11,6 +11,7 @@
 
 namespace Symfony\Cmf\Bundle\MediaBundle\Editor;
 
+use InvalidArgumentException;
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

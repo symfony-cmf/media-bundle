@@ -49,13 +49,13 @@ class Handler
     public function serializeImageToArray(JsonSerializationVisitor $visitor, ImageInterface $image)
     {
         $urlSafePath = $this->mediaManager->getUrlSafePath($image);
-        $url = $this->router->generate('cmf_media_image_display', array('path' => $urlSafePath), UrlGeneratorInterface::ABSOLUTE_URL);
+        $url = $this->router->generate('cmf_media_image_display', ['path' => $urlSafePath], UrlGeneratorInterface::ABSOLUTE_URL);
 
-        return array(
+        return [
             'id' => $image->getId(),
             'name' => $image->getName(),
             'url' => $url,
             'alt' => $image->getDescription(),
-        );
+        ];
     }
 }

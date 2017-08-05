@@ -37,7 +37,7 @@ class UploadDefaultHelper implements UploadEditorHelperInterface
      * @param array                 $propertyMapping maps request parameters to
      *                                               Media document properties
      */
-    public function __construct(MediaManagerInterface $mediaManager, RouterInterface $router, array $propertyMapping = array())
+    public function __construct(MediaManagerInterface $mediaManager, RouterInterface $router, array $propertyMapping = [])
     {
         $this->mediaManager = $mediaManager;
         $this->router = $router;
@@ -72,7 +72,7 @@ class UploadDefaultHelper implements UploadEditorHelperInterface
         $urlSafePath = $this->mediaManager->getUrlSafePath($files[0]);
 
         if ($files[0] instanceof ImageInterface) {
-            return new RedirectResponse($this->router->generate('cmf_media_image_display', array('path' => $urlSafePath)));
+            return new RedirectResponse($this->router->generate('cmf_media_image_display', ['path' => $urlSafePath]));
         } else {
             return new RedirectResponse($request->headers->get('referer'));
         }

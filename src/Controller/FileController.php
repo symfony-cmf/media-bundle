@@ -26,7 +26,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Security\Core\SecurityContextInterface;
 
 /**
  * Controller to handle file downloads, uploads and other things that have a route.
@@ -43,7 +42,7 @@ class FileController
     /**
      * When moving to 2.0, rename this to $authorizationChecker.
      *
-     * @var null|AuthorizationCheckerInterface|SecurityContextInterface
+     * @var null|AuthorizationCheckerInterface
      */
     protected $securityContext;
 
@@ -62,7 +61,7 @@ class FileController
      * @param MediaManagerInterface                                  $mediaManager
      * @param UploadFileHelperInterface                              $uploadFileHelper
      * @param string                                                 $requiredUploadRole   the role name for the security check
-     * @param AuthorizationCheckerInterface|SecurityContextInterface $authorizationChecker
+     * @param AuthorizationCheckerInterface                          $authorizationChecker
      * @param TokenStorageInterface                                  $tokenStorage
      */
     public function __construct(
@@ -138,6 +137,7 @@ class FileController
      * Action to download a file object that has a route.
      *
      * @param string $path
+     * @return BinaryFileResponse|Response
      */
     public function downloadAction($path)
     {
@@ -200,8 +200,7 @@ class FileController
     /**
      * Decide whether the user is allowed to upload a file.
      *
-     * @throws AccessDeniedException if the current user is not allowed to
-     *                               upload
+     * @param Request $request
      */
     protected function checkSecurityUpload(Request $request)
     {

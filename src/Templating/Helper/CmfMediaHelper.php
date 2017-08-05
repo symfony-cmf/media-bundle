@@ -42,27 +42,25 @@ class CmfMediaHelper extends Helper
      * Generates a download URL from the given file.
      *
      * @param FileInterface $file
-     * @param bool|string   $referenceType The type of reference (one of the constants in UrlGeneratorInterface)
-     *
+     * @param bool|int|string $referenceType The type of reference (one of the constants in UrlGeneratorInterface)
      * @return string The generated URL
      */
     public function downloadUrl(FileInterface $file, $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
         $urlSafePath = $this->mediaManager->getUrlSafePath($file);
 
-        return $this->generator->generate('cmf_media_download', array('path' => $urlSafePath), $referenceType);
+        return $this->generator->generate('cmf_media_download', ['path' => $urlSafePath], $referenceType);
     }
 
     /**
      * Generates a display URL from the given image.
      *
      * @param ImageInterface $file
-     * @param array          $options
-     * @param bool|string    $referenceType The type of reference (one of the constants in UrlGeneratorInterface)
-     *
+     * @param array $options
+     * @param bool|int|string $referenceType The type of reference (one of the constants in UrlGeneratorInterface)
      * @return string The generated URL
      */
-    public function displayUrl(ImageInterface $file, array $options = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+    public function displayUrl(ImageInterface $file, array $options = [], $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
         $urlSafePath = $this->mediaManager->getUrlSafePath($file);
 
@@ -70,11 +68,11 @@ class CmfMediaHelper extends Helper
             return $this->imagineHelper->filter(
                 $urlSafePath,
                 $options['imagine_filter'],
-                isset($options['imagine_runtime_config']) ? $options['imagine_runtime_config'] : array()
+                isset($options['imagine_runtime_config']) ? $options['imagine_runtime_config'] : []
             );
         }
 
-        return $this->generator->generate('cmf_media_image_display', array('path' => $urlSafePath), $referenceType);
+        return $this->generator->generate('cmf_media_image_display', ['path' => $urlSafePath], $referenceType);
     }
 
     /**

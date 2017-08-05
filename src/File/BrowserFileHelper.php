@@ -26,7 +26,8 @@ class BrowserFileHelper
     /**
      * Add an editor helper.
      *
-     * @param string                       $name
+     * @param string $name
+     * @param $editor
      * @param BrowserEditorHelperInterface $helper
      */
     public function addEditorHelper($name, $editor, BrowserEditorHelperInterface $helper)
@@ -44,8 +45,6 @@ class BrowserFileHelper
      */
     public function getEditorHelper($name = null, $browser = null)
     {
-        $helpers = $this->editorHelpers;
-
         if ($name && isset($this->editorHelpers[$name]) && count($this->editorHelpers[$name]) > 0) {
             if ($browser && isset($this->editorHelpers[$name][$browser])) {
                 // found name and browser
@@ -62,7 +61,5 @@ class BrowserFileHelper
             // get default
             return $this->editorHelpers['default'][$this->defaultBrowser];
         }
-
-        return;
     }
 }

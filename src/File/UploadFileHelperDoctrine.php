@@ -167,7 +167,7 @@ class UploadFileHelperDoctrine implements UploadFileHelperInterface
     private function getErrorMessage(UploadedFile $file)
     {
         $errorCode = $file->getError();
-        static $errors = array(
+        static $errors = [
             UPLOAD_ERR_INI_SIZE => 'The file "%s" exceeds your upload_max_filesize ini directive (limit is %d kb).',
             UPLOAD_ERR_FORM_SIZE => 'The file "%s" exceeds the upload limit defined in your form.',
             UPLOAD_ERR_PARTIAL => 'The file "%s" was only partially uploaded.',
@@ -175,7 +175,7 @@ class UploadFileHelperDoctrine implements UploadFileHelperInterface
             UPLOAD_ERR_CANT_WRITE => 'The file "%s" could not be written on disk.',
             UPLOAD_ERR_NO_TMP_DIR => 'File could not be uploaded: missing temporary directory.',
             UPLOAD_ERR_EXTENSION => 'File upload was stopped by a PHP extension.',
-        );
+        ];
 
         $maxFilesize = $errorCode === UPLOAD_ERR_INI_SIZE ? $file->getMaxFilesize() / 1024 : 0;
         $message = isset($errors[$errorCode]) ? $errors[$errorCode] : 'The file "%s" was not uploaded due to an unknown error.';
@@ -211,7 +211,7 @@ class UploadFileHelperDoctrine implements UploadFileHelperInterface
     /**
      * {@inheritdoc}
      */
-    public function getUploadResponse(Request $request, array $uploadedFiles = array())
+    public function getUploadResponse(Request $request, array $uploadedFiles = [])
     {
         $editorHelper = $this->getEditorHelper($request->get('editor', 'default'));
 
@@ -224,11 +224,11 @@ class UploadFileHelperDoctrine implements UploadFileHelperInterface
 
         if (count($uploadedFiles) === 0) {
             // by default get the first file
-            $uploadedFiles = array($request->files->getIterator()->current());
+            $uploadedFiles = [$request->files->getIterator()->current()];
         }
 
         // handle the uploaded file(s)
-        $files = array();
+        $files = [];
         foreach ($uploadedFiles as $uploadedFile) {
             $file = $this->handleUploadedFile($uploadedFile);
 

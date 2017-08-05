@@ -52,6 +52,11 @@ class PhpcrDriver extends ElFinderVolumeDriver
     protected $imagineFilter;
 
     /**
+     * @var array
+     */
+    private $options;
+
+    /**
      * Constructor.
      *
      * @param ManagerRegistry       $registry
@@ -65,23 +70,23 @@ class PhpcrDriver extends ElFinderVolumeDriver
         $managerName,
         MediaManagerInterface $mediaManager,
         CmfMediaHelper $mediaHelper,
-        $imagineFilter = false)
-    {
+        $imagineFilter = false
+    ) {
         $this->dm = $registry->getManager($managerName);
         $this->mediaManager = $mediaManager;
         $this->mediaHelper = $mediaHelper;
         $this->imagineFilter = $imagineFilter;
 
-        $opts = array(
+        $opts = [
             'workspace' => '',
             'manager' => '',
             // TODO: remove when implemented/ errors are fixed
-            'disabled' => array(
+            'disabled' => [
                 'archive',
                 'extract',
                 'resize',
-            ),
-        );
+            ],
+        ];
         $this->options = array_merge($this->options, $opts);
     }
 
@@ -158,9 +163,9 @@ class PhpcrDriver extends ElFinderVolumeDriver
         $initial_slashes = (int) $initial_slashes;
 
         $comps = explode('/', $path);
-        $new_comps = array();
+        $new_comps = [];
         foreach ($comps as $comp) {
-            if (in_array($comp, array('', '.'))) {
+            if (in_array($comp, ['', '.'])) {
                 continue;
             }
 
@@ -289,13 +294,13 @@ class PhpcrDriver extends ElFinderVolumeDriver
         if ($doc instanceof ImageInterface) {
             $url = $this->mediaHelper->displayUrl($doc);
             if ($this->imagineFilter) {
-                $tmbUrl = $this->mediaHelper->displayUrl($doc, array('imagine_filter' => $this->imagineFilter));
+                $tmbUrl = $this->mediaHelper->displayUrl($doc, ['imagine_filter' => $this->imagineFilter]);
             }
         } elseif ($doc instanceof FileInterface) {
             $url = $this->mediaHelper->downloadUrl($doc);
         }
 
-        $stat = array(
+        $stat = [
             'size' => $dir ? 0 : $doc->getSize(),
             'ts' => $ts,
             'mime' => $dir ? 'directory' : $doc->getContentType(),
@@ -305,7 +310,7 @@ class PhpcrDriver extends ElFinderVolumeDriver
             'hidden' => false,
             'url' => $url,
             'tmb' => $tmbUrl,
-        );
+        ];
 
         return $stat;
     }
@@ -363,7 +368,7 @@ class PhpcrDriver extends ElFinderVolumeDriver
     protected function _scandir($path)
     {
         $doc = $this->dm->find(null, $path);
-        $list = array();
+        $list = [];
         foreach ($doc->getChildren() as $child) {
             $list[] = $child->getId();
         }

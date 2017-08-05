@@ -177,7 +177,7 @@ abstract class AbstractCmfMediaDoctrine implements Adapter, ChecksumCalculator, 
     public function keys()
     {
         if (is_null($this->keys)) {
-            $keys = array();
+            $keys = [];
 
             $files = $this->findAll();
             foreach ($files as $file) {
@@ -276,7 +276,7 @@ abstract class AbstractCmfMediaDoctrine implements Adapter, ChecksumCalculator, 
      */
     public function listKeys($prefix = '')
     {
-        $dirKeys = $fileKeys = array();
+        $dirKeys = $fileKeys = [];
         $files = $this->findAll($prefix);
 
         foreach ($files as $file) {
@@ -289,10 +289,10 @@ abstract class AbstractCmfMediaDoctrine implements Adapter, ChecksumCalculator, 
             }
         }
 
-        return array(
+        return [
             'dirs' => sort($dirKeys),
             'keys' => sort($fileKeys),
-        );
+        ];
     }
 
     /**
@@ -327,7 +327,7 @@ abstract class AbstractCmfMediaDoctrine implements Adapter, ChecksumCalculator, 
     {
         $file = $this->find($key);
 
-        return $file ? $file->getMetadata() : array();
+        return $file ? $file->getMetadata() : [];
     }
 
     /**
@@ -385,7 +385,7 @@ abstract class AbstractCmfMediaDoctrine implements Adapter, ChecksumCalculator, 
             if ($this->identifier) {
                 $file = $this->getObjectManager()
                     ->getRepository($this->class)
-                    ->findOneBy(array($this->identifier => $id))
+                    ->findOneBy([$this->identifier => $id])
                 ;
             } else {
                 $file = $this->getObjectManager()->getRepository($this->class)->find($id);
@@ -397,7 +397,7 @@ abstract class AbstractCmfMediaDoctrine implements Adapter, ChecksumCalculator, 
             if ($this->identifier) {
                 $file = $this->getObjectManager()
                     ->getRepository($this->class)
-                    ->findOneBy(array($this->identifier => $id))
+                    ->findOneBy([$this->identifier => $id])
                 ;
             } else {
                 $file = $this->getObjectManager()->getRepository($this->dirClass)->find($id);
@@ -417,7 +417,7 @@ abstract class AbstractCmfMediaDoctrine implements Adapter, ChecksumCalculator, 
      */
     protected function findAll($prefix = '')
     {
-        $filesAndDirs = array();
+        $filesAndDirs = [];
         $prefix = $this->normalizePath($this->rootPath.'/'.trim($prefix));
 
         $files = $this->getObjectManager()->getRepository($this->class)->findAll();
@@ -445,6 +445,7 @@ abstract class AbstractCmfMediaDoctrine implements Adapter, ChecksumCalculator, 
      * Gaufrette uses a key to identify a file or directory. This adapter uses
      * a filesystem path, like /path/to/file/filename.ext, as key.
      *
+     * @param MediaInterface $file
      * @return string
      */
     protected function getFilePath(MediaInterface $file)
@@ -473,6 +474,7 @@ abstract class AbstractCmfMediaDoctrine implements Adapter, ChecksumCalculator, 
      * @param string $path
      *
      * return string
+     * @return string
      */
     public function computeKey($path)
     {
