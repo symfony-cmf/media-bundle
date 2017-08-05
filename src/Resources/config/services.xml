@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="cmf_media.default_browser">null</parameter>
+        <parameter key="cmf_media.browser_file_helper.class">Symfony\Cmf\Bundle\MediaBundle\File\BrowserFileHelper</parameter>
+    </parameters>
+
+    <services>
+
+        <service id="cmf_media.browser_file_helper" class="%cmf_media.browser_file_helper.class%">
+            <argument>%cmf_media.default_browser%</argument>
+        </service>
+
+    </services>
+
+</container>

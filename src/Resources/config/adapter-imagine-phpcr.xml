@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="cmf_media.liip_imagine.doctrine_phpcr.binary.loader.class">Symfony\Cmf\Bundle\MediaBundle\Adapter\LiipImagine\CmfMediaDoctrineLoader</parameter>
+    </parameters>
+
+    <services>
+
+        <service id="cmf_media.liip_imagine.doctrine_phpcr.binary.loader" class="%cmf_media.liip_imagine.doctrine_phpcr.binary.loader.class%">
+            <tag name="liip_imagine.binary.loader" loader="cmf_media_doctrine_phpcr" />
+            <argument type="service" id="liip_imagine" />
+            <argument type="service" id="doctrine_phpcr" />
+            <argument>%cmf_media.persistence.phpcr.manager_name%</argument>
+            <argument type="service" id="cmf_media.persistence.phpcr.manager" />
+            <argument>%cmf_media.persistence.phpcr.image.class%</argument>
+        </service>
+
+    </services>
+</container>

@@ -6,7 +6,11 @@
 >
     <testsuites>
         <testsuite name="Symfony CmfMediaBundle Test Suite">
-            <directory>./Tests/</directory>
+            <directory>./tests/Unit</directory>
+        </testsuite>
+
+        <testsuite name="phpcr">
+            <directory>./tests/WebTest</directory>
         </testsuite>
     </testsuites>
 
@@ -22,7 +26,11 @@
     </filter>
 
     <php>
-        <server name="KERNEL_DIR" value="Tests/Resources/app" />
+        <server name="KERNEL_DIR" value="tests/Resources/app" />
     </php>
+
+    <listeners>
+        <listener class="Symfony\Cmf\Component\Testing\Phpunit\DatabaseTestListener" />
+    </listeners>
 
 </phpunit>

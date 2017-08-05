@@ -1,0 +1,25 @@
+<doctrine-mapping
+    xmlns="http://doctrine-project.org/schemas/phpcr-odm/phpcr-mapping"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://doctrine-project.org/schemas/phpcr-odm/phpcr-mapping
+    https://github.com/doctrine/phpcr-odm/raw/master/doctrine-phpcr-odm-mapping.xsd"
+    >
+
+    <document
+        name="Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\File"
+        referenceable="true"
+        >
+
+        <mixins>
+            <mixin type="cmf:media" />
+        </mixins>
+
+        <field name="description" type="string" nullable="true"/>
+        <field name="copyright" type="string" nullable="true"/>
+        <field name="authorName" type="string" nullable="true"/>
+
+        <field name="metadata" type="string" assoc="" nullable="true"/>
+
+    </document>
+
+</doctrine-mapping>

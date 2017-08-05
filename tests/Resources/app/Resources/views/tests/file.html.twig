@@ -1,0 +1,50 @@
+{% extends "::layout.html.twig" %}
+{% block content %}
+    <h2>Upload file</h2>
+    <h4>Standard upload</h4>
+    <p>The upload is handled by your own controller action. The UploadFileHelperDoctrine is used to handle the upload
+        and creates a FileInterface object, writing the object to storage has to be implemented by yourself.</p>
+    <form class="standard" action="{{ path('phpcr_file_test_upload') }}" method="post" {{ form_start(upload_form) }}>
+        {{ form_widget(upload_form) }}
+
+        <input type="submit" value="submit" />
+    </form>
+    <h4>Web editor upload (default)</h4>
+    <p>The upload is completely handled by the FileController::uploadAction. The UploadFileHelperDoctrine will process
+        the upload, writes the created FileInterface object to storage and returns a response that depends on the editor
+        defined in the request.</p>
+    <form class="editor default" action="{{ path('cmf_media_file_upload', { editor: 'default' }) }}" method="post" {{ form_start(editor_form) }}>
+        {{ form_widget(editor_form) }}
+
+        <input type="submit" value="submit" />
+    </form>
+
+    <h4>Content object with file embedded (new)</h4>
+    <p>This will use the <code>cmf_media_file</code> form type.</p>
+    <form class="cmf_media_file new" action="{{ path('phpcr_file_test_content_new') }}" method="post" {{ form_start(content_form_new) }}>
+        {{ form_widget(content_form_new) }}
+
+        <input type="submit" value="submit" />
+    </form>
+
+    {% if content_form_edit_action %}
+        <h4>Content object with file embedded (edit)</h4>
+        <p>This will use the <code>cmf_media_file</code> form type that will show a link to the uploaded file.</p>
+        <form class="cmf_media_file edit default" action="{{ content_form_edit_action }}" method="post" {{ form_start(content_form_edit) }}>
+            {{ form_widget(content_form_edit) }}
+
+            <input type="submit" value="submit" />
+        </form>
+    {% endif %}
+
+    <h2>Download file(s)</h2>
+    {% if files is empty %}
+        <p>No files found, upload a file first.</p>
+    {% else %}
+        <ul class="downloads">
+            {% for file in files %}
+                <li><a href="{{ cmf_media_download_url(file) }}" title="Download {{ file.name }}">Download {{ file.name }} (id: {{ file.id }})</a></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}
