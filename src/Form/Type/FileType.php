@@ -84,14 +84,6 @@ class FileType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolver $options)
-    {
-        $this->configureOptions($options);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $options)
     {
         $options->setDefaults(['data_class' => $this->dataClass]);
