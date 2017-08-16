@@ -12,6 +12,8 @@
 namespace Symfony\Cmf\Bundle\MediaBundle\Form\Type;
 
 use Symfony\Cmf\Bundle\MediaBundle\File\UploadFileHelperInterface;
+use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
+use Symfony\Cmf\Bundle\MediaBundle\Form\DataTransformer\ModelToFileChildAwareTransformer;
 use Symfony\Cmf\Bundle\MediaBundle\Form\DataTransformer\ModelToFileTransformer;
 use Symfony\Cmf\Bundle\MediaBundle\Util\LegacyFormHelper;
 use Symfony\Component\Form\AbstractType;
@@ -77,7 +79,17 @@ class FileType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $transformer = new ModelToFileTransformer($this->uploadFileHelper, $options['data_class']);
+        if ($options['empty_data'] instanceof FileInterface) {
+            $transformer = new ModelToFileChildAwareTransformer(
+                $this->uploadFileHelper,
+                $options['data_class'],
+                $options['empty_data'],
+                $options['child_of_node']
+            );
+        } else {
+            $transformer = new ModelToFileTransformer($this->uploadFileHelper, $options['data_class']);
+        }
+
         $builder->addModelTransformer($transformer);
     }
 

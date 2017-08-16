@@ -1,5 +1,5 @@
 vendor/
 composer.lock
 tests/Resources/app/cache
-testsests/Resources/app/logs
+tests/Resources/app/logs
 tests/Resources/web
