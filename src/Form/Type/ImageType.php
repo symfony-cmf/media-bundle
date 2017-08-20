@@ -80,6 +80,7 @@ class ImageType extends FileType
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $view->vars['imagine_filter'] = $this->useImagine ? $options['imagine_filter'] : false;
+        $view->vars['use_timestamp'] = $options['use_timestamp'];
     }
 
     /**
@@ -88,6 +89,6 @@ class ImageType extends FileType
     public function configureOptions(OptionsResolver $options)
     {
         parent::configureOptions($options);
-        $options->setDefaults(['imagine_filter' => $this->defaultFilter]);
+        $options->setDefaults(['imagine_filter' => $this->defaultFilter, 'use_timestamp' => false]);
     }
 }

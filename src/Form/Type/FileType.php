@@ -98,6 +98,6 @@ class FileType extends AbstractType
      */
     public function configureOptions(OptionsResolver $options)
     {
-        $options->setDefaults(['data_class' => $this->dataClass]);
+        $options->setDefaults(['data_class' => $this->dataClass, 'child_of_node' => null]);
     }
 }
