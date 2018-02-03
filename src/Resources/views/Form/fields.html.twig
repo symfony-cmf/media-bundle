@@ -2,7 +2,7 @@
     {{ form_widget(form) }}
     {% block cmf_media_image_widget_preview %}
         {% if form.vars.data and form.vars.data.id is defined and form.vars.data.id %}
-                <img src="{{ cmf_media_display_url(form.vars.data, { imagine_filter : imagine_filter }) }}" alt="" {% if not imagine_filter %}width="100"{% endif %} />
+                <img src="{{ cmf_media_display_url(form.vars.data, { imagine_filter : imagine_filter }) }}{% if form.vars.use_timestamp is defined and form.vars.use_timestamp %}{{ '?'~form.vars.use_timestamp }}{% endif %}" alt="" {% if not imagine_filter %}width="100"{% endif %} />
         {% endif %}
     {% endblock %}
 {% endblock %}
