@@ -32,6 +32,9 @@
         "liip/imagine-bundle": "To integrate with the Imagine library for processing images",
         "helios-ag/fm-elfinder-bundle": "When using the elFinder media browser"
     },
+    "conflict": {
+        "helios-ag/fm-elfinder-bundle": "<8.0"
+    },
     "autoload": {
         "psr-4": {
             "Symfony\\Cmf\\Bundle\\MediaBundle\\": "src/"
