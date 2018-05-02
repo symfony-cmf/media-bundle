@@ -15,7 +15,6 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ODM\PHPCR\Document\Generic;
 use Doctrine\ODM\PHPCR\Document\Resource;
 use Doctrine\ODM\PHPCR\DocumentManager;
-use FM\ElFinderPHP\Driver\ElFinderVolumeDriver;
 use Imagine\Filter\ FilterInterface;
 use PHPCR\Util\PathHelper;
 use Symfony\Cmf\Bundle\MediaBundle\DirectoryInterface;
@@ -31,7 +30,7 @@ use Symfony\Cmf\Bundle\MediaBundle\Templating\Helper\CmfMediaHelper;
 /**
  * @author Sjoerd Peters <sjoerd.peters@gmail.com>
  */
-class PhpcrDriver extends ElFinderVolumeDriver
+class PhpcrDriver extends \elFinderVolumeDriver
 {
     /**
      * Driver id
@@ -54,7 +53,7 @@ class PhpcrDriver extends ElFinderVolumeDriver
     /**
      * @var array
      */
-    private $options;
+    protected $options;
 
     /**
      * Constructor.
