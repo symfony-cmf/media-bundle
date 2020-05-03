@@ -49,10 +49,6 @@ class PhpcrDriver extends ElFinderVolumeDriver
     protected $mediaHelper;
     protected $imagineFilter;
 
-    /**
-     * @var array
-     */
-    protected $options;
 
     /**
      * Constructor.
