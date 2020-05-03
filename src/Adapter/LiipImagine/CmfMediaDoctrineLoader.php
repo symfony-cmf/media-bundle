@@ -66,13 +66,8 @@ class CmfMediaDoctrineLoader extends AbstractDoctrineLoader
     protected function getStreamFromImage($image)
     {
         if (!$image instanceof ImageInterface) {
-            $type = is_object($image) ? get_class($image) : gettype($image);
-            throw new UnsupportedMediaTypeHttpException(
-                sprintf('Source image of type "%s" does not implement "%s"',
-                    $type,
-                    'Symfony\Cmf\Bundle\MediaBundle\ImageInterface'
-                )
-            );
+            $type = \is_object($image) ? \get_class($image) : \gettype($image);
+            throw new UnsupportedMediaTypeHttpException(sprintf('Source image of type "%s" does not implement "%s"', $type, 'Symfony\Cmf\Bundle\MediaBundle\ImageInterface'));
         }
 
         /** @var $image ImageInterface */

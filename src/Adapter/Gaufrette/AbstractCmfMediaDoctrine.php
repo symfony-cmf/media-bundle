@@ -80,44 +80,30 @@ abstract class AbstractCmfMediaDoctrine implements Adapter, ChecksumCalculator, 
         $autoFlush = true)
     {
         $this->managerRegistry = $registry;
-        $this->managerName = $managerName;
-        $this->class = $class;
-        $this->mediaManager = $mediaManager;
-        $this->rootPath = Util\Path::normalize($rootPath);
-        $this->create = $create;
-        $this->dirClass = $dirClass;
-        $this->identifier = $identifier;
-        $this->autoFlush = $autoFlush;
+        $this->managerName     = $managerName;
+        $this->class           = $class;
+        $this->mediaManager    = $mediaManager;
+        $this->rootPath        = Util\Path::normalize($rootPath);
+        $this->create          = $create;
+        $this->dirClass        = $dirClass;
+        $this->identifier      = $identifier;
+        $this->autoFlush       = $autoFlush;
 
         if (!is_subclass_of($class, 'Symfony\Cmf\Bundle\MediaBundle\FileInterface')) {
-            throw new \InvalidArgumentException(sprintf(
-                'The class "%s" does not implement Symfony\Cmf\Bundle\MediaBundle\FileInterface',
-                $class
-            ));
+            throw new \InvalidArgumentException(sprintf('The class "%s" does not implement Symfony\Cmf\Bundle\MediaBundle\FileInterface', $class));
         }
 
         if ($identifier && !$this->getObjectManager()->getClassMetadata($class)->hasField($identifier)) {
-            throw new \InvalidArgumentException(sprintf(
-                'The class "%s" does not have the field "%s" to be used as identifier',
-                $class,
-                $identifier
-            ));
+            throw new \InvalidArgumentException(sprintf('The class "%s" does not have the field "%s" to be used as identifier', $class, $identifier));
         }
 
         if ($dirClass) {
             if (!is_subclass_of($dirClass, 'Symfony\Cmf\Bundle\MediaBundle\DirectoryInterface')) {
-                throw new \InvalidArgumentException(sprintf(
-                    'The class "%s" does not implement Symfony\Cmf\Bundle\MediaBundle\DirectoryInterface',
-                    $dirClass
-                ));
+                throw new \InvalidArgumentException(sprintf('The class "%s" does not implement Symfony\Cmf\Bundle\MediaBundle\DirectoryInterface', $dirClass));
             }
 
             if ($identifier && !$this->getObjectManager()->getClassMetadata($dirClass)->hasField($identifier)) {
-                throw new \InvalidArgumentException(sprintf(
-                    'The class "%s" does not have the field "%s" to be used as identifier',
-                    $dirClass,
-                    $identifier
-                ));
+                throw new \InvalidArgumentException(sprintf('The class "%s" does not have the field "%s" to be used as identifier', $dirClass, $identifier));
             }
         }
     }
@@ -147,7 +133,7 @@ abstract class AbstractCmfMediaDoctrine implements Adapter, ChecksumCalculator, 
 
             $this->ensureDirectoryExists($this->getParentPath($filePath), $this->create);
 
-            $file = new $this->class();
+            $file   = new $this->class();
             $parent = $this->find($this->getParentPath($key));
 
             $this->setFileDefaults($filePath, $file, $parent);
@@ -168,7 +154,7 @@ abstract class AbstractCmfMediaDoctrine implements Adapter, ChecksumCalculator, 
      */
     public function exists($key)
     {
-        return (bool) $this->find($key) !== null;
+        return null !== (bool) $this->find($key);
     }
 
     /**
@@ -176,7 +162,7 @@ abstract class AbstractCmfMediaDoctrine implements Adapter, ChecksumCalculator, 
      */
     public function keys()
     {
-        if (is_null($this->keys)) {
+        if (null === $this->keys) {
             $keys = [];
 
             $files = $this->findAll();
@@ -277,7 +263,7 @@ abstract class AbstractCmfMediaDoctrine implements Adapter, ChecksumCalculator, 
     public function listKeys($prefix = '')
     {
         $dirKeys = $fileKeys = [];
-        $files = $this->findAll($prefix);
+        $files   = $this->findAll($prefix);
 
         foreach ($files as $file) {
             $key = $this->computeKey($this->getFilePath($file));
@@ -310,11 +296,8 @@ abstract class AbstractCmfMediaDoctrine implements Adapter, ChecksumCalculator, 
         }
 
         if (!$file instanceof MetadataInterface) {
-            $type = is_object($file) ? get_class($file) : gettype($file);
-            throw new \InvalidArgumentException(sprintf(
-                'The class "%s" does not implement Symfony\Cmf\Bundle\MediaBundle\MetadataInterface',
-                $type
-            ));
+            $type = \is_object($file) ? \get_class($file) : \gettype($file);
+            throw new \InvalidArgumentException(sprintf('The class "%s" does not implement Symfony\Cmf\Bundle\MediaBundle\MetadataInterface', $type));
         }
 
         $file->setMetadata($metadata);
@@ -377,7 +360,7 @@ abstract class AbstractCmfMediaDoctrine implements Adapter, ChecksumCalculator, 
             return;
         }
 
-        $id = $this->mapKeyToId($key);
+        $id   = $this->mapKeyToId($key);
         $file = null;
 
         // find file
@@ -418,7 +401,7 @@ abstract class AbstractCmfMediaDoctrine implements Adapter, ChecksumCalculator, 
     protected function findAll($prefix = '')
     {
         $filesAndDirs = [];
-        $prefix = $this->normalizePath($this->rootPath.'/'.trim($prefix));
+        $prefix       = $this->normalizePath($this->rootPath.'/'.trim($prefix));
 
         $files = $this->getObjectManager()->getRepository($this->class)->findAll();
         foreach ($files as $file) {
@@ -482,7 +465,7 @@ abstract class AbstractCmfMediaDoctrine implements Adapter, ChecksumCalculator, 
     {
         $path = $this->normalizePath($path);
 
-        return ltrim(substr($path, strlen($this->directory)), '/');
+        return ltrim(substr($path, \strlen($this->directory)), '/');
     }
 
     /**
@@ -552,7 +535,7 @@ abstract class AbstractCmfMediaDoctrine implements Adapter, ChecksumCalculator, 
     protected function setFileDefaults($path, FileInterface $file, DirectoryInterface $parent = null)
     {
         $setIdentifier = $this->identifier ? 'set'.ucfirst($this->identifier) : false;
-        $name = $this->getBaseName($path);
+        $name          = $this->getBaseName($path);
 
         if ($setIdentifier) {
             $file->{$setIdentifier}($name);
@@ -599,10 +582,7 @@ abstract class AbstractCmfMediaDoctrine implements Adapter, ChecksumCalculator, 
         $parent = null;
 
         if ($this->isDirectory($dirPath)) {
-            throw new \InvalidArgumentException(sprintf(
-                'The directory \'%s\' already exists.',
-                $dirPath
-            ));
+            throw new \InvalidArgumentException(sprintf('The directory \'%s\' already exists.', $dirPath));
         }
 
         // create parent directory if needed

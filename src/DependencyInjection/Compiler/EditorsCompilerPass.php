@@ -21,7 +21,7 @@ class EditorsCompilerPass implements CompilerPassInterface
     {
         $tags = $container->findTaggedServiceIds('cmf_media.upload_editor_helper');
 
-        if (count($tags) > 0) {
+        if (\count($tags) > 0) {
             if ($container->has('cmf_media.upload_file_helper')) {
                 $manager = $container->findDefinition('cmf_media.upload_file_helper');
 
@@ -41,13 +41,11 @@ class EditorsCompilerPass implements CompilerPassInterface
 
         $tags = $container->findTaggedServiceIds('cmf_media.browser_file_helper');
 
-        if (count($tags) > 0) {
-            if ($container->has('cmf_media.browser_file_helper')) {
-                $manager = $container->findDefinition('cmf_media.browser_file_helper');
+        if ((\count($tags) > 0) && $container->has('cmf_media.browser_file_helper')) {
+            $manager = $container->findDefinition('cmf_media.browser_file_helper');
 
-                foreach ($tags as $id => $tag) {
-                    $manager->addMethodCall('addEditorHelper', [$tag[0]['editor'], $tag[0]['browser'], new Reference($id)]);
-                }
+            foreach ($tags as $id => $tag) {
+                $manager->addMethodCall('addEditorHelper', [$tag[0]['editor'], $tag[0]['browser'], new Reference($id)]);
             }
         }
     }

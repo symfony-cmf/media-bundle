@@ -1,0 +1,8 @@
+services:
+    Symfony\Cmf\Bundle\MediaBundle\Serializer\Handler:
+        arguments:
+            - '@Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\MediaManager'
+            - '@router'
+        tags:
+            - {name: 'jms_serializer.handler', type: '%cmf_media.persistence.phpcr.image.class', direction: 'serialization', format: 'json', method: 'serializeImageToArray'}
+

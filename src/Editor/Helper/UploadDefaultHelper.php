@@ -39,8 +39,8 @@ class UploadDefaultHelper implements UploadEditorHelperInterface
      */
     public function __construct(MediaManagerInterface $mediaManager, RouterInterface $router, array $propertyMapping = [])
     {
-        $this->mediaManager = $mediaManager;
-        $this->router = $router;
+        $this->mediaManager    = $mediaManager;
+        $this->router          = $router;
         $this->propertyMapping = $propertyMapping;
     }
 
@@ -51,7 +51,7 @@ class UploadDefaultHelper implements UploadEditorHelperInterface
     {
         // map request parameters to Media properties
         foreach ($this->propertyMapping as $param => $property) {
-            if (strlen($request->get($param))) {
+            if (\strlen($request->get($param))) {
                 $setter = 'set'.ucfirst($property);
                 $file->$setter($request->get($param));
             }
@@ -64,9 +64,7 @@ class UploadDefaultHelper implements UploadEditorHelperInterface
     public function getUploadResponse(Request $request, array $files)
     {
         if (!isset($files[0]) && !$files[0] instanceof FileInterface) {
-            throw new \InvalidArgumentException(
-                'Provide at least one Symfony\Cmf\Bundle\MediaBundle\FileInterface file.'
-            );
+            throw new \InvalidArgumentException('Provide at least one Symfony\Cmf\Bundle\MediaBundle\FileInterface file.');
         }
 
         $urlSafePath = $this->mediaManager->getUrlSafePath($files[0]);

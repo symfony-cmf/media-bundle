@@ -37,8 +37,8 @@ class MediaManager implements MediaManagerInterface
     public function __construct(ManagerRegistry $registry, $managerName, $rootPath = '/')
     {
         $this->managerRegistry = $registry;
-        $this->managerName = $managerName;
-        $this->rootPath = $rootPath;
+        $this->managerName     = $managerName;
+        $this->rootPath        = $rootPath;
     }
 
     /**
@@ -102,15 +102,12 @@ class MediaManager implements MediaManagerInterface
             if ($media->getId()) {
                 $media->setName(PathHelper::getNodeName($media->getId()));
             } else {
-                throw new \RuntimeException(sprintf(
-                    'Unable to set defaults, Media of type "%s" does not have a name or id.',
-                    $class
-                ));
+                throw new \RuntimeException(sprintf('Unable to set defaults, Media of type "%s" does not have a name or id.', $class));
             }
         }
 
-        $rootPath = is_null($parentPath) ? $this->rootPath : $parentPath;
-        $path = ($rootPath === '/' ? $rootPath : $rootPath.'/').$media->getName();
+        $rootPath = null === $parentPath ? $this->rootPath : $parentPath;
+        $path     = ('/' === $rootPath ? $rootPath : $rootPath.'/').$media->getName();
 
         /** @var DocumentManager $dm */
         $dm = $this->getObjectManager();
@@ -136,12 +133,8 @@ class MediaManager implements MediaManagerInterface
         // The path is being the id
         $id = PathHelper::absolutizePath($path, '/');
 
-        if (is_string($rootPath) && 0 !== strpos($id, $rootPath)) {
-            throw new \OutOfBoundsException(sprintf(
-                'The path "%s" is out of the root path "%s" were the file system is located.',
-                $path,
-                $rootPath
-            ));
+        if (\is_string($rootPath) && 0 !== strpos($id, $rootPath)) {
+            throw new \OutOfBoundsException(sprintf('The path "%s" is out of the root path "%s" were the file system is located.', $path, $rootPath));
         }
 
         return $id;

@@ -33,8 +33,8 @@ class CmfMediaHelper extends Helper
      */
     public function __construct(MediaManagerInterface $mediaManager, UrlGeneratorInterface $router, ImagineHelper $imagineHelper = null)
     {
-        $this->mediaManager = $mediaManager;
-        $this->generator = $router;
+        $this->mediaManager  = $mediaManager;
+        $this->generator     = $router;
         $this->imagineHelper = $imagineHelper;
     }
 
@@ -66,7 +66,7 @@ class CmfMediaHelper extends Helper
     {
         $urlSafePath = $this->mediaManager->getUrlSafePath($file);
 
-        if ($this->imagineHelper && isset($options['imagine_filter']) && is_string($options['imagine_filter'])) {
+        if ($this->imagineHelper && isset($options['imagine_filter']) && \is_string($options['imagine_filter'])) {
             return $this->imagineHelper->filter(
                 $urlSafePath,
                 $options['imagine_filter'],

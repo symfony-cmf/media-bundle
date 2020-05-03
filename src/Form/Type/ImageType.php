@@ -54,7 +54,7 @@ class ImageType extends FileType
     public function __construct($class, UploadFileHelperInterface $uploadFileHelper, $useImagine = false, $defaultFilter = false)
     {
         parent::__construct($class, $uploadFileHelper);
-        $this->useImagine = $useImagine;
+        $this->useImagine    = $useImagine;
         $this->defaultFilter = $this->useImagine ? $defaultFilter : false;
     }
 
@@ -80,7 +80,7 @@ class ImageType extends FileType
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $view->vars['imagine_filter'] = $this->useImagine ? $options['imagine_filter'] : false;
-        $view->vars['use_timestamp'] = $options['use_timestamp'];
+        $view->vars['use_timestamp']  = $options['use_timestamp'];
     }
 
     /**

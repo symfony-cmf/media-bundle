@@ -1,0 +1,27 @@
+cmf_media_download:
+    path: /media/download/{path}
+    methods: GET
+    controller: Symfony\Cmf\Bundle\MediaBundle\Controller\FileController::download
+    requirements:
+        path: '.*'
+
+cmf_media_upload:
+    path: /media/upload/{editor}
+    methods: POST
+    controller: Symfony\Cmf\Bundle\MediaBundle\Controller\FileController::upload
+
+
+cmf_media_image_display:
+    path: /media/image/{path}
+    methods: GET
+    controller: Symfony\Cmf\Bundle\MediaBundle\Controller\ImageController::display
+    requirements:
+        path: '.*'
+
+cmf_media_image_upload:
+    path: /media/upload/{editor}
+    methods: POST
+    controller: Symfony\Cmf\Bundle\MediaBundle\Controller\ImageController::upload
+    editor: 'default'
+    format: 'json'
+

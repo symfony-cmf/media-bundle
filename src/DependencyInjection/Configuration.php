@@ -11,6 +11,10 @@
 
 namespace Symfony\Cmf\Bundle\MediaBundle\DependencyInjection;
 
+use Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\Directory;
+use Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\File;
+use Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\Image;
+use Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\Media;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -22,8 +26,8 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('cmf_media');
+        $treeBuilder = new TreeBuilder('cmf_media');
+        $rootNode    = $treeBuilder->root('');
 
         $rootNode
             ->children()
@@ -36,10 +40,10 @@ class Configuration implements ConfigurationInterface
                             ->children()
                                 ->scalarNode('media_basepath')->defaultValue('/cms/media')->end()
                                 ->scalarNode('manager_name')->defaultNull()->end()
-                                ->scalarNode('media_class')->defaultValue('Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\Media')->end()
-                                ->scalarNode('file_class')->defaultValue('Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\File')->end()
-                                ->scalarNode('directory_class')->defaultValue('Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\Directory')->end()
-                                ->scalarNode('image_class')->defaultValue('Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\Image')->end()
+                                ->scalarNode('media_class')->defaultValue(Media::class)->end()
+                                ->scalarNode('file_class')->defaultValue(File::class)->end()
+                                ->scalarNode('directory_class')->defaultValue(Directory::class)->end()
+                                ->scalarNode('image_class')->defaultValue(Image::class)->end()
                                 ->arrayNode('event_listeners')
                                     ->addDefaultsIfNotSet()
                                     ->children()

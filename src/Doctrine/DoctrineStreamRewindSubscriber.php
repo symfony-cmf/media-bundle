@@ -66,7 +66,7 @@ class DoctrineStreamRewindSubscriber implements EventSubscriber
         }
 
         $stream = $object->getContentAsStream();
-        if (!is_resource($stream)) {
+        if (!\is_resource($stream)) {
             return;
         }
 

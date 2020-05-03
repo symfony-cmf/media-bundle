@@ -1,0 +1,11 @@
+services:
+    Symfony\Cmf\Bundle\MediaBundle\Adapter\LiipImagine\CmfMediaDoctrineLoader:
+        arguments:
+            - '@liip_imagine'
+            - '@doctrine_phpcr'
+            - '%cmf_media.persistence.phpcr.manager_name%'
+            - '@cmf_media.persistence.phpcr.manager'
+            - '%cmf_media.persistence.phpcr.image.class%'
+
+    cmf_media.liip_imagine.doctrine_phpcr.binary.loader:
+        alias: '@Symfony\Cmf\Bundle\MediaBundle\Adapter\LiipImagine\CmfMediaDoctrineLoader'

@@ -13,9 +13,8 @@ namespace Symfony\Cmf\Bundle\MediaBundle\Adapter\ElFinder;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ODM\PHPCR\Document\Generic;
-use Doctrine\ODM\PHPCR\Document\Resource;
 use Doctrine\ODM\PHPCR\DocumentManager;
-use Imagine\Filter\ FilterInterface;
+use Imagine\Filter\FilterInterface;
 use PHPCR\Util\PathHelper;
 use Symfony\Cmf\Bundle\MediaBundle\DirectoryInterface;
 use Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\Directory;
@@ -30,7 +29,7 @@ use Symfony\Cmf\Bundle\MediaBundle\Templating\Helper\CmfMediaHelper;
 /**
  * @author Sjoerd Peters <sjoerd.peters@gmail.com>
  */
-class PhpcrDriver extends \elFinderVolumeDriver
+class PhpcrDriver extends ElFinderVolumeDriver
 {
     /**
      * Driver id
@@ -71,14 +70,14 @@ class PhpcrDriver extends \elFinderVolumeDriver
         CmfMediaHelper $mediaHelper,
         $imagineFilter = false
     ) {
-        $this->dm = $registry->getManager($managerName);
-        $this->mediaManager = $mediaManager;
-        $this->mediaHelper = $mediaHelper;
+        $this->dm            = $registry->getManager($managerName);
+        $this->mediaManager  = $mediaManager;
+        $this->mediaHelper   = $mediaHelper;
         $this->imagineFilter = $imagineFilter;
 
         $opts = [
             'workspace' => '',
-            'manager' => '',
+            'manager'   => '',
             // TODO: remove when implemented/ errors are fixed
             'disabled' => [
                 'archive',
@@ -147,37 +146,39 @@ class PhpcrDriver extends \elFinderVolumeDriver
             return '.';
         }
 
-        if (strpos($path, '/') === 0) {
+        if (0 === strpos($path, '/')) {
             $initial_slashes = true;
         } else {
             $initial_slashes = false;
         }
 
         if (($initial_slashes)
-            && (strpos($path, '//') === 0)
-            && (strpos($path, '///') === false)) {
+            && (0 === strpos($path, '//'))
+            && (false === strpos($path, '///'))
+        ) {
             $initial_slashes = 2;
         }
 
         $initial_slashes = (int) $initial_slashes;
 
-        $comps = explode('/', $path);
+        $comps     = explode('/', $path);
         $new_comps = [];
         foreach ($comps as $comp) {
-            if (in_array($comp, ['', '.'])) {
+            if (\in_array($comp, ['', '.'])) {
                 continue;
             }
 
-            if (($comp !== '..')
+            if (('..' !== $comp)
                 || (!$initial_slashes && !$new_comps)
-                || ($new_comps && (end($new_comps) === '..'))) {
+                || ($new_comps && ('..' === end($new_comps)))
+            ) {
                 array_push($new_comps, $comp);
             } elseif ($new_comps) {
                 array_pop($new_comps);
             }
         }
         $comps = $new_comps;
-        $path = implode('/', $comps);
+        $path  = implode('/', $comps);
         if ($initial_slashes) {
             $path = str_repeat('/', $initial_slashes).$path;
         }
@@ -196,7 +197,7 @@ class PhpcrDriver extends \elFinderVolumeDriver
      **/
     protected function _relpath($path)
     {
-        return $path === $this->root ? '' : substr($path, strlen($this->root) + 1);
+        return $path === $this->root ? '' : substr($path, \strlen($this->root) + 1);
     }
 
     /**
@@ -210,7 +211,7 @@ class PhpcrDriver extends \elFinderVolumeDriver
      **/
     protected function _abspath($path)
     {
-        return $path === '/' ? $this->root : $this->root.'/'.$path;
+        return '/' === $path ? $this->root : $this->root.'/'.$path;
     }
 
     /**
@@ -239,7 +240,7 @@ class PhpcrDriver extends \elFinderVolumeDriver
      **/
     protected function _inpath($path, $parent)
     {
-        return $path === $parent || strpos($path, $parent.'/') === 0;
+        return $path === $parent || 0 === strpos($path, $parent.'/');
     }
 
     /**
@@ -288,7 +289,7 @@ class PhpcrDriver extends \elFinderVolumeDriver
             $ts = $dt->getTimestamp();
         }
 
-        $url = false;
+        $url    = false;
         $tmbUrl = false;
         if ($doc instanceof ImageInterface) {
             $url = $this->mediaHelper->displayUrl($doc);
@@ -300,15 +301,15 @@ class PhpcrDriver extends \elFinderVolumeDriver
         }
 
         $stat = [
-            'size' => $dir ? 0 : $doc->getSize(),
-            'ts' => $ts,
-            'mime' => $dir ? 'directory' : $doc->getContentType(),
-            'read' => true,
-            'write' => true,
+            'size'   => $dir ? 0 : $doc->getSize(),
+            'ts'     => $ts,
+            'mime'   => $dir ? 'directory' : $doc->getContentType(),
+            'read'   => true,
+            'write'  => true,
             'locked' => false,
             'hidden' => false,
-            'url' => $url,
-            'tmb' => $tmbUrl,
+            'url'    => $url,
+            'tmb'    => $tmbUrl,
         ];
 
         return $stat;
@@ -327,7 +328,7 @@ class PhpcrDriver extends \elFinderVolumeDriver
     {
         $doc = $this->dm->find(null, $path);
         if ($doc instanceof DirectoryInterface) {
-            return count($doc->getChildren()) > 0;
+            return \count($doc->getChildren()) > 0;
         }
 
         return false;
@@ -366,7 +367,7 @@ class PhpcrDriver extends \elFinderVolumeDriver
      **/
     protected function _scandir($path)
     {
-        $doc = $this->dm->find(null, $path);
+        $doc  = $this->dm->find(null, $path);
         $list = [];
         foreach ($doc->getChildren() as $child) {
             $list[] = $child->getId();
@@ -521,7 +522,7 @@ class PhpcrDriver extends \elFinderVolumeDriver
      **/
     protected function _move($source, $targetDir, $name)
     {
-        $filename = $this->_joinPath($targetDir, $name);
+        $filename  = $this->_joinPath($targetDir, $name);
         $sourceDir = $this->_dirname($source);
 
         try {

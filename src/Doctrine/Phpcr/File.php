@@ -194,14 +194,14 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
     public function getContentAsString()
     {
         $stream = $this->getContentAsStream();
-        if (!is_resource($stream)) {
+        if (!\is_resource($stream)) {
             return '';
         }
 
         $content = stream_get_contents($stream);
         rewind($stream);
 
-        return $content !== false ? $content : '';
+        return false !== $content ? $content : '';
     }
 
     /**
@@ -209,7 +209,7 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
      */
     public function setContentFromString($content)
     {
-        if (!is_resource($content)) {
+        if (!\is_resource($content)) {
             $stream = fopen('php://memory', 'rwb+');
             fwrite($stream, $content);
             rewind($stream);
@@ -236,11 +236,8 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
         } elseif ($file instanceof FileInterface) {
             $this->setContentFromString($file->getContentAsString());
         } else {
-            $type = is_object($file) ? get_class($file) : gettype($file);
-            throw new \InvalidArgumentException(sprintf(
-                'File is not a valid type, "%s" given.',
-                 $type
-            ));
+            $type = \is_object($file) ? \get_class($file) : \gettype($file);
+            throw new \InvalidArgumentException(sprintf('File is not a valid type, "%s" given.', $type));
         }
 
         return $this;
@@ -252,7 +249,7 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
     public function getContentAsStream()
     {
         $stream = $this->getContent()->getData();
-        if (!is_resource($stream)) {
+        if (!\is_resource($stream)) {
             return;
         }
         rewind($stream);
@@ -265,7 +262,7 @@ class File extends DoctrineOdmFile implements FileInterface, BinaryInterface
      */
     public function setContentFromStream($stream)
     {
-        if (!is_resource($stream)) {
+        if (!\is_resource($stream)) {
             throw new \InvalidArgumentException('Expected a stream');
         }
 

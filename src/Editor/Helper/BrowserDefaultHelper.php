@@ -34,9 +34,9 @@ class BrowserDefaultHelper implements BrowserEditorHelperInterface
         array $parameters = [],
         $referenceType = RouterInterface::ABSOLUTE_PATH)
     {
-        $this->router = $router;
-        $this->name = $name;
-        $this->parameters = $parameters;
+        $this->router        = $router;
+        $this->name          = $name;
+        $this->parameters    = $parameters;
         $this->referenceType = $referenceType;
     }
 

@@ -38,10 +38,7 @@ class ImageController extends FileController
         $contentObject = $this->getObjectManager()->find($this->class, $id);
 
         if (!$contentObject || !$contentObject instanceof ImageInterface) {
-            throw new NotFoundHttpException(sprintf(
-                'Object with identifier %s cannot be resolved to a valid instance of Symfony\Cmf\Bundle\MediaBundle\ImageInterface',
-                $path
-            ));
+            throw new NotFoundHttpException(sprintf('Object with identifier %s cannot be resolved to a valid instance of Symfony\Cmf\Bundle\MediaBundle\ImageInterface', $path));
         }
 
         $response = new Response($contentObject->getContentAsString());
