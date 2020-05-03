@@ -13,6 +13,9 @@ namespace Symfony\Cmf\Bundle\MediaBundle\DependencyInjection;
 
 use Symfony\Cmf\Bundle\MediaBundle\Doctrine\DoctrineImageDimensionsSubscriber;
 use Symfony\Cmf\Bundle\MediaBundle\Doctrine\DoctrineStreamRewindSubscriber;
+use Symfony\Cmf\Bundle\MediaBundle\Templating\Helper\CmfMediaHelper;
+use Symfony\Cmf\Bundle\MediaBundle\Controller\ImageController;
+use Symfony\Cmf\Bundle\MediaBundle\Controller\FileController;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -142,11 +145,15 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
             }
         }
 
+        if (!isset($config['manager_name'])) {
+            $container->setParameter($prefix.'.manager_name', null);
+        }
+
         // load phpcr specific configuration
         $loader->load('persistence-phpcr.yml');
         if (!interface_exists(TokenStorageInterface::class)) {
-            $container->getDefinition('cmf_media.file_controller')->replaceArgument(7, new Reference('security.context'));
-            $container->getDefinition('cmf_media.image_controller')->replaceArgument(7, new Reference('security.context'));
+            $container->getDefinition(FileController::class)->replaceArgument(7, new Reference('security.context'));
+            $container->getDefinition(ImageController::class)->replaceArgument(7, new Reference('security.context'));
         }
 
         // aliases
@@ -159,7 +166,7 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
         if (!$config['event_listeners']['image_dimensions']) {
             $container->removeDefinition(DoctrineImageDimensionsSubscriber::class);
         } elseif ($useImagine) {
-            $definition = $container->getDefinition($this->getAlias().'.persistence.phpcr.subscriber.image_dimensions');
+            $definition = $container->getDefinition(DoctrineImageDimensionsSubscriber::class);
             $definition->addArgument(new Reference('liip_imagine'));
         } elseif (!\function_exists('imagecreatefromstring')) {
             throw new InvalidConfigurationException('persistence.phpcr.subscriber.image_dimensions must be set to false if Imagine is not enabled and the GD PHP extension is not available.');
@@ -173,7 +180,7 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
             }
 
             // TODO: this should not be phcpr specific but the MediaManagerInterface service should be an alias instead
-            $definition = $container->getDefinition($this->getAlias().'.templating.helper');
+            $definition = $container->getDefinition(CmfMediaHelper::class);
             $definition->addArgument(new Reference('liip_imagine.templating.helper'));
         } elseif (true === $config['event_listeners']['imagine_cache']) {
             throw new InvalidConfigurationException('persistence.phpcr.event_listeners.imagine_cache may not be forced enabled if Imagine is not enabled.');

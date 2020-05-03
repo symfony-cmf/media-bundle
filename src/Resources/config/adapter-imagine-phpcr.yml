@@ -4,8 +4,8 @@ services:
             - '@liip_imagine'
             - '@doctrine_phpcr'
             - '%cmf_media.persistence.phpcr.manager_name%'
-            - '@cmf_media.persistence.phpcr.manager'
+            - '@Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\MediaManager'
             - '%cmf_media.persistence.phpcr.image.class%'
 
     cmf_media.liip_imagine.doctrine_phpcr.binary.loader:
-        alias: '@Symfony\Cmf\Bundle\MediaBundle\Adapter\LiipImagine\CmfMediaDoctrineLoader'
+        alias: Symfony\Cmf\Bundle\MediaBundle\Adapter\LiipImagine\CmfMediaDoctrineLoader

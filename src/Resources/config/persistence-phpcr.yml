@@ -2,8 +2,9 @@ services:
     cmf_media.initializer:
         class: Doctrine\Bundle\PHPCRBundle\Initializer\GenericInitializer
         arguments:
+            - 'CmfMediaBundle'
             - ['%cmf_media.persistence.phpcr.media_basepath%']
-            - ''
+            -
         tags: ['doctrine_phpcr.initializer']
 
     Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\MediaManager:
@@ -11,6 +12,9 @@ services:
             - '@doctrine_phpcr'
             - '%cmf_media.persistence.phpcr.manager_name%'
             - '%cmf_media.persistence.phpcr.media_basepath%'
+
+    cmf_media.persistence.phpcr.manager:
+        alias: Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\MediaManager
 
     cmf_media.persistence.phpcr.upload_file_helper:
         class: Symfony\Cmf\Bundle\MediaBundle\File\UploadFileHelperDoctrine
@@ -39,11 +43,11 @@ services:
             - '@Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\MediaManager'
             - '@cmf_media.upload_file_helper'
             - '%cmf_media.upload_file_role%'
-            - '@security.authorization_checkerv'
+            - '@security.authorization_checker'
             - '@security.token_storage'
 
     cmf_media.file_controller:
-        alias: '@Symfony\Cmf\Bundle\MediaBundle\Controller\FileController'
+        alias: Symfony\Cmf\Bundle\MediaBundle\Controller\FileController
 
     Symfony\Cmf\Bundle\MediaBundle\Controller\ImageController:
         arguments:
@@ -54,11 +58,11 @@ services:
             - '@Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\MediaManager'
             - '@cmf_media.upload_image_helper'
             - '%cmf_media.upload_file_role%'
-            - '@security.authorization_checkerv'
+            - '@security.authorization_checker'
             - '@security.token_storage'
 
     cmf_media.image_controller:
-        alias: '@Symfony\Cmf\Bundle\MediaBundle\Controller\ImageController'
+        alias: Symfony\Cmf\Bundle\MediaBundle\Controller\ImageController
 
     Symfony\Cmf\Bundle\MediaBundle\Templating\Helper\CmfMediaHelper:
         arguments:
@@ -68,12 +72,12 @@ services:
             - {name: 'templating.helper', alias: 'cmf_media'}
 
     cmf_media.templating.helper:
-        alias: '@Symfony\Cmf\Bundle\MediaBundle\Templating\Helper\CmfMediaHelper'
+        alias: Symfony\Cmf\Bundle\MediaBundle\Templating\Helper\CmfMediaHelper
 
 
     Symfony\Cmf\Bundle\MediaBundle\Twig\Extension\CmfMediaExtension:
         arguments:
-            '@Symfony\Cmf\Bundle\MediaBundle\Templating\Helper\CmfMediaHelper'
+            - '@Symfony\Cmf\Bundle\MediaBundle\Templating\Helper\CmfMediaHelper'
         tags: ['twig.extension']
 
     Symfony\Cmf\Bundle\MediaBundle\Editor\Helper\UploadDefaultHelper:
@@ -87,7 +91,7 @@ services:
             - {name: 'cmf_media.upload_editor_helper', alias: 'default'}
 
     cmf_media.upload_editor_helper.default:
-        alias: '@Symfony\Cmf\Bundle\MediaBundle\Editor\Helper\UploadDefaultHelper'
+        alias: Symfony\Cmf\Bundle\MediaBundle\Editor\Helper\UploadDefaultHelper
 
     Symfony\Cmf\Bundle\MediaBundle\Editor\Helper\UploadCkeditorHelper:
         arguments:
@@ -119,3 +123,8 @@ services:
     Symfony\Cmf\Bundle\MediaBundle\Doctrine\DoctrineImageDimensionsSubscriber:
         tags:
             - {name: 'doctrine_phpcr.event_subscriber'}
+
+    cmf_media.persistence.phpcr.subscriber.image_dimensions:
+        alias: Symfony\Cmf\Bundle\MediaBundle\Doctrine\DoctrineImageDimensionsSubscriber
+    cmf_media.persistence.phpcr.subscriber.stream_rewind:
+        alias: Symfony\Cmf\Bundle\MediaBundle\Doctrine\DoctrineStreamRewindSubscriber

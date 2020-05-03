@@ -19,6 +19,7 @@ use Symfony\Cmf\Bundle\MediaBundle\ImageInterface;
 use Symfony\Cmf\Bundle\MediaBundle\MediaManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * A listener to invalidate the imagine cache when Image documents are
@@ -70,17 +71,19 @@ class ImagineCacheInvalidatorSubscriber implements EventSubscriber
     }
 
     /**
-     * @param Request $request
+     * @param RequestStack $request
      */
-    public function setRequest(Request $request = null)
+    public function setRequest(RequestStack $request = null)
     {
-        $this->request = $request;
+        if (null !== $request->getMasterRequest()) {
+            $this->request = $request;
+        }
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getSubscribedEvents()
+    public function getSubscribedEvents(): array
     {
         return [
             'postUpdate',
