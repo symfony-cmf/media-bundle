@@ -46,7 +46,7 @@ class CmfMediaHelper extends Helper
      *
      * @return string The generated URL
      */
-    public function downloadUrl(FileInterface $file, $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+    public function downloadUrl(FileInterface $file, $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH): string
     {
         $urlSafePath = $this->mediaManager->getUrlSafePath($file);
 
@@ -62,7 +62,7 @@ class CmfMediaHelper extends Helper
      *
      * @return string The generated URL
      */
-    public function displayUrl(ImageInterface $file, array $options = [], $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+    public function displayUrl(ImageInterface $file, array $options = [], $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH): string
     {
         $urlSafePath = $this->mediaManager->getUrlSafePath($file);
 
@@ -70,7 +70,7 @@ class CmfMediaHelper extends Helper
             return $this->imagineHelper->filter(
                 $urlSafePath,
                 $options['imagine_filter'],
-                isset($options['imagine_runtime_config']) ? $options['imagine_runtime_config'] : []
+                $options['imagine_runtime_config'] ?? []
             );
         }
 
@@ -82,7 +82,7 @@ class CmfMediaHelper extends Helper
      *
      * @return string The canonical name
      */
-    public function getName()
+    public function getName(): string
     {
         return 'cmf_media';
     }

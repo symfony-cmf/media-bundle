@@ -46,7 +46,7 @@ class Handler
      *
      * @return array
      */
-    public function serializeImageToArray(JsonSerializationVisitor $visitor, ImageInterface $image)
+    public function serializeImageToArray(JsonSerializationVisitor $visitor, ImageInterface $image): array
     {
         $urlSafePath = $this->mediaManager->getUrlSafePath($image);
         $url         = $this->router->generate('cmf_media_image_display', ['path' => $urlSafePath], UrlGeneratorInterface::ABSOLUTE_URL);
