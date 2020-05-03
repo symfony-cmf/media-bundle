@@ -1588,10 +1588,10 @@ class ElFinder
 
         // Redirect
         switch ($rc) {
-            case 307 : // Temporary Redirect
-            case 303 : // See Other
-            case 302 : // Moved Temporarily
-            case 301 : // Moved Permanently
+            case 307: // Temporary Redirect
+            case 303: // See Other
+            case 302: // Moved Temporarily
+            case 301: // Moved Permanently
                 $matches = [];
                 if (preg_match('/^Location: (.+?)(#.+)?$/im', $header, $matches) && --$redirect_max > 0) {
                     $url  = trim($matches[1]);
@@ -2803,9 +2803,9 @@ class ElFinder
     {
         list($width, $height, $type, $attr) = getimagesize($path);
         switch ($type) {
-            case IMAGETYPE_GIF :
+            case IMAGETYPE_GIF:
                 break;
-            default :
+            default:
                 return false;
         }
 
@@ -2891,16 +2891,16 @@ class ElFinder
         $chk = true;
         if ($checkIs) {
             switch ($checkIs) {
-                case 'array' :
+                case 'array':
                     $chk = \is_array($data);
                     break;
-                case 'string' :
+                case 'string':
                     $chk = \is_string($data);
                     break;
-                case 'object' :
+                case 'object':
                     $chk = \is_object($data);
                     break;
-                case 'int' :
+                case 'int':
                     $chk = \is_int($data);
                     break;
             }

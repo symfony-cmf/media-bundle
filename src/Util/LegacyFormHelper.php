@@ -14,7 +14,7 @@ namespace Symfony\Cmf\Bundle\MediaBundle\Util;
 use Symfony\Cmf\Bundle\MediaBundle\Form\Type\FileType;
 use Symfony\Cmf\Bundle\MediaBundle\Form\Type\ImageType;
 use Symfony\Component\Form\Extension\Core\Type\FileType as SfFileType;
-use Symfony\Component\Form\Extension\Core\Type\FormType AS SfFormType;
+use Symfony\Component\Form\Extension\Core\Type\FormType as SfFormType;
 
 final class LegacyFormHelper
 {
