@@ -21,7 +21,7 @@ services:
         arguments:
             - '@doctrine_phpcr'
             - '%cmf_media.persistence.phpcr.manager_name%'
-            - '%cmf_media.persistence.phpcr.file.class'
+            - '%cmf_media.persistence.phpcr.file.class%'
             - '%cmf_media.persistence.phpcr.media_basepath%'
             - '@Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\MediaManager'
 
@@ -30,7 +30,7 @@ services:
         arguments:
             - '@doctrine_phpcr'
             - '%cmf_media.persistence.phpcr.manager_name%'
-            - '%cmf_media.persistence.phpcr.image.class'
+            - '%cmf_media.persistence.phpcr.image.class%'
             - '%cmf_media.persistence.phpcr.media_basepath%'
             - '@Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\MediaManager'
 

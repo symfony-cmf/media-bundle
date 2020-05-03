@@ -6,7 +6,8 @@ services:
             - '@Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\MediaManager'
             - '@Symfony\Cmf\Bundle\MediaBundle\Templating\Helper\CmfMediaHelper'
             - '%cmf_media.imagine.filter.elfinder_thumbnail%'
-    
+            - '@session'
+
     Symfony\Cmf\Bundle\MediaBundle\Editor\Helper\BrowserDefaultHelper:
         arguments:
             - '@router'

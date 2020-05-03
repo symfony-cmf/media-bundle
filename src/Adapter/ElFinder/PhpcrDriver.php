@@ -25,11 +25,13 @@ use Symfony\Cmf\Bundle\MediaBundle\HierarchyInterface;
 use Symfony\Cmf\Bundle\MediaBundle\ImageInterface;
 use Symfony\Cmf\Bundle\MediaBundle\MediaManagerInterface;
 use Symfony\Cmf\Bundle\MediaBundle\Templating\Helper\CmfMediaHelper;
-
+use elFinderVolumeDriver;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use FM\ElfinderBundle\Session\ElFinderSession;
 /**
  * @author Sjoerd Peters <sjoerd.peters@gmail.com>
  */
-class PhpcrDriver extends ElFinderVolumeDriver
+class PhpcrDriver extends elFinderVolumeDriver
 {
     /**
      * Driver id
@@ -38,7 +40,7 @@ class PhpcrDriver extends ElFinderVolumeDriver
      *
      * @var string
      **/
-    protected $driverId = 'p';
+    protected $driverId = 'phpcrmedia';
 
     /**
      * @var DocumentManager
@@ -49,14 +51,11 @@ class PhpcrDriver extends ElFinderVolumeDriver
     protected $mediaHelper;
     protected $imagineFilter;
 
-    /**
-     * @var array
-     */
-    protected $options;
 
     /**
      * Constructor.
      *
+     * @param SessionInterface      $session
      * @param ManagerRegistry       $registry
      * @param string                $managerName
      * @param MediaManagerInterface $mediaManager
@@ -68,17 +67,18 @@ class PhpcrDriver extends ElFinderVolumeDriver
         $managerName,
         MediaManagerInterface $mediaManager,
         CmfMediaHelper $mediaHelper,
-        $imagineFilter = false
+        $imagineFilter = false,
+        SessionInterface $session
     ) {
         $this->dm            = $registry->getManager($managerName);
         $this->mediaManager  = $mediaManager;
         $this->mediaHelper   = $mediaHelper;
         $this->imagineFilter = $imagineFilter;
+        $this->session       = new ElFinderSession($session);
 
         $opts = [
             'workspace' => '',
             'manager'   => '',
-            // TODO: remove when implemented/ errors are fixed
             'disabled' => [
                 'archive',
                 'extract',
@@ -87,6 +87,7 @@ class PhpcrDriver extends ElFinderVolumeDriver
         ];
         $this->options = array_merge($this->options, $opts);
     }
+
 
     /**
      * Return parent directory path.

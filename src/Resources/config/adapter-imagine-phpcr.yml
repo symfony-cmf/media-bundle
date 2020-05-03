@@ -6,6 +6,7 @@ services:
             - '%cmf_media.persistence.phpcr.manager_name%'
             - '@Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\MediaManager'
             - '%cmf_media.persistence.phpcr.image.class%'
-
+        tags:
+            - {name: 'liip_imagine.binary.loader', loader: 'cmf_media_doctrine_phpcr'}
     cmf_media.liip_imagine.doctrine_phpcr.binary.loader:
         alias: Symfony\Cmf\Bundle\MediaBundle\Adapter\LiipImagine\CmfMediaDoctrineLoader
