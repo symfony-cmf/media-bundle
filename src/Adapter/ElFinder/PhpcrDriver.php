@@ -14,6 +14,8 @@ namespace Symfony\Cmf\Bundle\MediaBundle\Adapter\ElFinder;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ODM\PHPCR\Document\Generic;
 use Doctrine\ODM\PHPCR\DocumentManager;
+use elFinderVolumeDriver;
+use FM\ElfinderBundle\Session\ElFinderSession;
 use Imagine\Filter\FilterInterface;
 use PHPCR\Util\PathHelper;
 use Symfony\Cmf\Bundle\MediaBundle\DirectoryInterface;
@@ -25,9 +27,8 @@ use Symfony\Cmf\Bundle\MediaBundle\HierarchyInterface;
 use Symfony\Cmf\Bundle\MediaBundle\ImageInterface;
 use Symfony\Cmf\Bundle\MediaBundle\MediaManagerInterface;
 use Symfony\Cmf\Bundle\MediaBundle\Templating\Helper\CmfMediaHelper;
-use elFinderVolumeDriver;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use FM\ElfinderBundle\Session\ElFinderSession;
+
 /**
  * @author Sjoerd Peters <sjoerd.peters@gmail.com>
  */
@@ -50,7 +51,6 @@ class PhpcrDriver extends elFinderVolumeDriver
     protected $mediaManager;
     protected $mediaHelper;
     protected $imagineFilter;
-
 
     /**
      * Constructor.
@@ -79,7 +79,7 @@ class PhpcrDriver extends elFinderVolumeDriver
         $opts = [
             'workspace' => '',
             'manager'   => '',
-            'disabled' => [
+            'disabled'  => [
                 'archive',
                 'extract',
                 'resize',
@@ -87,7 +87,6 @@ class PhpcrDriver extends elFinderVolumeDriver
         ];
         $this->options = array_merge($this->options, $opts);
     }
-
 
     /**
      * Return parent directory path.
