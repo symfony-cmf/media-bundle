@@ -11,12 +11,10 @@
 
 namespace Symfony\Cmf\Bundle\MediaBundle\DependencyInjection;
 
-use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Symfony\Cmf\Bundle\MediaBundle\Controller\FileController;
 use Symfony\Cmf\Bundle\MediaBundle\Controller\ImageController;
 use Symfony\Cmf\Bundle\MediaBundle\Doctrine\DoctrineImageDimensionsSubscriber;
 use Symfony\Cmf\Bundle\MediaBundle\Doctrine\DoctrineStreamRewindSubscriber;
-use Symfony\Cmf\Bundle\MediaBundle\Templating\Helper\CmfMediaHelper;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -179,7 +177,6 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
             if (false !== $config['event_listeners']['imagine_cache']) {
                 $loader->load('persistence-phpcr-event-imagine.yml');
             }
-
         } elseif (true === $config['event_listeners']['imagine_cache']) {
             throw new InvalidConfigurationException('persistence.phpcr.event_listeners.imagine_cache may not be forced enabled if Imagine is not enabled.');
         }
