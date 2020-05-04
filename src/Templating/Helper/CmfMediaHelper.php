@@ -11,6 +11,8 @@
 
 namespace Symfony\Cmf\Bundle\MediaBundle\Templating\Helper;
 
+use Liip\ImagineBundle\Templating\FilterTrait;
+use Liip\ImagineBundle\Templating\Helper\FilterHelper;
 use Liip\ImagineBundle\Templating\Helper\ImagineHelper;
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
 use Symfony\Cmf\Bundle\MediaBundle\ImageInterface;
@@ -22,20 +24,20 @@ class CmfMediaHelper extends Helper
 {
     protected $mediaManager;
     protected $generator;
-    protected $imagineHelper;
+    protected $filterHelper;
 
     /**
      * Constructor.
      *
      * @param MediaManagerInterface $mediaManager
      * @param UrlGeneratorInterface $router        A Router instance
-     * @param ImagineHelper         $imagineHelper Imagine helper to use if available
+     * @param FilterHelper $filterHelper
      */
-    public function __construct(MediaManagerInterface $mediaManager, UrlGeneratorInterface $router, ImagineHelper $imagineHelper = null)
+    public function __construct(MediaManagerInterface $mediaManager, UrlGeneratorInterface $router, FilterHelper $filterHelper)
     {
         $this->mediaManager  = $mediaManager;
         $this->generator     = $router;
-        $this->imagineHelper = $imagineHelper;
+        $this->filterHelper  = $filterHelper;
     }
 
     /**
@@ -66,8 +68,8 @@ class CmfMediaHelper extends Helper
     {
         $urlSafePath = $this->mediaManager->getUrlSafePath($file);
 
-        if ($this->imagineHelper && isset($options['imagine_filter']) && \is_string($options['imagine_filter'])) {
-            return $this->imagineHelper->filter(
+        if (isset($options['imagine_filter']) && \is_string($options['imagine_filter'])) {
+            return $this->filterHelper->filter(
                 $urlSafePath,
                 $options['imagine_filter'],
                 $options['imagine_runtime_config'] ?? []

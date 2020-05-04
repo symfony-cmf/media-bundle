@@ -11,6 +11,7 @@
 
 namespace Symfony\Cmf\Bundle\MediaBundle\DependencyInjection;
 
+use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Symfony\Cmf\Bundle\MediaBundle\Controller\FileController;
 use Symfony\Cmf\Bundle\MediaBundle\Controller\ImageController;
 use Symfony\Cmf\Bundle\MediaBundle\Doctrine\DoctrineImageDimensionsSubscriber;
@@ -179,9 +180,6 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
                 $loader->load('persistence-phpcr-event-imagine.yml');
             }
 
-            // TODO: this should not be phcpr specific but the MediaManagerInterface service should be an alias instead
-            $definition = $container->getDefinition(CmfMediaHelper::class);
-            $definition->addArgument(new Reference('liip_imagine.templating.helper'));
         } elseif (true === $config['event_listeners']['imagine_cache']) {
             throw new InvalidConfigurationException('persistence.phpcr.event_listeners.imagine_cache may not be forced enabled if Imagine is not enabled.');
         }

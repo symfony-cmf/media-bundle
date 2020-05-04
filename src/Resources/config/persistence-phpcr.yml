@@ -68,6 +68,7 @@ services:
         arguments:
             - '@Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\MediaManager'
             - '@router'
+            - '@liip_imagine.templating.filter_helper'
         tags:
             - {name: 'templating.helper', alias: 'cmf_media'}
 
