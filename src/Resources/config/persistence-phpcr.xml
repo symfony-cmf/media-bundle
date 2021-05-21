@@ -73,7 +73,7 @@
             <argument type="service" id="cmf_media.persistence.phpcr.manager" />
         </service>
 
-        <service id="cmf_media.file_controller" class="%cmf_media.file_controller.class%">
+        <service id="cmf_media.file_controller" class="%cmf_media.file_controller.class%" public="true">
             <argument type="service" id="doctrine_phpcr" />
             <argument>%cmf_media.persistence.phpcr.manager_name%</argument>
             <argument/>
@@ -85,7 +85,7 @@
             <argument type="service" id="security.token_storage" on-invalid="ignore" />
         </service>
 
-        <service id="cmf_media.image_controller" class="%cmf_media.image_controller.class%">
+        <service id="cmf_media.image_controller" class="%cmf_media.image_controller.class%" public="true">
             <argument type="service" id="doctrine_phpcr" />
             <argument>%cmf_media.persistence.phpcr.manager_name%</argument>
             <argument/>

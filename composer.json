@@ -12,16 +12,16 @@
         }
     ],
     "require": {
-        "php": "^5.3.9|^7.0",
-        "symfony/framework-bundle": "~2.3|~3.0"
+        "php": "^7.3",
+        "symfony/framework-bundle": "~3.0|~4.0"
     },
     "require-dev": {
-        "twig/twig": "^1.12|^2.0",
+        "twig/twig": "^2.0",
         "symfony-cmf/testing": "^2.0",
         "doctrine/phpcr-odm": "^1.4|^2.0",
         "doctrine/annotations": "^1.1.2",
         "jms/serializer-bundle": "^0.12|^1.0",
-        "liip/imagine-bundle": "^1.0.4",
+        "liip/imagine-bundle": "^1.0.4|^2.0",
         "mikey179/vfsStream": "^1.2"
     },
     "suggest": {
@@ -31,9 +31,6 @@
         "jms/serializer-bundle": "When using the serializer handler",
         "liip/imagine-bundle": "To integrate with the Imagine library for processing images",
         "helios-ag/fm-elfinder-bundle": "When using the elFinder media browser"
-    },
-    "conflict": {
-        "helios-ag/fm-elfinder-bundle": "<8.0"
     },
     "autoload": {
         "psr-4": {
