@@ -3,3 +3,4 @@ composer.lock
 tests/Resources/app/cache
 tests/Resources/app/logs
 tests/Resources/web
+.idea

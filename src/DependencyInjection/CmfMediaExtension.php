@@ -11,14 +11,19 @@
 
 namespace Symfony\Cmf\Bundle\MediaBundle\DependencyInjection;
 
-use Symfony\Component\Config\FileLocator;
+use Symfony\Cmf\Bundle\MediaBundle\Controller\FileController;
+use Symfony\Cmf\Bundle\MediaBundle\Controller\ImageController;
+use Symfony\Cmf\Bundle\MediaBundle\Doctrine\DoctrineImageDimensionsSubscriber;
+use Symfony\Cmf\Bundle\MediaBundle\Doctrine\DoctrineStreamRewindSubscriber;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface;
 
 /**
  * This is the class that loads and manages your bundle configuration.
@@ -36,29 +41,24 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
         $bundles = $container->getParameter('kernel.bundles');
 
         // process the configuration of CmfMediaExtension
-        $configs = $container->getExtensionConfig($this->getAlias());
+        $configs      = $container->getExtensionConfig($this->getAlias());
         $parameterBag = $container->getParameterBag();
-        $configs = $parameterBag->resolveValue($configs);
-        $config = $this->processConfiguration(new Configuration(), $configs);
+        $configs      = $parameterBag->resolveValue($configs);
+        $config       = $this->processConfiguration(new Configuration(), $configs);
 
-        if ($config['persistence']['phpcr']['enabled']) {
-            if (isset($bundles['CmfCreateBundle'])) {
-                $config = [
-                    'persistence' => [
-                        'phpcr' => [
-                            'image' => [
-                                // enable imaging inside CreateBundle, general
-                                // phpcr persistence still needs to be enabled
-                                // explicitly or by CoreBundle
-                                'enabled' => true,
-                                'model_class' => $config['persistence']['phpcr']['image_class'],
-                                'basepath' => $config['persistence']['phpcr']['media_basepath'],
-                            ],
+        if ($config['persistence']['phpcr']['enabled'] && isset($bundles['CmfCreateBundle'])) {
+            $config = [
+                'persistence' => [
+                    'phpcr' => [
+                        'image' => [
+                            'enabled'     => true,
+                            'model_class' => $config['persistence']['phpcr']['image_class'],
+                            'basepath'    => $config['persistence']['phpcr']['media_basepath'],
                         ],
                     ],
-                ];
-                $container->prependExtensionConfig('cmf_create', $config);
-            }
+                ],
+            ];
+            $container->prependExtensionConfig('cmf_create', $config);
         }
     }
 
@@ -68,10 +68,10 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
     public function load(array $configs, ContainerBuilder $container)
     {
         $configuration = new Configuration();
-        $config = $this->processConfiguration($configuration, $configs);
+        $config        = $this->processConfiguration($configuration, $configs);
 
         // detect bundles
-        $bundles = $container->getParameter('kernel.bundles');
+        $bundles    = $container->getParameter('kernel.bundles');
         $useImagine = true === $config['use_imagine']
             || ('auto' === $config['use_imagine']
                 && isset($bundles['LiipImagineBundle'])
@@ -91,8 +91,8 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
         ;
 
         // load config
-        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('services.xml');
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('services.yml');
 
         if ($config['persistence']['phpcr']['enabled']) {
             $this->loadPhpcr($config['persistence']['phpcr'], $loader, $container, $useImagine, $useJmsSerializer, $useElFinder);
@@ -117,7 +117,7 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
 
     public function loadPhpcr(
         $config,
-        XmlFileLoader $loader,
+        YamlFileLoader $loader,
         ContainerBuilder $container,
         $useImagine,
         $useJmsSerializer,
@@ -127,12 +127,12 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
         $prefix = $this->getAlias().'.persistence.phpcr';
 
         $keys = [
-            'media_class' => 'media.class',
-            'file_class' => 'file.class',
+            'media_class'     => 'media.class',
+            'file_class'      => 'file.class',
             'directory_class' => 'directory.class',
-            'image_class' => 'image.class',
-            'media_basepath' => 'media_basepath',
-            'manager_name' => 'manager_name',
+            'image_class'     => 'image.class',
+            'media_basepath'  => 'media_basepath',
+            'manager_name'    => 'manager_name',
         ];
 
         foreach ($keys as $sourceKey => $targetKey) {
@@ -144,11 +144,15 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
             }
         }
 
+        if (!isset($config['manager_name'])) {
+            $container->setParameter($prefix.'.manager_name', null);
+        }
+
         // load phpcr specific configuration
-        $loader->load('persistence-phpcr.xml');
-        if (!interface_exists('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface')) {
-            $container->getDefinition('cmf_media.file_controller')->replaceArgument(7, new Reference('security.context'));
-            $container->getDefinition('cmf_media.image_controller')->replaceArgument(7, new Reference('security.context'));
+        $loader->load('persistence-phpcr.yml');
+        if (!interface_exists(TokenStorageInterface::class)) {
+            $container->getDefinition(FileController::class)->replaceArgument(7, new Reference('security.context'));
+            $container->getDefinition(ImageController::class)->replaceArgument(7, new Reference('security.context'));
         }
 
         // aliases
@@ -156,43 +160,39 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
         $container->setAlias($this->getAlias().'.upload_image_helper', $prefix.'.upload_image_helper');
 
         if (!$config['event_listeners']['stream_rewind']) {
-            $container->removeDefinition('cmf_media.persistence.phpcr.subscriber.stream_rewind');
+            $container->removeDefinition(DoctrineStreamRewindSubscriber::class);
         }
         if (!$config['event_listeners']['image_dimensions']) {
-            $container->removeDefinition('cmf_media.persistence.phpcr.subscriber.image_dimensions');
+            $container->removeDefinition(DoctrineImageDimensionsSubscriber::class);
         } elseif ($useImagine) {
-            $definition = $container->getDefinition($this->getAlias().'.persistence.phpcr.subscriber.image_dimensions');
+            $definition = $container->getDefinition(DoctrineImageDimensionsSubscriber::class);
             $definition->addArgument(new Reference('liip_imagine'));
-        } elseif (!function_exists('imagecreatefromstring')) {
+        } elseif (!\function_exists('imagecreatefromstring')) {
             throw new InvalidConfigurationException('persistence.phpcr.subscriber.image_dimensions must be set to false if Imagine is not enabled and the GD PHP extension is not available.');
         }
 
         if ($useImagine) {
             // load phpcr specific imagine configuration
-            $loader->load('adapter-imagine-phpcr.xml');
+            $loader->load('adapter-imagine-phpcr.yml');
             if (false !== $config['event_listeners']['imagine_cache']) {
-                $loader->load('persistence-phpcr-event-imagine.xml');
+                $loader->load('persistence-phpcr-event-imagine.yml');
             }
-
-            // TODO: this should not be phcpr specific but the MediaManagerInterface service should be an alias instead
-            $definition = $container->getDefinition($this->getAlias().'.templating.helper');
-            $definition->addArgument(new Reference('liip_imagine.templating.filter_helper'));
         } elseif (true === $config['event_listeners']['imagine_cache']) {
             throw new InvalidConfigurationException('persistence.phpcr.event_listeners.imagine_cache may not be forced enabled if Imagine is not enabled.');
         }
 
         if ($useJmsSerializer) {
             // load phpcr specific serializer configuration
-            $loader->load('serializer-phpcr.xml');
+            $loader->load('serializer-phpcr.yml');
         }
 
         if ($useElFinder) {
             // load phpcr specific elfinder configuration
-            $loader->load('adapter-elfinder-phpcr.xml');
+            $loader->load('adapter-elfinder-phpcr.yml');
         }
     }
 
-    public function loadLiipImagine($enabled, $config, XmlFileLoader $loader, ContainerBuilder $container, $useElFinder)
+    public function loadLiipImagine($enabled, $config, YamlFileLoader $loader, ContainerBuilder $container, $useElFinder)
     {
         if (!$enabled) {
             $container->setParameter($this->getAlias().'.use_imagine', false);
@@ -203,13 +203,13 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
             return;
         }
 
-        $filters = isset($config['extra_filters']) && is_array($config['extra_filters'])
+        $filters = isset($config['extra_filters']) && \is_array($config['extra_filters'])
             ? array_merge($config['imagine_filters'], $config['extra_filters'])
             : [];
         if (!$useElFinder) {
             unset($filters['elfinder_thumbnail']);
         }
-        if ($key = array_search(null, $filters)) {
+        if ($key = array_search(null, $filters, true)) {
             throw new InvalidConfigurationException("Imagine filter name for $key may not be null");
         }
 
@@ -224,12 +224,12 @@ class CmfMediaExtension extends Extension implements PrependExtensionInterface
      *
      * @return string The XSD base path
      */
-    public function getXsdValidationBasePath()
+    public function getXsdValidationBasePath(): string
     {
         return __DIR__.'/../Resources/config/schema';
     }
 
-    public function getNamespace()
+    public function getNamespace(): string
     {
         return 'http://cmf.symfony.com/schema/dic/media';
     }

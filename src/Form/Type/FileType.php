@@ -49,7 +49,7 @@ class FileType extends AbstractType
      */
     public function __construct($class, UploadFileHelperInterface $uploadFileHelper)
     {
-        $this->dataClass = $class;
+        $this->dataClass        = $class;
         $this->uploadFileHelper = $uploadFileHelper;
     }
 

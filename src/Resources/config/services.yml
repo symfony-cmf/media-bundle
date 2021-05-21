@@ -1,0 +1,4 @@
+services:
+    Symfony\Cmf\Bundle\MediaBundle\File\BrowserFileHelper:
+        arguments:
+            -

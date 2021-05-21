@@ -1,0 +1,131 @@
+services:
+    cmf_media.initializer:
+        class: Doctrine\Bundle\PHPCRBundle\Initializer\GenericInitializer
+        arguments:
+            - 'CmfMediaBundle'
+            - ['%cmf_media.persistence.phpcr.media_basepath%']
+            -
+        tags: ['doctrine_phpcr.initializer']
+
+    Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\MediaManager:
+        arguments:
+            - '@doctrine_phpcr'
+            - '%cmf_media.persistence.phpcr.manager_name%'
+            - '%cmf_media.persistence.phpcr.media_basepath%'
+
+    cmf_media.persistence.phpcr.manager:
+        alias: Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\MediaManager
+
+    cmf_media.persistence.phpcr.upload_file_helper:
+        class: Symfony\Cmf\Bundle\MediaBundle\File\UploadFileHelperDoctrine
+        arguments:
+            - '@doctrine_phpcr'
+            - '%cmf_media.persistence.phpcr.manager_name%'
+            - '%cmf_media.persistence.phpcr.file.class%'
+            - '%cmf_media.persistence.phpcr.media_basepath%'
+            - '@Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\MediaManager'
+
+    cmf_media.persistence.phpcr.upload_image_helper:
+        class: Symfony\Cmf\Bundle\MediaBundle\File\UploadFileHelperDoctrine
+        arguments:
+            - '@doctrine_phpcr'
+            - '%cmf_media.persistence.phpcr.manager_name%'
+            - '%cmf_media.persistence.phpcr.image.class%'
+            - '%cmf_media.persistence.phpcr.media_basepath%'
+            - '@Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\MediaManager'
+
+    Symfony\Cmf\Bundle\MediaBundle\Controller\FileController:
+        arguments:
+            - '@doctrine_phpcr'
+            - '%cmf_media.persistence.phpcr.manager_name%'
+            -
+            - '%cmf_media.persistence.phpcr.media_basepath%'
+            - '@Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\MediaManager'
+            - '@cmf_media.upload_file_helper'
+            - '%cmf_media.upload_file_role%'
+            - '@security.authorization_checker'
+            - '@security.token_storage'
+
+    cmf_media.file_controller:
+        alias: Symfony\Cmf\Bundle\MediaBundle\Controller\FileController
+
+    Symfony\Cmf\Bundle\MediaBundle\Controller\ImageController:
+        arguments:
+            - '@doctrine_phpcr'
+            - '%cmf_media.persistence.phpcr.manager_name%'
+            -
+            - '%cmf_media.persistence.phpcr.media_basepath%'
+            - '@Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\MediaManager'
+            - '@cmf_media.upload_image_helper'
+            - '%cmf_media.upload_file_role%'
+            - '@security.authorization_checker'
+            - '@security.token_storage'
+
+    cmf_media.image_controller:
+        alias: Symfony\Cmf\Bundle\MediaBundle\Controller\ImageController
+
+    Symfony\Cmf\Bundle\MediaBundle\Templating\Helper\CmfMediaHelper:
+        arguments:
+            - '@Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\MediaManager'
+            - '@router'
+            - '@liip_imagine.templating.filter_helper'
+        tags:
+            - {name: 'templating.helper', alias: 'cmf_media'}
+
+    cmf_media.templating.helper:
+        alias: Symfony\Cmf\Bundle\MediaBundle\Templating\Helper\CmfMediaHelper
+
+
+    Symfony\Cmf\Bundle\MediaBundle\Twig\Extension\CmfMediaExtension:
+        arguments:
+            - '@Symfony\Cmf\Bundle\MediaBundle\Templating\Helper\CmfMediaHelper'
+        tags: ['twig.extension']
+
+    Symfony\Cmf\Bundle\MediaBundle\Editor\Helper\UploadDefaultHelper:
+        arguments:
+            - '@Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\MediaManager'
+            - '@router'
+            -
+                description: 'description'
+                caption: 'description'
+        tags:
+            - {name: 'cmf_media.upload_editor_helper', alias: 'default'}
+
+    cmf_media.upload_editor_helper.default:
+        alias: Symfony\Cmf\Bundle\MediaBundle\Editor\Helper\UploadDefaultHelper
+
+    Symfony\Cmf\Bundle\MediaBundle\Editor\Helper\UploadCkeditorHelper:
+        arguments:
+            - '@Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\MediaManager'
+            - '@router'
+        tags:
+            - {name: 'cmf_media.upload_editor_helper', alias: 'ckeditor'}
+
+    Symfony\Cmf\Bundle\MediaBundle\Form\Type\FileType:
+        arguments:
+            - '%cmf_media.persistence.phpcr.file.class%'
+            - '@cmf_media.upload_file_helper'
+        tags:
+            - {name: 'form.type', alias: 'cmf_media_file'}
+
+    Symfony\Cmf\Bundle\MediaBundle\Form\Type\ImageType:
+        arguments:
+            - '%cmf_media.persistence.phpcr.image.class%'
+            - '@cmf_media.upload_file_helper'
+            - '%cmf_media.use_imagine%'
+            - '%cmf_media.imagine.filter.upload_thumbnail%'
+        tags:
+            - {name: 'form.type', alias: 'cmf_media_image'}
+
+    Symfony\Cmf\Bundle\MediaBundle\Doctrine\DoctrineStreamRewindSubscriber:
+        tags:
+            - {name: 'doctrine_phpcr.event_subscriber', priority: "-50"}
+
+    Symfony\Cmf\Bundle\MediaBundle\Doctrine\DoctrineImageDimensionsSubscriber:
+        tags:
+            - {name: 'doctrine_phpcr.event_subscriber'}
+
+    cmf_media.persistence.phpcr.subscriber.image_dimensions:
+        alias: Symfony\Cmf\Bundle\MediaBundle\Doctrine\DoctrineImageDimensionsSubscriber
+    cmf_media.persistence.phpcr.subscriber.stream_rewind:
+        alias: Symfony\Cmf\Bundle\MediaBundle\Doctrine\DoctrineStreamRewindSubscriber

@@ -39,7 +39,7 @@ class ImageRepository extends DocumentRepository implements ImageRepositoryInter
             $qb->andWhere()->descendant($this->rootPath, 'i');
         }
 
-        if (strlen($term)) {
+        if (\strlen($term)) {
             $qb->andWhere()->orX()
                 ->like()->localName('i')->literal('%'.$term.'%')->end()
                 ->like()->field('i.description')->literal('%'.$term.'%')

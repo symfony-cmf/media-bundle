@@ -45,7 +45,7 @@ class BrowserFileHelper
      */
     public function getEditorHelper($name = null, $browser = null)
     {
-        if ($name && isset($this->editorHelpers[$name]) && count($this->editorHelpers[$name]) > 0) {
+        if ($name && isset($this->editorHelpers[$name]) && \count($this->editorHelpers[$name]) > 0) {
             if ($browser && isset($this->editorHelpers[$name][$browser])) {
                 // found name and browser
                 return $this->editorHelpers[$name][$browser];

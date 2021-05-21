@@ -1,0 +1,21 @@
+services:
+    Symfony\Cmf\Bundle\MediaBundle\Adapter\ElFinder\PhpcrDriver:
+        arguments:
+            - '@doctrine_phpcr'
+            - '%cmf_media.persistence.phpcr.manager_name%'
+            - '@Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\MediaManager'
+            - '@Symfony\Cmf\Bundle\MediaBundle\Templating\Helper\CmfMediaHelper'
+            - '%cmf_media.imagine.filter.elfinder_thumbnail%'
+            - '@session'
+
+    Symfony\Cmf\Bundle\MediaBundle\Editor\Helper\BrowserDefaultHelper:
+        arguments:
+            - '@router'
+            - 'elfinder'
+        tags:
+            - {name: "cmf_media.browser_file_helper", editor: "default", browser: "elfinder"}
+
+    cmf_media.adapter.elfinder.phpcr_driver:
+        alias: Symfony\Cmf\Bundle\MediaBundle\Adapter\ElFinder\PhpcrDriver
+    cmd_media.browser_file_helper.default_elfinder:
+        alias: Symfony\Cmf\Bundle\MediaBundle\Editor\Helper\BrowserDefaultHelper

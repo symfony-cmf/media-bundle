@@ -11,16 +11,21 @@
 
 namespace Symfony\Cmf\Bundle\MediaBundle\Util;
 
+use Symfony\Cmf\Bundle\MediaBundle\Form\Type\FileType;
+use Symfony\Cmf\Bundle\MediaBundle\Form\Type\ImageType;
+use Symfony\Component\Form\Extension\Core\Type\FileType as SfFileType;
+use Symfony\Component\Form\Extension\Core\Type\FormType as SfFormType;
+
 final class LegacyFormHelper
 {
     private static $map = [
-        'Symfony\Cmf\Bundle\MediaBundle\Form\Type\FileType' => 'cmf_media_file',
-        'Symfony\Cmf\Bundle\MediaBundle\Form\Type\ImageType' => 'cmf_media_image',
-        'Symfony\Component\Form\Extension\Core\Type\FileType' => 'file',
-        'Symfony\Component\Form\Extension\Core\Type\FormType' => 'form',
+        FileType::class   => 'cmf_media_file',
+        ImageType::class  => 'cmf_media_image',
+        SfFileType::class => 'file',
+        SfFormType::class => 'form',
     ];
 
-    public static function getType($class)
+    public static function getType($class): string
     {
         if (!self::isLegacy()) {
             return $class;
@@ -33,7 +38,7 @@ final class LegacyFormHelper
         return self::$map[$class];
     }
 
-    public static function isLegacy()
+    public static function isLegacy(): bool
     {
         return !method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix');
     }

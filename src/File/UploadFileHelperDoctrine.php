@@ -16,11 +16,11 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Cmf\Bundle\MediaBundle\Editor\UploadEditorHelperInterface;
 use Symfony\Cmf\Bundle\MediaBundle\FileInterface;
 use Symfony\Cmf\Bundle\MediaBundle\MediaManagerInterface;
+use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 
 class UploadFileHelperDoctrine implements UploadFileHelperInterface
 {
@@ -47,9 +47,9 @@ class UploadFileHelperDoctrine implements UploadFileHelperInterface
         MediaManagerInterface $mediaManager)
     {
         $this->managerRegistry = $registry;
-        $this->managerName = $managerName;
+        $this->managerName     = $managerName;
         $this->setClass($class);
-        $this->rootPath = $rootPath;
+        $this->rootPath     = $rootPath;
         $this->mediaManager = $mediaManager;
     }
 
@@ -87,10 +87,7 @@ class UploadFileHelperDoctrine implements UploadFileHelperInterface
         }
 
         if (!is_subclass_of($class, 'Symfony\Cmf\Bundle\MediaBundle\FileInterface')) {
-            throw new \InvalidArgumentException(sprintf(
-                'The class "%s" does not implement Symfony\Cmf\Bundle\MediaBundle\FileInterface',
-                $class
-            ));
+            throw new \InvalidArgumentException(sprintf('The class "%s" does not implement Symfony\Cmf\Bundle\MediaBundle\FileInterface', $class));
         }
         $this->class = $class;
     }
@@ -166,19 +163,19 @@ class UploadFileHelperDoctrine implements UploadFileHelperInterface
      */
     private function getErrorMessage(UploadedFile $file)
     {
-        $errorCode = $file->getError();
+        $errorCode     = $file->getError();
         static $errors = [
-            UPLOAD_ERR_INI_SIZE => 'The file "%s" exceeds your upload_max_filesize ini directive (limit is %d kb).',
-            UPLOAD_ERR_FORM_SIZE => 'The file "%s" exceeds the upload limit defined in your form.',
-            UPLOAD_ERR_PARTIAL => 'The file "%s" was only partially uploaded.',
-            UPLOAD_ERR_NO_FILE => 'No file was uploaded.',
+            UPLOAD_ERR_INI_SIZE   => 'The file "%s" exceeds your upload_max_filesize ini directive (limit is %d kb).',
+            UPLOAD_ERR_FORM_SIZE  => 'The file "%s" exceeds the upload limit defined in your form.',
+            UPLOAD_ERR_PARTIAL    => 'The file "%s" was only partially uploaded.',
+            UPLOAD_ERR_NO_FILE    => 'No file was uploaded.',
             UPLOAD_ERR_CANT_WRITE => 'The file "%s" could not be written on disk.',
             UPLOAD_ERR_NO_TMP_DIR => 'File could not be uploaded: missing temporary directory.',
-            UPLOAD_ERR_EXTENSION => 'File upload was stopped by a PHP extension.',
+            UPLOAD_ERR_EXTENSION  => 'File upload was stopped by a PHP extension.',
         ];
 
-        $maxFilesize = $errorCode === UPLOAD_ERR_INI_SIZE ? $file->getMaxFilesize() / 1024 : 0;
-        $message = isset($errors[$errorCode]) ? $errors[$errorCode] : 'The file "%s" was not uploaded due to an unknown error.';
+        $maxFilesize = UPLOAD_ERR_INI_SIZE === $errorCode ? $file->getMaxFilesize() / 1024 : 0;
+        $message     = isset($errors[$errorCode]) ? $errors[$errorCode] : 'The file "%s" was not uploaded due to an unknown error.';
 
         return sprintf($message, $file->getClientOriginalName(), $maxFilesize);
     }
@@ -216,13 +213,10 @@ class UploadFileHelperDoctrine implements UploadFileHelperInterface
         $editorHelper = $this->getEditorHelper($request->get('editor', 'default'));
 
         if (!$editorHelper) {
-            throw new HttpException(409, sprintf(
-                'Editor type "%s" not found, cannot process upload.',
-                $request->get('editor', 'default')
-            ));
+            throw new HttpException(409, sprintf('Editor type "%s" not found, cannot process upload.', $request->get('editor', 'default')));
         }
 
-        if (count($uploadedFiles) === 0) {
+        if (0 === \count($uploadedFiles)) {
             // by default get the first file
             $uploadedFiles = [$request->files->getIterator()->current()];
         }

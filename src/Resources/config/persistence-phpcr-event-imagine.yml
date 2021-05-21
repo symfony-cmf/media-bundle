@@ -1,0 +1,9 @@
+services:
+    Symfony\Cmf\Bundle\MediaBundle\Doctrine\ImagineCacheInvalidatorSubscriber:
+        arguments:
+            - '@Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\MediaManager'
+            - '@liip_imagine.cache.manager'
+            - '%cmf_media.imagine.all_filters%'
+        tags: ['doctrine_phpcr.event_subscriber']
+        calls:
+            - [setRequest, ['@?request_stack']]

@@ -42,12 +42,12 @@ class FileController
     /**
      * When moving to 2.0, rename this to $authorizationChecker.
      *
-     * @var null|AuthorizationCheckerInterface
+     * @var AuthorizationCheckerInterface|null
      */
     protected $securityContext;
 
     /**
-     * @var null|TokenStorageInterface
+     * @var TokenStorageInterface|null
      */
     protected $tokenStorage;
 
@@ -75,18 +75,18 @@ class FileController
         $authorizationChecker = null,
         $tokenStorage = null
     ) {
-        $this->managerRegistry = $registry;
-        $this->managerName = $managerName;
-        $this->class = $class === '' ? null : $class;
-        $this->rootPath = $rootPath;
-        $this->mediaManager = $mediaManager;
-        $this->uploadFileHelper = $uploadFileHelper;
+        $this->managerRegistry    = $registry;
+        $this->managerName        = $managerName;
+        $this->class              = '' === $class ? null : $class;
+        $this->rootPath           = $rootPath;
+        $this->mediaManager       = $mediaManager;
+        $this->uploadFileHelper   = $uploadFileHelper;
         $this->requiredUploadRole = $requiredUploadRole;
         if ($authorizationChecker instanceof AuthorizationCheckerInterface && !$tokenStorage instanceof TokenStorageInterface) {
             throw new \InvalidArgumentException('Supply both authorization checker and token storage, or none of them');
         }
         $this->securityContext = $authorizationChecker;
-        $this->tokenStorage = $authorizationChecker instanceof AuthorizationCheckerInterface ? $tokenStorage : $authorizationChecker;
+        $this->tokenStorage    = $authorizationChecker instanceof AuthorizationCheckerInterface ? $tokenStorage : $authorizationChecker;
     }
 
     /**
@@ -151,10 +151,7 @@ class FileController
         $contentDocument = $this->getObjectManager()->find($this->class, $id);
 
         if (!$contentDocument || !$contentDocument instanceof FileInterface) {
-            throw new NotFoundHttpException(sprintf(
-                'Object with identifier %s cannot be resolved to a valid instance of Symfony\Cmf\Bundle\MediaBundle\FileInterface',
-                $path
-            ));
+            throw new NotFoundHttpException(sprintf('Object with identifier %s cannot be resolved to a valid instance of Symfony\Cmf\Bundle\MediaBundle\FileInterface', $path));
         }
 
         $file = false;
@@ -162,7 +159,7 @@ class FileController
         if ($contentDocument instanceof BinaryInterface) {
             $metadata = stream_get_meta_data($contentDocument->getContentAsStream());
 
-            $file = isset($metadata['uri']) ? $metadata['uri'] : false;
+            $file = $metadata['uri'] ?? false;
         } elseif ($contentDocument instanceof FileSystemInterface) {
             $file = $contentDocument->getFileSystemPath();
         }

@@ -162,7 +162,7 @@ abstract class AbstractMedia implements MediaInterface, MetadataInterface
      */
     public function getMetadataValue($name, $default = null)
     {
-        return isset($this->metadata[$name]) ? $this->metadata[$name] : $default;
+        return $this->metadata[$name] ?? $default;
     }
 
     /**

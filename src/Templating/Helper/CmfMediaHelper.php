@@ -22,20 +22,20 @@ class CmfMediaHelper extends Helper
 {
     protected $mediaManager;
     protected $generator;
-    protected $imagineHelper;
+    protected $filterHelper;
 
     /**
      * Constructor.
      *
      * @param MediaManagerInterface $mediaManager
-     * @param UrlGeneratorInterface $router        A Router instance
-     * @param FilterHelper         $imagineHelper Imagine helper to use if available
+     * @param UrlGeneratorInterface $router       A Router instance
+     * @param FilterHelper          $filterHelper
      */
-    public function __construct(MediaManagerInterface $mediaManager, UrlGeneratorInterface $router, FilterHelper $imagineHelper = null)
+    public function __construct(MediaManagerInterface $mediaManager, UrlGeneratorInterface $router, FilterHelper $filterHelper)
     {
         $this->mediaManager = $mediaManager;
-        $this->generator = $router;
-        $this->imagineHelper = $imagineHelper;
+        $this->generator    = $router;
+        $this->filterHelper = $filterHelper;
     }
 
     /**
@@ -46,7 +46,7 @@ class CmfMediaHelper extends Helper
      *
      * @return string The generated URL
      */
-    public function downloadUrl(FileInterface $file, $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+    public function downloadUrl(FileInterface $file, $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH): string
     {
         $urlSafePath = $this->mediaManager->getUrlSafePath($file);
 
@@ -62,15 +62,15 @@ class CmfMediaHelper extends Helper
      *
      * @return string The generated URL
      */
-    public function displayUrl(ImageInterface $file, array $options = [], $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+    public function displayUrl(ImageInterface $file, array $options = [], $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH): string
     {
         $urlSafePath = $this->mediaManager->getUrlSafePath($file);
 
-        if ($this->imagineHelper && isset($options['imagine_filter']) && is_string($options['imagine_filter'])) {
-            return $this->imagineHelper->filter(
+        if (isset($options['imagine_filter']) && \is_string($options['imagine_filter'])) {
+            return $this->filterHelper->filter(
                 $urlSafePath,
                 $options['imagine_filter'],
-                isset($options['imagine_runtime_config']) ? $options['imagine_runtime_config'] : []
+                $options['imagine_runtime_config'] ?? []
             );
         }
 
@@ -82,7 +82,7 @@ class CmfMediaHelper extends Helper
      *
      * @return string The canonical name
      */
-    public function getName()
+    public function getName(): string
     {
         return 'cmf_media';
     }

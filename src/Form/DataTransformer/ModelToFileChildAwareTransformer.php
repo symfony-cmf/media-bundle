@@ -42,9 +42,9 @@ class ModelToFileChildAwareTransformer extends ModelToFileTransformer
     {
         parent::__construct($helper, $class);
 
-        $this->helper = $helper;
-        $this->class = $class;
-        $this->emptyData = $emptyData;
+        $this->helper      = $helper;
+        $this->class       = $class;
+        $this->emptyData   = $emptyData;
         $this->childOfNode = $childOfNode;
     }
 

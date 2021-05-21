@@ -14,11 +14,12 @@ namespace Symfony\Cmf\Bundle\MediaBundle\Doctrine;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ODM\PHPCR\Document\Resource;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
+use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Symfony\Cmf\Bundle\MediaBundle\ImageInterface;
 use Symfony\Cmf\Bundle\MediaBundle\MediaManagerInterface;
-use Liip\ImagineBundle\Imagine\Cache\CacheManager;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * A listener to invalidate the imagine cache when Image documents are
@@ -65,22 +66,24 @@ class ImagineCacheInvalidatorSubscriber implements EventSubscriber
     public function __construct(MediaManagerInterface $mediaManager, CacheManager $manager, $filters)
     {
         $this->mediaManager = $mediaManager;
-        $this->manager = $manager;
-        $this->filters = $filters;
+        $this->manager      = $manager;
+        $this->filters      = $filters;
     }
 
     /**
-     * @param Request $request
+     * @param RequestStack $request
      */
-    public function setRequest(Request $request = null)
+    public function setRequest(RequestStack $request = null)
     {
-        $this->request = $request;
+        if (null !== $request->getMasterRequest()) {
+            $this->request = $request;
+        }
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getSubscribedEvents()
+    public function getSubscribedEvents(): array
     {
         return [
             'postUpdate',
@@ -141,7 +144,7 @@ class ImagineCacheInvalidatorSubscriber implements EventSubscriber
 
             // TODO: this might not be needed https://github.com/liip/LiipImagineBundle/issues/162
             if (false !== strpos($path, $filter)) {
-                $path = substr($path, strpos($path, $filter) + strlen($filter));
+                $path = substr($path, strpos($path, $filter) + \strlen($filter));
             }
             $this->manager->remove($path, $filter);
         }

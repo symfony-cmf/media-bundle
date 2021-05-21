@@ -15,11 +15,11 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Imagine\Exception\InvalidArgumentException;
 use Imagine\Exception\RuntimeException;
-use Imagine\Image\ImagineInterface;
 use Imagine\Image\ImageInterface;
+use Imagine\Image\ImagineInterface;
 use Symfony\Cmf\Bundle\MediaBundle\BinaryInterface;
-use Symfony\Cmf\Bundle\MediaBundle\FileSystemInterface;
 use Symfony\Cmf\Bundle\MediaBundle\Doctrine\Phpcr\Image;
+use Symfony\Cmf\Bundle\MediaBundle\FileSystemInterface;
 
 /**
  * A listener to update the dimensions of an image object from the content.
@@ -118,7 +118,7 @@ class DoctrineImageDimensionsSubscriber implements EventSubscriber
             return;
         }
 
-        if (function_exists('imagecreatefromstring')) {
+        if (\function_exists('imagecreatefromstring')) {
             // use gd to determine the dimensions
             $content = $object->getContentAsString();
             if ($content) {
